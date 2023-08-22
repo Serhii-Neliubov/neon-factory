@@ -83,23 +83,23 @@
 .sidebarCompany {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   position: relative;
+  gap: 10px;
 }
 
 .sidebarCompany h1 {
   color: #ffffff;
-  position: absolute;
   white-space: nowrap;
-  padding-left: 25px;
-  top: 27%;
-  left: 50%;
-  transform: translate(0, -50%);
 }
 
-@media screen and (min-width: 640px) {
-  .mapboxgl-ctrl-geocoder--input {
-    height: 36px;
-    padding: 6px 35px;
-  }
+.PrintScreen {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.PrintScreen:hover {
+  color: #4cc0ad;
 }
