@@ -10,20 +10,27 @@ import "mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 mapboxgl.accessToken =
   "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
 
-const districtVisibility = {
-  CBD: true,
-  EU: true,
-  Louise: true,
-  North: true,
-  South: true,
-};
-
 function App() {
   const [map, setMap] = useState(null);
   const districtButtons = document.querySelectorAll(".toggleButton");
   const submenu = document.querySelector(".submenu");
   const controlsButton = document.querySelector("#controlsButton");
   const centralisedButton = document.getElementById("CBDEULouiseNorthButton");
+  const sidebarLabels = document.querySelectorAll(".sidebar-label");
+  const allDistrictsButton = document.getElementById("allDistrictsButton");
+
+  const [districts, setDistricts] = useState({
+    CBD: true,
+    EU: true,
+    Louise: true,
+    North: true,
+    NorthEast: true,
+    NorthWest: true,
+    South: true,
+    SouthEst: true,
+    SouthWest: true,
+    Airport: true,
+  });
 
   useEffect(() => {
     const mapSettings = {
@@ -96,14 +103,12 @@ function App() {
     });
 
     // Reset the visibility of all districts
-    for (var district in districtVisibility) {
-      toggleDistrictLayerVisibility(district, districtVisibility[district]);
+    for (let district in districts) {
+      toggleDistrictLayerVisibility(district, districts[district]);
     }
 
     // Reset the visibility of the main layer
     map.setLayoutProperty("districts-brussels-0-2", "visibility", "visible");
-
-    var allDistrictsButton = document.getElementById("allDistrictsButton");
 
     allDistrictsButton.addEventListener("click", function () {
       // Toggle the visibility of the "districts-brussels-0-2" layer
@@ -116,17 +121,28 @@ function App() {
     toggleButtonText(allDistrictsButton, "All Districts", true);
     toggleButtonText(centralisedButton, "Show Centralised Districts", false);
 
-    districtButtons.forEach(function (button) {
+    districtButtons.forEach((button) => {
       toggleButtonText(button, button.getAttribute("data-district"), false);
     });
 
     // Reset the sidebar label visibility
-    var sidebarLabels = document.querySelectorAll(".sidebar-label");
 
-    sidebarLabels.forEach(function (label) {
+    sidebarLabels.forEach((label) => {
       label.classList.remove("hidden");
     });
   }
+
+  districtButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      var district = button.getAttribute("data-district");
+
+      // Toggle the visibility of the sidebar label item named "North"
+      toggleSidebarLabelItemVisibility(district);
+
+      // Toggle the visibility of the "districts-brussels-0-2" layer based on 'sidebar_label' property
+      toggleDistrictLayerVisibility(district);
+    });
+  });
 
   function toggleDistrictLayerVisibility(district, isVisible) {
     var layerId = "districts-brussels-0-2";
@@ -166,7 +182,7 @@ function App() {
     }
 
     // Update the visibility of the district
-    districtVisibility[district] = isVisible;
+    districts[district] = isVisible;
 
     // Update the filter to show/hide the district
     var filter = ["==", ["get", "sidebar_label"], district];
@@ -180,21 +196,6 @@ function App() {
     toggleDistrictLayerVisibility(districtsToShow);
     toggleButtonText(centralisedButton);
   }
-
-  districtButtons.forEach(function (button) {
-    button.addEventListener("click", function () {
-      var district = button.getAttribute("data-district");
-
-      // Toggle the visibility of the sidebar label item named "North"
-      toggleSidebarLabelItemVisibility(district);
-
-      // Toggle the text of the button
-      toggleButtonText(button, district, false);
-
-      // Toggle the visibility of the "districts-brussels-0-2" layer based on 'sidebar_label' property
-      toggleDistrictLayerVisibility(district);
-    });
-  });
 
   function toggleSidebarLabelItemVisibility(district) {
     // Find the sidebar label item with the corresponding district name
@@ -365,10 +366,11 @@ function App() {
           </button>
           <button
             className="toggleButton"
+            onClick={() => setDistricts(!districts.Airport)}
             data-district="Airport"
             id="AirportButton"
           >
-            Airport
+            {districts.Airport ? "Show Airport" : "Hide Airport"}
           </button>
           <div className="greenLine"></div>
         </div>
