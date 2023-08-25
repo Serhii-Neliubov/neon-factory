@@ -1,20 +1,42 @@
-import React, { useState } from "react";
-const ToggleButton = ({ data, id, children, toggleButton }) => {
+import React, { useState, useEffect } from "react";
+
+
+
+const ToggleButton = ({ data, id, children, toggleButton, isAllDistrictsSelected }) => {
+
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [toggleClass, setToggleClass] = useState<string>('');
+
   const handleClick = () => {
+    setToggle(!toggle)
     toggleButton(data); // Вызываем функцию toggleButton, если это необходимо
   };
 
+  useEffect(() => {
+    setToggle(isAllDistrictsSelected)
+  }, [isAllDistrictsSelected])
+
+
+  useEffect(() => {
+
+    if (toggle) {
+      setToggleClass('switch-btn switch-on')
+    } else {
+      setToggleClass('switch-btn')
+    }
+  }, [toggle])
+
+
   return (
     <div style={{ display: "flex" }}>
-      <button
-        onClick={handleClick}
+      <div
         className="toggleButton"
         data-district={data}
         id={id}
       >
         {children}
-      </button>
-      <div className="switch-btn"></div>
+      </div>
+      <div className={toggleClass} onClick={handleClick}></div>
     </div>
   );
 };

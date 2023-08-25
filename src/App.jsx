@@ -20,7 +20,8 @@ function App() {
   let submenu = document.querySelector(".submenu");
   const pageElement = document.querySelector("#map");
   let selectedDistricts = [];
-  let allDistrictsVisible = false;
+  let isAllDistrictsVisible = false;
+  let [isAllDistrictsSelected, setIsAllDistrictsVisible] = useState(false);
   let drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
 
   useEffect(() => {
@@ -92,10 +93,11 @@ function App() {
   /*===================================================================================*/
 
   function allDistrictsButtonHandler() {
-    allDistrictsVisible = !allDistrictsVisible; // Toggle the state of allDistrictsVisible
 
-    if (allDistrictsVisible) {
-      // Show all districts
+    isAllDistrictsVisible = !isAllDistrictsVisible // Toggle the state of allDistrictsVisible
+    
+    if (isAllDistrictsVisible) {
+      
       selectedDistricts = [
         "SW",
         "SE",
@@ -108,11 +110,13 @@ function App() {
         "North",
         "South",
       ];
+
+      setIsAllDistrictsVisible(true)
     } else {
       // Hide all districts
       selectedDistricts = [];
+      setIsAllDistrictsVisible(false)
     }
-
     // Toggle visibility of all districts
     toggleAllDistrictsVisibility();
   }
@@ -171,6 +175,7 @@ function App() {
         <div className="greenLine"></div>
         <div className="toggleContainer">
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="CD"
@@ -179,6 +184,7 @@ function App() {
             Center District
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="EU"
@@ -187,6 +193,7 @@ function App() {
             European District
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="Louise"
@@ -195,6 +202,7 @@ function App() {
             Louise
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="North"
@@ -203,6 +211,7 @@ function App() {
             North
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="NE"
@@ -211,6 +220,7 @@ function App() {
             North-East
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="NW"
@@ -219,6 +229,7 @@ function App() {
             North-West
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="South"
@@ -227,6 +238,7 @@ function App() {
             South
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="SE"
@@ -235,6 +247,7 @@ function App() {
             South-East
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="SW"
@@ -243,6 +256,7 @@ function App() {
             South-West
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="Airport"
