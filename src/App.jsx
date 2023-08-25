@@ -19,9 +19,9 @@ function App() {
   const [isControlsActive, setIsControlsActive] = useState(false);
   let submenu = document.querySelector(".submenu");
   const pageElement = document.querySelector("#map");
-  let selectedDistricts = [];
-  let isAllDistrictsVisible = false;
-  let [isAllDistrictsSelected, setIsAllDistrictsVisible] = useState(false);
+  let [selectedDistricts, setSelectedDistricts] = useState([]);
+  let [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
+  let [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   let drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
 
   useEffect(() => {
@@ -93,12 +93,8 @@ function App() {
   /*===================================================================================*/
 
   function allDistrictsButtonHandler() {
-
-    isAllDistrictsVisible = !isAllDistrictsVisible // Toggle the state of allDistrictsVisible
-    
     if (isAllDistrictsVisible) {
-      
-      selectedDistricts = [
+      setSelectedDistricts([
         "SW",
         "SE",
         "CD",
@@ -109,13 +105,16 @@ function App() {
         "Louise",
         "North",
         "South",
-      ];
-
-      setIsAllDistrictsVisible(true)
+      ]);
+      setIsAllDistrictsSelected(true);
+      console.log(selectedDistricts);
+      toggleAllDistrictsVisibility();
     } else {
       // Hide all districts
-      selectedDistricts = [];
-      setIsAllDistrictsVisible(false)
+      setSelectedDistricts([]);
+      setIsAllDistrictsSelected(false);
+      console.log(selectedDistricts);
+      toggleAllDistrictsVisibility();
     }
     // Toggle visibility of all districts
     toggleAllDistrictsVisibility();
@@ -125,7 +124,7 @@ function App() {
     var districtsToShow = [];
 
     if (selectedDistricts.length === 0) {
-      // districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
+      districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
     } else {
       selectedDistricts.forEach(function (district) {
         districtsToShow.push(["==", ["get", "sidebar_label"], district]);
@@ -148,7 +147,7 @@ function App() {
       // Если район уже выбран, удалите его из списка
       selectedDistricts.splice(districtIndex, 1);
     }
-
+    console.log(selectedDistricts);
     // Переключите видимость всех районов
     toggleAllDistrictsVisibility();
   }
@@ -266,7 +265,10 @@ function App() {
           </ToggleButton>
 
           <button
-            onClick={allDistrictsButtonHandler}
+            onClick={() => {
+              setIsAllDistrictsVisible(!isAllDistrictsVisible);
+              allDistrictsButtonHandler();
+            }}
             data-district="All"
             className="toggleButton"
             id="allDistrictsButton"
