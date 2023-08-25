@@ -210,6 +210,8 @@
   position: relative;
   transition-duration: 300ms; /* анимация */
 }
+
+
 .switch-btn::after {
   content: "";
   height: 16px; /* высота кнопки */

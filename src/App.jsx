@@ -19,8 +19,9 @@ function App() {
   const [isControlsActive, setIsControlsActive] = useState(false);
   let submenu = document.querySelector(".submenu");
   const pageElement = document.querySelector("#map");
-  let selectedDistricts = [];
-  let allDistrictsVisible = false;
+  let [selectedDistricts, setSelectedDistricts] = useState([]);
+  let [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
+  let [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   let drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
 
   useEffect(() => {
@@ -92,11 +93,8 @@ function App() {
   /*===================================================================================*/
 
   function allDistrictsButtonHandler() {
-    allDistrictsVisible = !allDistrictsVisible; // Toggle the state of allDistrictsVisible
-
-    if (allDistrictsVisible) {
-      // Show all districts
-      selectedDistricts = [
+    if (isAllDistrictsVisible) {
+      setSelectedDistricts([
         "SW",
         "SE",
         "CD",
@@ -107,12 +105,17 @@ function App() {
         "Louise",
         "North",
         "South",
-      ];
+      ]);
+      setIsAllDistrictsSelected(true);
+      console.log(selectedDistricts);
+      toggleAllDistrictsVisibility();
     } else {
       // Hide all districts
-      selectedDistricts = [];
+      setSelectedDistricts([]);
+      setIsAllDistrictsSelected(false);
+      console.log(selectedDistricts);
+      toggleAllDistrictsVisibility();
     }
-
     // Toggle visibility of all districts
     toggleAllDistrictsVisibility();
   }
@@ -121,7 +124,7 @@ function App() {
     var districtsToShow = [];
 
     if (selectedDistricts.length === 0) {
-      // districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
+      districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
     } else {
       selectedDistricts.forEach(function (district) {
         districtsToShow.push(["==", ["get", "sidebar_label"], district]);
@@ -144,7 +147,7 @@ function App() {
       // Если район уже выбран, удалите его из списка
       selectedDistricts.splice(districtIndex, 1);
     }
-
+    console.log(selectedDistricts);
     // Переключите видимость всех районов
     toggleAllDistrictsVisibility();
   }
@@ -171,6 +174,7 @@ function App() {
         <div className="greenLine"></div>
         <div className="toggleContainer">
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="CD"
@@ -179,6 +183,7 @@ function App() {
             Center District
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="EU"
@@ -187,6 +192,7 @@ function App() {
             European District
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="Louise"
@@ -195,6 +201,7 @@ function App() {
             Louise
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="North"
@@ -203,6 +210,7 @@ function App() {
             North
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="NE"
@@ -211,6 +219,7 @@ function App() {
             North-East
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="NW"
@@ -219,6 +228,7 @@ function App() {
             North-West
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="South"
@@ -227,6 +237,7 @@ function App() {
             South
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="SE"
@@ -235,6 +246,7 @@ function App() {
             South-East
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="SW"
@@ -243,6 +255,7 @@ function App() {
             South-West
           </ToggleButton>
           <ToggleButton
+            isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
             data="Airport"
@@ -252,7 +265,10 @@ function App() {
           </ToggleButton>
 
           <button
-            onClick={allDistrictsButtonHandler}
+            onClick={() => {
+              setIsAllDistrictsVisible(!isAllDistrictsVisible);
+              allDistrictsButtonHandler();
+            }}
             data-district="All"
             className="toggleButton"
             id="allDistrictsButton"

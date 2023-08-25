@@ -8,7 +8,6 @@ const ResetMap = ({
 }) => {
   function resetMapButtonHandler() {
     removeCustomMarker();
-    setIsActive(false);
     map.flyTo({
       center: [4.387564, 50.838193],
       zoom: 11,
