@@ -2,7 +2,7 @@ import React from "react";
 
 const ResetMap = ({
   map,
-  selectedDistricts,
+  setSelectedDistricts,
   removeCustomMarker,
   setIsActive,
   draw,
@@ -17,9 +17,9 @@ const ResetMap = ({
       pitch: 0,
     });
 
-    selectedDistricts = [];
+    setSelectedDistricts([]);
 
-    map.setStyle("mapbox://styles/neon-factory/clf8a2hoq001r01mukt9dgsmp");
+    map.setStyle("mapbox://mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b/neon-factory/clf8a2hoq001r01mukt9dgsmp");
 
     // Сбрасываем видимость надписей в боковой панели
     var sidebarLabels = document.querySelectorAll(".sidebar-label");

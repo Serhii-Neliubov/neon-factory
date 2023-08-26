@@ -6,18 +6,26 @@ const ToggleButton = ({
   children,
   toggleButton,
   isAllDistrictsSelected,
+  setSelectedDistricts,
+  selectedDistricts
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggleClass, setToggleClass] = useState<string>("");
 
   const handleClick = () => {
-    setToggle(!toggle);
-    toggleButton(data); // Вызываем функцию toggleButton, если это необходимо
+    toggleButton(data);
+    const isDataSelected = selectedDistricts.includes(data);
+    setToggle(isDataSelected);
   };
 
   useEffect(() => {
     setToggle(isAllDistrictsSelected);
   }, [isAllDistrictsSelected]);
+
+  useEffect(() => {
+    const isDataSelected = selectedDistricts.includes(data);
+    setToggle(isDataSelected);
+  }, [selectedDistricts])
 
   useEffect(() => {
     if (toggle) {

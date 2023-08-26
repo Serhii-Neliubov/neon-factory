@@ -51,8 +51,7 @@ function App() {
     const draw = new MapboxDraw({
       userProperties: true,
       controls: {
-        marker: true, // Включите инструмент "Marker"
-        // Другие инструменты рисования, если необходимо
+        marker: true,
       },
       modes: {
         ...MapboxDraw.modes,
@@ -166,12 +165,14 @@ function App() {
           map={map}
         ></SubMenu>
         <div className="greenLine"></div>
+
         <ResetMap
           draw={draw}
           map={map}
           removeCustomMarker={removeCustomMarker}
-          selectedDistricts={selectedDistricts}
+          setSelectedDistricts={setSelectedDistricts}
         ></ResetMap>
+
         <div className="greenLine"></div>
         Brussels
         <div className="greenLine"></div>
@@ -180,6 +181,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="CD"
             id="CBDButton"
           >
@@ -189,6 +191,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="EU"
             id="EUButton"
           >
@@ -198,6 +201,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="Louise"
             id="LouiseButton"
           >
@@ -207,6 +211,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="North"
             id="NorthButton"
           >
@@ -216,6 +221,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="NE"
             id="NEButton"
           >
@@ -225,6 +231,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="NW"
             id="NEButton"
           >
@@ -234,6 +241,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="South"
             id="NEButton"
           >
@@ -243,6 +251,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="SE"
             id="SEButton"
           >
@@ -252,6 +261,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="SW"
             id="SEButton"
           >
@@ -261,6 +271,7 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
+            setSelectedDistricts={setSelectedDistricts}
             data="Airport"
             id="SEButton"
           >

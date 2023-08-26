@@ -8,7 +8,6 @@ const AllDistrictsButton = ({
   selectedDistricts,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
-  const [toggleClass, setToggleClass] = useState<string>("");
 
   const handleClick = () => {
     setToggle((prevToggle) => !prevToggle);
