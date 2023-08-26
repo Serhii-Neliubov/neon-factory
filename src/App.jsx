@@ -8,8 +8,8 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import SubMenu from "./components/SubMenu/SubMenu";
 import ResetMap from "./components/ResetMap";
 import PrintScreen from "./components/PrintScreen";
-import Logo from "./components/logo";
 import ToggleButton from "./components/ToggleMenu/ToggleButton";
+import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -23,11 +23,12 @@ function App() {
   let [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
   let [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   let drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
+  const [draw, setDraw] = useState(null);
 
   useEffect(() => {
     let mapSettings = {
       container: "map",
-      style: "mapbox://styles/neon-factory/clf8a2hoq001r01mukt9dgsmp",
+      style: "mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b",
       center: [4.387564, 50.838193],
       zoom: 11,
       preserveDrawingBuffer: true,
@@ -57,7 +58,7 @@ function App() {
         ...MapboxDraw.modes,
       },
     });
-
+    setDraw(draw);
     map.on("load", function () {
       map.addControl(draw);
     });
@@ -68,7 +69,7 @@ function App() {
   function createCustomMarkerElement() {
     let element = document.createElement("div");
     element.className = "custom-marker";
-    element.style.backgroundImage = "url(/pin.png)";
+    element.style.backgroundImage = "url(/pin.svg)";
     element.style.width = "32px"; // Установите желаемую ширину и высоту маркера
     element.style.height = "32px";
     return element;
@@ -107,13 +108,14 @@ function App() {
         "South",
       ]);
       setIsAllDistrictsSelected(true);
-      console.log(selectedDistricts);
       toggleAllDistrictsVisibility();
+      map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     } else {
       // Hide all districts
+      map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+
       setSelectedDistricts([]);
       setIsAllDistrictsSelected(false);
-      console.log(selectedDistricts);
       toggleAllDistrictsVisibility();
     }
     // Toggle visibility of all districts
@@ -124,7 +126,7 @@ function App() {
     var districtsToShow = [];
 
     if (selectedDistricts.length === 0) {
-      districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
+      // districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
     } else {
       selectedDistricts.forEach(function (district) {
         districtsToShow.push(["==", ["get", "sidebar_label"], district]);
@@ -155,7 +157,7 @@ function App() {
   return (
     <div id="mapContainer">
       <div className="sidebar">
-        <Logo />
+        <img alt="Logo" className="logo" src="logo.png" />
         <div id="geocoderContainer"></div>
         <div className="greenLine"></div>
         <SubMenu
@@ -165,6 +167,7 @@ function App() {
         ></SubMenu>
         <div className="greenLine"></div>
         <ResetMap
+          draw={draw}
           map={map}
           removeCustomMarker={removeCustomMarker}
           selectedDistricts={selectedDistricts}
@@ -263,19 +266,16 @@ function App() {
           >
             Airport
           </ToggleButton>
-
-          <button
-            onClick={() => {
-              setIsAllDistrictsVisible(!isAllDistrictsVisible);
-              allDistrictsButtonHandler();
-            }}
-            data-district="All"
-            className="toggleButton"
-            id="allDistrictsButton"
+          <AllDistrictsButton
+            setIsAllDistrictsVisible={setIsAllDistrictsVisible}
+            allDistrictsButtonHandler={allDistrictsButtonHandler}
+            isAllDistrictsVisible={isAllDistrictsVisible}
+            selectedDistricts={selectedDistricts}
           >
             All Districts
-          </button>
+          </AllDistrictsButton>
           <div className="greenLine"></div>
+
           <PrintScreen
             toggleAllDistrictsVisibility={toggleAllDistrictsVisibility}
             drawMenu={drawMenu}
@@ -287,7 +287,7 @@ function App() {
       </div>
       <div id="map" style={{ flex: 1, position: "relative" }}>
         <a href="https://neon-factory.design">
-          <img alt="Logo" className="logo-map" src="public/logo.png" />
+          <img alt="Logo" className="logo-map" src="logo.png" />
         </a>
       </div>
     </div>

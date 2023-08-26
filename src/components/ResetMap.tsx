@@ -5,9 +5,11 @@ const ResetMap = ({
   selectedDistricts,
   removeCustomMarker,
   setIsActive,
+  draw,
 }) => {
   function resetMapButtonHandler() {
     removeCustomMarker();
+    draw.deleteAll();
     map.flyTo({
       center: [4.387564, 50.838193],
       zoom: 11,

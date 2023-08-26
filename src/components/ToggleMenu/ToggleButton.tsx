@@ -29,7 +29,12 @@ const ToggleButton = ({
 
   return (
     <div style={{ display: "flex" }}>
-      <div className="toggleButton" data-district={data} id={id}>
+      <div
+        onClick={handleClick}
+        className="toggleButton"
+        data-district={data}
+        id={id}
+      >
         {children}
       </div>
       <div className={toggleClass} onClick={handleClick}></div>
