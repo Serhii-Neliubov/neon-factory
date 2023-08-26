@@ -111,14 +111,28 @@ function App() {
       map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     } else {
       // Hide all districts
-      map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
-
+      // map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+      const allDistricts = [
+        "SW",
+        "SE",
+        "CD",
+        "EU",
+        "NE",
+        "NW",
+        "Airport",
+        "Louise",
+        "North",
+        "South",
+      ];
+      allDistricts.forEach((district) => {
+        if (selectedDistricts.includes(district)) {
+          toggleButton(district);
+        }
+      });
       setSelectedDistricts([]);
       setIsAllDistrictsSelected(false);
       toggleAllDistrictsVisibility();
     }
-    // Toggle visibility of all districts
-    toggleAllDistrictsVisibility();
   }
 
   function toggleAllDistrictsVisibility() {
@@ -181,7 +195,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="CD"
             id="CBDButton"
           >
@@ -191,7 +204,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="EU"
             id="EUButton"
           >
@@ -201,7 +213,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="Louise"
             id="LouiseButton"
           >
@@ -211,7 +222,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="North"
             id="NorthButton"
           >
@@ -221,7 +231,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="NE"
             id="NEButton"
           >
@@ -231,7 +240,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="NW"
             id="NEButton"
           >
@@ -241,7 +249,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="South"
             id="NEButton"
           >
@@ -251,7 +258,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="SE"
             id="SEButton"
           >
@@ -261,7 +267,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="SW"
             id="SEButton"
           >
@@ -271,7 +276,6 @@ function App() {
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
             selectedDistricts={selectedDistricts}
-            setSelectedDistricts={setSelectedDistricts}
             data="Airport"
             id="SEButton"
           >

@@ -6,7 +6,6 @@ const ToggleButton = ({
   children,
   toggleButton,
   isAllDistrictsSelected,
-  setSelectedDistricts,
   selectedDistricts
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);

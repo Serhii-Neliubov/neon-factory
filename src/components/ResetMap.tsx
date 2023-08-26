@@ -19,7 +19,7 @@ const ResetMap = ({
 
     setSelectedDistricts([]);
 
-    map.setStyle("mapbox://mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b/neon-factory/clf8a2hoq001r01mukt9dgsmp");
+    map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
 
     // Сбрасываем видимость надписей в боковой панели
     var sidebarLabels = document.querySelectorAll(".sidebar-label");
