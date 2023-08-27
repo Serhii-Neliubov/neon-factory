@@ -47,23 +47,15 @@ function App() {
       marker: {
         draggable: false,
         element: createCustomMarkerElement(),
+        animate: false, // Отключить анимацию появления/исчезновения маркера
       },
-    });
-
-    map.loadImage("/pin.png", function (error, image) {
-      if (error) throw error;
-
-      // Add the loaded image to the map's style
-      map.addImage("custom-pin", image);
-
-      // Continue with your map initialization
-      // ...
     });
 
     const draw = new MapboxDraw({
       userProperties: true,
       controls: {
         marker: true,
+        animate: false, // Отключить анимацию появления/исчезновения маркера
       },
       styles: [
         // ACTIVE (being drawn)
@@ -238,6 +230,14 @@ function App() {
     setDraw(draw);
     map.on("load", function () {
       map.addControl(draw);
+
+      map.loadImage("/pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+
+        // Continue with your map initialization
+        // ...
+      });
     });
 
     geocoderContainer.appendChild(geocoder.onAdd(map));
@@ -249,6 +249,7 @@ function App() {
     element.style.backgroundImage = "url(/pin.svg)";
     element.style.width = "32px"; // Установите желаемую ширину и высоту маркера
     element.style.height = "32px";
+
     return element;
   }
 
@@ -267,6 +268,7 @@ function App() {
     setIsControlsActive(!isControlsActive);
     submenu.style.display = submenuDisplay;
   }
+
   const handleColorChange = (color) => {
     setSelectedColor(color.hex); // Получите шестнадцатеричное значение цвета
   };
