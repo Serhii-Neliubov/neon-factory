@@ -1,13 +1,13 @@
 import html2canvas from "html2canvas";
 import React from "react";
 
-const PrintScreen = ({ pageElement, drawMenu }) => {
+const PrintScreen = ({ mapTag, drawMenu }) => {
   async function printScreenHandler() {
     // Спрячьте drawMenu
     drawMenu.style.display = "none";
 
     // Сделайте снимок экрана с использованием html2canvas
-    const canvas = await html2canvas(pageElement);
+    const canvas = await html2canvas(mapTag);
 
     // Восстановите видимость drawMenu
     drawMenu.style.display = "block";

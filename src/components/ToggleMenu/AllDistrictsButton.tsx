@@ -14,7 +14,7 @@ const AllDistrictsButton = ({
   };
 
   useEffect(() => {
-    if (selectedDistricts.length >= 10) {
+    if (selectedDistricts.length === 10) {
       setToggle(true);
     } else {
       setToggle(false);

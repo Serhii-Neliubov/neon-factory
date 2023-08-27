@@ -4,10 +4,11 @@ const ResetMap = ({
   map,
   setSelectedDistricts,
   removeCustomMarker,
-  setIsActive,
   draw,
+  setIsAllDistrictsVisible
 }) => {
   function resetMapButtonHandler() {
+    setIsAllDistrictsVisible(true);
     removeCustomMarker();
     draw.deleteAll();
     map.flyTo({
@@ -18,7 +19,6 @@ const ResetMap = ({
     });
 
     setSelectedDistricts([]);
-
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
 
     // Сбрасываем видимость надписей в боковой панели

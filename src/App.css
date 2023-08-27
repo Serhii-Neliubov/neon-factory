@@ -268,8 +268,11 @@ body {
 }
 
 .palette {
+  
+  width: 30px;
+  height: 30px;
   position: absolute;
-  top: 50%;
+  top: 15%;
   right: 10px;
   z-index: 100;
 }

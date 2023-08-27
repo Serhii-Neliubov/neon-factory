@@ -6,13 +6,14 @@ const ToggleButton = ({
   children,
   toggleButton,
   isAllDistrictsSelected,
-  selectedDistricts
+  selectedDistricts,
+  map
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggleClass, setToggleClass] = useState<string>("");
 
   const handleClick = () => {
-    toggleButton(data);
+    toggleButton(data, selectedDistricts, map);
     const isDataSelected = selectedDistricts.includes(data);
     setToggle(isDataSelected);
   };

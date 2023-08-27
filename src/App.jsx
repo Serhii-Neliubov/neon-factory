@@ -1,29 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+
+// MapBox
 import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
+
+// Css
 import "./App.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import MapboxDraw from "@mapbox/mapbox-gl-draw";
+
+// Components
 import SubMenu from "./components/SubMenu/SubMenu";
 import ResetMap from "./components/ResetMap";
 import PrintScreen from "./components/PrintScreen";
 import ToggleButton from "./components/ToggleMenu/ToggleButton";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
 
+// Utils
+import defaultDrawStyles from "./utils/DefaultDrawStyles";
+
+//Map functions
+import {
+  createCustomMarkerElement,
+  removeCustomMarker,
+  toggleAllDistrictsVisibility,
+  toggleButton,
+  changeColor,
+} from "./utils/MapFunctions";
+
 mapboxgl.accessToken =
   "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
 
 function App() {
-  let [map, setMap] = useState(null);
+  const [map, setMap] = useState(null);
   const [isControlsActive, setIsControlsActive] = useState(false);
-  let submenu = document.querySelector(".submenu");
-  const pageElement = document.querySelector("#map");
-  let [selectedDistricts, setSelectedDistricts] = useState([]);
-  let [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
-  let [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
-  let drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
+  const [selectedDistricts, setSelectedDistricts] = useState([]);
+  const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
+  const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   const [draw, setDraw] = useState(null);
+  const submenuTag = useRef();
+  const mapTag = useRef();
+  const colorPicker = useRef();
+  const geocoderContainer = useRef();
+  const drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
+  let newDrawFeature = useRef(false);
+  const allDistricts = [
+    "SW",
+    "SE",
+    "CD",
+    "EU",
+    "NE",
+    "NW",
+    "Airport",
+    "Louise",
+    "North",
+    "South",
+  ];
 
   useEffect(() => {
     let mapSettings = {
@@ -36,7 +69,6 @@ function App() {
 
     let map = new mapboxgl.Map(mapSettings);
     setMap(map);
-    let geocoderContainer = document.getElementById("geocoderContainer");
 
     let geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -45,7 +77,7 @@ function App() {
       marker: {
         draggable: false,
         element: createCustomMarkerElement(),
-        animate: false, // Отключить анимацию появления/исчезновения маркера
+        animate: false,
       },
     });
 
@@ -53,210 +85,9 @@ function App() {
       userProperties: true,
       controls: {
         marker: true,
-        animate: false, // Отключить анимацию появления/исчезновения маркера
+        animate: false,
       },
-      styles: [
-        // ACTIVE (being drawn)
-        // line stroke
-        {
-          id: "gl-draw-line",
-          type: "line",
-          filter: [
-            "all",
-            ["==", "$type", "LineString"],
-            ["!=", "mode", "static"],
-          ],
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-color": "#000",
-            "line-dasharray": [0.2, 2],
-            "line-width": 2,
-          },
-        },
-        // polygon fill
-        {
-          id: "gl-draw-polygon-fill",
-          type: "fill",
-          filter: ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
-          paint: {
-            "fill-color": "#000",
-            "fill-outline-color": "#D20C0C",
-            "fill-opacity": 0.1,
-          },
-        },
-        // polygon mid points
-        {
-          id: "gl-draw-polygon-midpoint",
-          type: "circle",
-          filter: ["all", ["==", "$type", "Point"], ["==", "meta", "midpoint"]],
-          paint: {
-            "circle-radius": 3,
-            "circle-color": "#fbb03b",
-          },
-        },
-        // polygon outline stroke
-        // This doesn't style the first edge of the polygon, which uses the line stroke styling instead
-        {
-          id: "gl-draw-polygon-stroke-active",
-          type: "line",
-          filter: ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-color": "#000",
-            "line-dasharray": [0.2, 2],
-            "line-width": 2,
-          },
-        },
-        // vertex point halos
-        {
-          id: "gl-draw-polygon-and-line-vertex-halo-active",
-          type: "circle",
-          filter: [
-            "all",
-            ["==", "meta", "vertex"],
-            ["==", "$type", "Point"],
-            ["!=", "mode", "static"],
-          ],
-          paint: {
-            "circle-radius": 5,
-            "circle-color": "#000",
-          },
-        },
-        // vertex points
-        {
-          id: "gl-draw-polygon-and-line-vertex-active",
-          type: "circle",
-          filter: [
-            "all",
-            ["==", "meta", "vertex"],
-            ["==", "$type", "Point"],
-            ["!=", "mode", "static"],
-          ],
-          paint: {
-            "circle-radius": 3,
-            "circle-color": "#000",
-          },
-        },
-
-        // INACTIVE (static, already drawn)
-        // line stroke
-        {
-          id: "gl-draw-line-static",
-          type: "line",
-          filter: [
-            "all",
-            ["==", "$type", "LineString"],
-            ["==", "mode", "static"],
-          ],
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-color": "#000",
-            "line-width": 3,
-          },
-        },
-        // polygon fill
-        {
-          id: "gl-draw-polygon-fill-static",
-          type: "fill",
-          filter: ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
-          paint: {
-            "fill-color": "#000",
-            "fill-outline-color": "#000",
-            "fill-opacity": 0.1,
-          },
-        },
-        // polygon outline
-        {
-          id: "gl-draw-polygon-stroke-static",
-          type: "line",
-          filter: ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
-          layout: {
-            "line-cap": "round",
-            "line-join": "round",
-          },
-          paint: {
-            "line-color": "#000",
-            "line-width": 3,
-          },
-        },
-        {
-          id: "highlight-active-points",
-          type: "symbol", // Измените тип на "symbol"
-          filter: [
-            "all",
-            ["==", "$type", "Point"],
-            ["==", "meta", "feature"],
-            ["==", "active", "true"],
-          ],
-          layout: {
-            "icon-image": "custom-pin", // Имя изображения без расширения файла
-            "icon-size": 1,
-            "icon-anchor": "bottom",
-          },
-          paint: {},
-        },
-        {
-          id: "points-are-blue",
-          type: "symbol",
-          filter: [
-            "all",
-            ["==", "$type", "Point"],
-            ["==", "meta", "feature"],
-            ["==", "active", "false"],
-          ],
-          layout: {
-            "icon-image": "custom-pin", // Имя изображения без расширения файла
-            "icon-size": 1,
-            "icon-anchor": "bottom",
-          },
-          paint: {},
-        },
-        {
-          id: "gl-draw-polygon-color-picker",
-          type: "fill",
-          filter: [
-            "all",
-            ["==", "$type", "Polygon"],
-            ["has", "user_portColor"],
-          ],
-          paint: {
-            "fill-color": ["get", "user_portColor"],
-            "fill-outline-color": ["get", "user_portColor"],
-            "fill-opacity": 0.5,
-          },
-        },
-        {
-          id: "gl-draw-line-color-picker",
-          type: "line",
-          filter: [
-            "all",
-            ["==", "$type", "LineString"],
-            ["has", "user_portColor"],
-          ],
-          paint: {
-            "line-color": ["get", "user_portColor"],
-            "line-width": 2,
-          },
-        },
-        {
-          id: "gl-draw-point-color-picker",
-          type: "circle",
-          filter: ["all", ["==", "$type", "Point"], ["has", "user_portColor"]],
-          paint: {
-            "circle-radius": 3,
-            "circle-color": ["get", "user_portColor"],
-          },
-        },
-      ],
+      styles: defaultDrawStyles,
       modes: {
         ...MapboxDraw.modes,
       },
@@ -265,9 +96,8 @@ function App() {
 
     map.on("load", function () {
       map.addControl(draw);
-      var colorPicker = document.getElementById("colorPicker");
 
-      colorPicker.addEventListener("input", function () {
+      colorPicker.current.addEventListener("input", function () {
         var selectedColor = colorPicker.value;
 
         if (mapboxgl.accessToken !== "" && typeof draw === "object") {
@@ -294,7 +124,7 @@ function App() {
     });
 
     map.on("draw.create", function () {
-      newDrawFeature = true;
+      newDrawFeature.current = true;
     });
     var setDrawFeature = function (e) {
       if (e.features.length && e.features[0].type === "Feature") {
@@ -307,7 +137,7 @@ function App() {
     map.on("draw.selectionchange", setDrawFeature);
 
     map.on("click", function (e) {
-      if (!newDrawFeature) {
+      if (!newDrawFeature.current) {
         var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
 
         //if another drawFeature is not found - reset drawFeatureID
@@ -316,136 +146,56 @@ function App() {
           : "";
       }
 
-      newDrawFeature = false;
+      newDrawFeature.current = false;
     });
+    const geocoderContainerRef = geocoderContainer.current;
+    geocoderContainerRef.appendChild(geocoder.onAdd(map));
 
-    geocoderContainer.appendChild(geocoder.onAdd(map));
+    return () => {
+      geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
+    };
   }, []);
 
-  function changeColor(selectedColor) {
-    if (mapboxgl.accessToken !== "" && typeof draw === "object") {
-      // Установите выбранный цвет для выбранной фигуры
-      draw.setFeatureProperty(mapboxgl.accessToken, "portColor", selectedColor);
-
-      // Обновите фигуру на карте
-      var feat = draw.get(mapboxgl.accessToken);
-      draw.add(feat);
-    }
-  }
-
-  function createCustomMarkerElement() {
-    let element = document.createElement("div");
-    element.className = "custom-marker";
-    element.style.backgroundImage = "url(pin.svg)";
-    element.style.width = "32px"; // Установите желаемую ширину и высоту маркера
-    element.style.height = "32px";
-
-    return element;
-  }
-
-  function removeCustomMarker() {
-    // Get the custom marker element
-    let customMarker = document.querySelector(".custom-marker");
-
-    // Remove the custom marker from the map
-    if (customMarker) {
-      customMarker.parentNode.removeChild(customMarker);
-    }
-  }
-
   function controlsButtonHandler() {
-    let submenuDisplay = submenu.style.display === "none" ? "block" : "none";
+    let submenuDisplay =
+      submenuTag.current.style.display === "none" ? "block" : "none";
     setIsControlsActive(!isControlsActive);
-    submenu.style.display = submenuDisplay;
+    submenuTag.current.style.display = submenuDisplay;
   }
-  /*===================================================================================*/
 
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
-      setSelectedDistricts([
-        "SW",
-        "SE",
-        "CD",
-        "EU",
-        "NE",
-        "NW",
-        "Airport",
-        "Louise",
-        "North",
-        "South",
-      ]);
-      setIsAllDistrictsSelected(true);
-      toggleAllDistrictsVisibility();
+
+      setSelectedDistricts(allDistricts);
+      toggleAllDistrictsVisibility(selectedDistricts, map);
       map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+
+      setIsAllDistrictsSelected(true);
     } else {
-      // Hide all districts
-      // map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
-      const allDistricts = [
-        "SW",
-        "SE",
-        "CD",
-        "EU",
-        "NE",
-        "NW",
-        "Airport",
-        "Louise",
-        "North",
-        "South",
-      ];
+
+      setSelectedDistricts([]);
       allDistricts.forEach((district) => {
         if (selectedDistricts.includes(district)) {
-          toggleButton(district);
+          toggleButton(district, selectedDistricts, map);
         }
       });
-      setSelectedDistricts([]);
+      toggleAllDistrictsVisibility(selectedDistricts, map);
+
       setIsAllDistrictsSelected(false);
-      toggleAllDistrictsVisibility();
     }
-  }
-
-  function toggleAllDistrictsVisibility() {
-    var districtsToShow = [];
-
-    if (selectedDistricts.length === 0) {
-      // districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
-    } else {
-      selectedDistricts.forEach(function (district) {
-        districtsToShow.push(["==", ["get", "sidebar_label"], district]);
-      });
-    }
-
-    map.setFilter("districts-brussels-0-2", ["any"].concat(districtsToShow));
-
-    // Обновите карту
-    map.triggerRepaint();
-  }
-
-  var newDrawFeature = false;
-
-  function toggleButton(data) {
-    const districtIndex = selectedDistricts.indexOf(data);
-
-    if (districtIndex === -1) {
-      // Если район не выбран, добавьте его в список
-      selectedDistricts.push(data);
-    } else {
-      // Если район уже выбран, удалите его из списка
-      selectedDistricts.splice(districtIndex, 1);
-    }
-    // Переключите видимость всех районов
-    toggleAllDistrictsVisibility();
   }
 
   return (
     <div id="mapContainer">
       <div className="sidebar">
         <img alt="Logo" className="logo" src="logo.png" />
-        <div id="geocoderContainer"></div>
+        <div ref={geocoderContainer}></div>
         <div className="greenLine"></div>
         <SubMenu
           controlsButtonHandler={controlsButtonHandler}
           isControlsActive={isControlsActive}
           map={map}
+          submenuTag={submenuTag}
         ></SubMenu>
         <div className="greenLine"></div>
         <ResetMap
@@ -453,6 +203,7 @@ function App() {
           map={map}
           removeCustomMarker={removeCustomMarker}
           setSelectedDistricts={setSelectedDistricts}
+          setIsAllDistrictsVisible={setIsAllDistrictsVisible}
         ></ResetMap>
         <div className="greenLine"></div>
         Brussels
@@ -461,6 +212,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="CD"
             id="CBDButton"
@@ -470,6 +222,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="EU"
             id="EUButton"
@@ -479,6 +232,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="Louise"
             id="LouiseButton"
@@ -488,6 +242,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="North"
             id="NorthButton"
@@ -497,6 +252,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="NE"
             id="NEButton"
@@ -506,6 +262,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="NW"
             id="NEButton"
@@ -515,6 +272,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="South"
             id="NEButton"
@@ -524,6 +282,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="SE"
             id="SEButton"
@@ -533,6 +292,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="SW"
             id="SEButton"
@@ -542,6 +302,7 @@ function App() {
           <ToggleButton
             isAllDistrictsSelected={isAllDistrictsSelected}
             toggleButton={toggleButton}
+            map={map}
             selectedDistricts={selectedDistricts}
             data="Airport"
             id="SEButton"
@@ -558,21 +319,17 @@ function App() {
           </AllDistrictsButton>
           <div className="greenLine"></div>
 
-          <PrintScreen
-            toggleAllDistrictsVisibility={toggleAllDistrictsVisibility}
-            drawMenu={drawMenu}
-            pageElement={pageElement}
-          >
+          <PrintScreen drawMenu={drawMenu} mapTag={mapTag.current}>
             Print Screen
           </PrintScreen>
         </div>
       </div>
-      <div id="map" style={{ flex: 1, position: "relative" }}>
+      <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
         <input
           type="color"
-          id="colorPicker"
+          ref={colorPicker}
           className="palette"
-          onChange={() => changeColor(this.value)}
+          onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
         />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>

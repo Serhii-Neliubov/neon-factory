@@ -7,14 +7,14 @@ import IncreasePitchButton from "./IncreasePitchButton";
 import DecreasePitchButton from "./DecreasePitchButton";
 import { ActionControls } from "./ActionControls";
 
-const SubMenu = ({ map, isControlsActive, controlsButtonHandler }) => {
+const SubMenu = ({ map, isControlsActive, controlsButtonHandler, submenuTag }) => {
   return (
     <>
       <ActionControls
         isControlsActive={isControlsActive}
         controlsButtonHandler={controlsButtonHandler}
       ></ActionControls>
-      <div className="submenu" id="controlsSubMenu" style={{ display: "none" }}>
+      <div className="submenu" ref={submenuTag} id="controlsSubMenu" style={{ display: "none" }}>
         <ZoomInButton map={map}>Zoom In</ZoomInButton>
         <ZoomOutButton map={map}>Zoom Out</ZoomOutButton>
         <RotateLeftButton map={map}>Rotate Left</RotateLeftButton>
