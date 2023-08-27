@@ -10,7 +10,6 @@ import ResetMap from "./components/ResetMap";
 import PrintScreen from "./components/PrintScreen";
 import ToggleButton from "./components/ToggleMenu/ToggleButton";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
-import Palette from "./components/Palette";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -25,7 +24,6 @@ function App() {
   let [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   let drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const [draw, setDraw] = useState(null);
-  const [selectedColor, setSelectedColor] = useState("#000000");
 
   useEffect(() => {
     let mapSettings = {
@@ -73,7 +71,7 @@ function App() {
             "line-join": "round",
           },
           paint: {
-            "line-color": selectedColor,
+            "line-color": "#000",
             "line-dasharray": [0.2, 2],
             "line-width": 2,
           },
@@ -84,7 +82,7 @@ function App() {
           type: "fill",
           filter: ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
           paint: {
-            "fill-color": selectedColor,
+            "fill-color": "#000",
             "fill-outline-color": "#D20C0C",
             "fill-opacity": 0.1,
           },
@@ -110,7 +108,7 @@ function App() {
             "line-join": "round",
           },
           paint: {
-            "line-color": selectedColor,
+            "line-color": "#000",
             "line-dasharray": [0.2, 2],
             "line-width": 2,
           },
@@ -127,7 +125,7 @@ function App() {
           ],
           paint: {
             "circle-radius": 5,
-            "circle-color": selectedColor,
+            "circle-color": "#000",
           },
         },
         // vertex points
@@ -142,7 +140,7 @@ function App() {
           ],
           paint: {
             "circle-radius": 3,
-            "circle-color": selectedColor,
+            "circle-color": "#000",
           },
         },
 
@@ -161,7 +159,7 @@ function App() {
             "line-join": "round",
           },
           paint: {
-            "line-color": selectedColor,
+            "line-color": "#000",
             "line-width": 3,
           },
         },
@@ -171,8 +169,8 @@ function App() {
           type: "fill",
           filter: ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
           paint: {
-            "fill-color": selectedColor,
-            "fill-outline-color": selectedColor,
+            "fill-color": "#000",
+            "fill-outline-color": "#000",
             "fill-opacity": 0.1,
           },
         },
@@ -186,7 +184,7 @@ function App() {
             "line-join": "round",
           },
           paint: {
-            "line-color": selectedColor,
+            "line-color": "#000",
             "line-width": 3,
           },
         },
@@ -222,16 +220,71 @@ function App() {
           },
           paint: {},
         },
+        {
+          id: "gl-draw-polygon-color-picker",
+          type: "fill",
+          filter: [
+            "all",
+            ["==", "$type", "Polygon"],
+            ["has", "user_portColor"],
+          ],
+          paint: {
+            "fill-color": ["get", "user_portColor"],
+            "fill-outline-color": ["get", "user_portColor"],
+            "fill-opacity": 0.5,
+          },
+        },
+        {
+          id: "gl-draw-line-color-picker",
+          type: "line",
+          filter: [
+            "all",
+            ["==", "$type", "LineString"],
+            ["has", "user_portColor"],
+          ],
+          paint: {
+            "line-color": ["get", "user_portColor"],
+            "line-width": 2,
+          },
+        },
+        {
+          id: "gl-draw-point-color-picker",
+          type: "circle",
+          filter: ["all", ["==", "$type", "Point"], ["has", "user_portColor"]],
+          paint: {
+            "circle-radius": 3,
+            "circle-color": ["get", "user_portColor"],
+          },
+        },
       ],
       modes: {
         ...MapboxDraw.modes,
       },
     });
     setDraw(draw);
+
     map.on("load", function () {
       map.addControl(draw);
+      var colorPicker = document.getElementById("colorPicker");
 
-      map.loadImage("/pin.png", function (error, image) {
+      colorPicker.addEventListener("input", function () {
+        var selectedColor = colorPicker.value;
+
+        if (mapboxgl.accessToken !== "" && typeof draw === "object") {
+          // Установите выбранный цвет для выбранной фигуры
+          draw.setFeatureProperty(
+            mapboxgl.accessToken,
+            "portColor",
+            selectedColor
+          );
+
+          // Обновите фигуру на карте
+          var feat = draw.get(mapboxgl.accessToken);
+          draw.add(feat);
+        }
+      });
+
+      map.loadImage("pin.png", function (error, image) {
         if (error) throw error;
         map.addImage("custom-pin", image);
 
@@ -240,13 +293,50 @@ function App() {
       });
     });
 
+    map.on("draw.create", function () {
+      newDrawFeature = true;
+    });
+    var setDrawFeature = function (e) {
+      if (e.features.length && e.features[0].type === "Feature") {
+        var feat = e.features[0];
+        mapboxgl.accessToken = feat.id;
+      }
+    };
+    map.on("draw.update", setDrawFeature);
+
+    map.on("draw.selectionchange", setDrawFeature);
+
+    map.on("click", function (e) {
+      if (!newDrawFeature) {
+        var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
+
+        //if another drawFeature is not found - reset drawFeatureID
+        mapboxgl.accessToken = drawFeatureAtPoint.length
+          ? drawFeatureAtPoint[0]
+          : "";
+      }
+
+      newDrawFeature = false;
+    });
+
     geocoderContainer.appendChild(geocoder.onAdd(map));
-  }, [selectedColor]);
+  }, []);
+
+  function changeColor(selectedColor) {
+    if (mapboxgl.accessToken !== "" && typeof draw === "object") {
+      // Установите выбранный цвет для выбранной фигуры
+      draw.setFeatureProperty(mapboxgl.accessToken, "portColor", selectedColor);
+
+      // Обновите фигуру на карте
+      var feat = draw.get(mapboxgl.accessToken);
+      draw.add(feat);
+    }
+  }
 
   function createCustomMarkerElement() {
     let element = document.createElement("div");
     element.className = "custom-marker";
-    element.style.backgroundImage = "url(/pin.svg)";
+    element.style.backgroundImage = "url(pin.svg)";
     element.style.width = "32px"; // Установите желаемую ширину и высоту маркера
     element.style.height = "32px";
 
@@ -268,10 +358,6 @@ function App() {
     setIsControlsActive(!isControlsActive);
     submenu.style.display = submenuDisplay;
   }
-
-  const handleColorChange = (color) => {
-    setSelectedColor(color.hex); // Получите шестнадцатеричное значение цвета
-  };
   /*===================================================================================*/
 
   function allDistrictsButtonHandler() {
@@ -333,6 +419,9 @@ function App() {
     // Обновите карту
     map.triggerRepaint();
   }
+
+  var newDrawFeature = false;
+
   function toggleButton(data) {
     const districtIndex = selectedDistricts.indexOf(data);
 
@@ -349,10 +438,6 @@ function App() {
 
   return (
     <div id="mapContainer">
-      <Palette
-        selectedColor={selectedColor}
-        handleColorChange={handleColorChange}
-      />
       <div className="sidebar">
         <img alt="Logo" className="logo" src="logo.png" />
         <div id="geocoderContainer"></div>
@@ -483,6 +568,12 @@ function App() {
         </div>
       </div>
       <div id="map" style={{ flex: 1, position: "relative" }}>
+        <input
+          type="color"
+          id="colorPicker"
+          className="palette"
+          onChange={() => changeColor(this.value)}
+        />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
     </div>

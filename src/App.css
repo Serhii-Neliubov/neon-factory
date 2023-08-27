@@ -266,3 +266,10 @@ body {
   z-index: 1000;
   transform: translate(0, -40%);
 }
+
+.palette {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  z-index: 100;
+}
