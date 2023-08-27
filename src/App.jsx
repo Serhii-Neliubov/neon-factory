@@ -50,6 +50,16 @@ function App() {
       },
     });
 
+    map.loadImage("/pin.png", function (error, image) {
+      if (error) throw error;
+
+      // Add the loaded image to the map's style
+      map.addImage("custom-pin", image);
+
+      // Continue with your map initialization
+      // ...
+    });
+
     const draw = new MapboxDraw({
       userProperties: true,
       controls: {
@@ -187,6 +197,38 @@ function App() {
             "line-color": selectedColor,
             "line-width": 3,
           },
+        },
+        {
+          id: "highlight-active-points",
+          type: "symbol", // Измените тип на "symbol"
+          filter: [
+            "all",
+            ["==", "$type", "Point"],
+            ["==", "meta", "feature"],
+            ["==", "active", "true"],
+          ],
+          layout: {
+            "icon-image": "custom-pin", // Имя изображения без расширения файла
+            "icon-size": 1,
+            "icon-anchor": "bottom",
+          },
+          paint: {},
+        },
+        {
+          id: "points-are-blue",
+          type: "symbol",
+          filter: [
+            "all",
+            ["==", "$type", "Point"],
+            ["==", "meta", "feature"],
+            ["==", "active", "false"],
+          ],
+          layout: {
+            "icon-image": "custom-pin", // Имя изображения без расширения файла
+            "icon-size": 1,
+            "icon-anchor": "bottom",
+          },
+          paint: {},
         },
       ],
       modes: {
@@ -439,9 +481,7 @@ function App() {
         </div>
       </div>
       <div id="map" style={{ flex: 1, position: "relative" }}>
-        <a href="https://neon-factory.design">
-          <img alt="Logo" className="logo-map" src="logo.png" />
-        </a>
+        <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
     </div>
   );
