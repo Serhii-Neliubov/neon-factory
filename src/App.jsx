@@ -10,6 +10,7 @@ import ResetMap from "./components/ResetMap";
 import PrintScreen from "./components/PrintScreen";
 import ToggleButton from "./components/ToggleMenu/ToggleButton";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
+import Palette from "./components/Palette";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -24,6 +25,7 @@ function App() {
   let [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   let drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const [draw, setDraw] = useState(null);
+  const [selectedColor, setSelectedColor] = useState("#000000");
 
   useEffect(() => {
     let mapSettings = {
@@ -53,6 +55,140 @@ function App() {
       controls: {
         marker: true,
       },
+      styles: [
+        // ACTIVE (being drawn)
+        // line stroke
+        {
+          id: "gl-draw-line",
+          type: "line",
+          filter: [
+            "all",
+            ["==", "$type", "LineString"],
+            ["!=", "mode", "static"],
+          ],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": selectedColor,
+            "line-dasharray": [0.2, 2],
+            "line-width": 2,
+          },
+        },
+        // polygon fill
+        {
+          id: "gl-draw-polygon-fill",
+          type: "fill",
+          filter: ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
+          paint: {
+            "fill-color": selectedColor,
+            "fill-outline-color": "#D20C0C",
+            "fill-opacity": 0.1,
+          },
+        },
+        // polygon mid points
+        {
+          id: "gl-draw-polygon-midpoint",
+          type: "circle",
+          filter: ["all", ["==", "$type", "Point"], ["==", "meta", "midpoint"]],
+          paint: {
+            "circle-radius": 3,
+            "circle-color": "#fbb03b",
+          },
+        },
+        // polygon outline stroke
+        // This doesn't style the first edge of the polygon, which uses the line stroke styling instead
+        {
+          id: "gl-draw-polygon-stroke-active",
+          type: "line",
+          filter: ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": selectedColor,
+            "line-dasharray": [0.2, 2],
+            "line-width": 2,
+          },
+        },
+        // vertex point halos
+        {
+          id: "gl-draw-polygon-and-line-vertex-halo-active",
+          type: "circle",
+          filter: [
+            "all",
+            ["==", "meta", "vertex"],
+            ["==", "$type", "Point"],
+            ["!=", "mode", "static"],
+          ],
+          paint: {
+            "circle-radius": 5,
+            "circle-color": selectedColor,
+          },
+        },
+        // vertex points
+        {
+          id: "gl-draw-polygon-and-line-vertex-active",
+          type: "circle",
+          filter: [
+            "all",
+            ["==", "meta", "vertex"],
+            ["==", "$type", "Point"],
+            ["!=", "mode", "static"],
+          ],
+          paint: {
+            "circle-radius": 3,
+            "circle-color": selectedColor,
+          },
+        },
+
+        // INACTIVE (static, already drawn)
+        // line stroke
+        {
+          id: "gl-draw-line-static",
+          type: "line",
+          filter: [
+            "all",
+            ["==", "$type", "LineString"],
+            ["==", "mode", "static"],
+          ],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": selectedColor,
+            "line-width": 3,
+          },
+        },
+        // polygon fill
+        {
+          id: "gl-draw-polygon-fill-static",
+          type: "fill",
+          filter: ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
+          paint: {
+            "fill-color": selectedColor,
+            "fill-outline-color": selectedColor,
+            "fill-opacity": 0.1,
+          },
+        },
+        // polygon outline
+        {
+          id: "gl-draw-polygon-stroke-static",
+          type: "line",
+          filter: ["all", ["==", "$type", "Polygon"], ["==", "mode", "static"]],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": selectedColor,
+            "line-width": 3,
+          },
+        },
+      ],
       modes: {
         ...MapboxDraw.modes,
       },
@@ -63,7 +199,7 @@ function App() {
     });
 
     geocoderContainer.appendChild(geocoder.onAdd(map));
-  }, []);
+  }, [selectedColor]);
 
   function createCustomMarkerElement() {
     let element = document.createElement("div");
@@ -89,7 +225,9 @@ function App() {
     setIsControlsActive(!isControlsActive);
     submenu.style.display = submenuDisplay;
   }
-
+  const handleColorChange = (color) => {
+    setSelectedColor(color.hex); // Получите шестнадцатеричное значение цвета
+  };
   /*===================================================================================*/
 
   function allDistrictsButtonHandler() {
@@ -151,7 +289,6 @@ function App() {
     // Обновите карту
     map.triggerRepaint();
   }
-
   function toggleButton(data) {
     const districtIndex = selectedDistricts.indexOf(data);
 
@@ -162,13 +299,16 @@ function App() {
       // Если район уже выбран, удалите его из списка
       selectedDistricts.splice(districtIndex, 1);
     }
-    console.log(selectedDistricts);
     // Переключите видимость всех районов
     toggleAllDistrictsVisibility();
   }
 
   return (
     <div id="mapContainer">
+      <Palette
+        selectedColor={selectedColor}
+        handleColorChange={handleColorChange}
+      />
       <div className="sidebar">
         <img alt="Logo" className="logo" src="logo.png" />
         <div id="geocoderContainer"></div>
@@ -179,14 +319,12 @@ function App() {
           map={map}
         ></SubMenu>
         <div className="greenLine"></div>
-
         <ResetMap
           draw={draw}
           map={map}
           removeCustomMarker={removeCustomMarker}
           setSelectedDistricts={setSelectedDistricts}
         ></ResetMap>
-
         <div className="greenLine"></div>
         Brussels
         <div className="greenLine"></div>

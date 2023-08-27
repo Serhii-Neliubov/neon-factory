@@ -238,7 +238,7 @@ body {
   z-index: 1;
 }
 .switch-on {
-  background: #118c4e;
+  background: #4cc0ad;
 }
 .switch-on::after {
   left: 16px;
@@ -253,8 +253,16 @@ body {
   top: 20px; /* Установите желаемый отступ сверху */
   left: 20px; /* Установите желаемый отступ справа */
   width: 130px; /* Установите желаемую ширину */
-  background-image: url("/path/to/your/logo.png"); /* Путь к вашему логотипу */
+  background-image: url("logo.png"); /* Путь к вашему логотипу */
   background-size: cover;
   background-repeat: no-repeat;
   z-index: 1000;
+}
+
+.line-palette {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 1000;
+  transform: translate(0, -40%);
 }
