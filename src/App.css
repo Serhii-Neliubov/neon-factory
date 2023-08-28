@@ -244,9 +244,9 @@ body {
   left: 16px;
 }
 
-.mapboxgl-ctrl-group.mapboxgl-ctrl button:nth-last-child(-n + 2) {
+/* .mapboxgl-ctrl-group.mapboxgl-ctrl button:nth-last-child(-n + 2) {
   display: none;
-}
+} */
 
 .logo-map {
   position: absolute;

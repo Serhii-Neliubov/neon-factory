@@ -18,7 +18,6 @@ import ToggleButton from "./components/ToggleMenu/ToggleButton";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
 
 // Utils
-import defaultDrawStyles from "./utils/DefaultDrawStyles";
 
 //Map functions
 import {
@@ -26,7 +25,6 @@ import {
   removeCustomMarker,
   toggleAllDistrictsVisibility,
   toggleButton,
-  changeColor,
 } from "./utils/MapFunctions";
 
 function App() {
@@ -43,7 +41,6 @@ function App() {
   const drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const sreenLogo = document.querySelector(".logo-map");
   const palette = document.querySelector(".palette");
-  let newDrawFeature = useRef(false);
   const allDistricts = [
     "SW",
     "SE",
@@ -56,6 +53,9 @@ function App() {
     "North",
     "South",
   ];
+  var drawFeatureID =
+    "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
+  var newDrawFeature = false;
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -82,75 +82,352 @@ function App() {
         animate: false,
       },
     });
+    const colorPicker = document.getElementById("colorPicker");
 
-    const draw = new MapboxDraw({
+    colorPicker.addEventListener("input", function () {
+      var selectedColor = colorPicker.value;
+
+      if (drawFeatureID !== "" && typeof draw === "object") {
+        // Установите выбранный цвет для выбранной фигуры
+        draw.setFeatureProperty(drawFeatureID, "portColor", selectedColor);
+
+        // Обновите фигуру на карте
+        var feat = draw.get(drawFeatureID);
+        draw.add(feat);
+      }
+    });
+    var draw = new MapboxDraw({
+      // this is used to allow for custom properties for styling
+      // it appends the word "user_" to the property
       userProperties: true,
       controls: {
-        marker: true,
-        animate: false,
+        combine_features: false,
+        uncombine_features: false,
       },
-      styles: defaultDrawStyles,
-      modes: {
-        ...MapboxDraw.modes,
-      },
+      styles: [
+        // default themes provided by MB Draw
+        // default themes provided by MB Draw
+        // default themes provided by MB Draw
+        // default themes provided by MB Draw
+
+        {
+          id: "gl-draw-polygon-fill-inactive",
+          type: "fill",
+          filter: [
+            "all",
+            ["==", "active", "false"],
+            ["==", "$type", "Polygon"],
+            ["!=", "mode", "static"],
+          ],
+          paint: {
+            "fill-color": "#3bb2d0",
+            "fill-outline-color": "#3bb2d0",
+            "fill-opacity": 0.1,
+          },
+        },
+        {
+          id: "gl-draw-polygon-fill-active",
+          type: "fill",
+          filter: ["all", ["==", "active", "true"], ["==", "$type", "Polygon"]],
+          paint: {
+            "fill-color": "#fbb03b",
+            "fill-outline-color": "#fbb03b",
+            "fill-opacity": 0.1,
+          },
+        },
+        {
+          id: "gl-draw-polygon-midpoint",
+          type: "circle",
+          filter: ["all", ["==", "$type", "Point"], ["==", "meta", "midpoint"]],
+          paint: {
+            "circle-radius": 3,
+            "circle-color": "#fbb03b",
+          },
+        },
+        {
+          id: "gl-draw-polygon-stroke-inactive",
+          type: "line",
+          filter: [
+            "all",
+            ["==", "active", "false"],
+            ["==", "$type", "Polygon"],
+            ["!=", "mode", "static"],
+          ],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": "#3bb2d0",
+            "line-width": 2,
+          },
+        },
+        {
+          id: "gl-draw-polygon-stroke-active",
+          type: "line",
+          filter: ["all", ["==", "active", "true"], ["==", "$type", "Polygon"]],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": "#fbb03b",
+            "line-dasharray": [0.2, 2],
+            "line-width": 2,
+          },
+        },
+        {
+          id: "gl-draw-line-inactive",
+          type: "line",
+          filter: [
+            "all",
+            ["==", "active", "false"],
+            ["==", "$type", "LineString"],
+            ["!=", "mode", "static"],
+          ],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": "#3bb2d0",
+            "line-width": 2,
+          },
+        },
+        {
+          id: "gl-draw-line-active",
+          type: "line",
+          filter: [
+            "all",
+            ["==", "$type", "LineString"],
+            ["==", "active", "true"],
+          ],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": "#fbb03b",
+            "line-dasharray": [0.2, 2],
+            "line-width": 2,
+          },
+        },
+        {
+          id: "gl-draw-polygon-and-line-vertex-stroke-inactive",
+          type: "circle",
+          filter: [
+            "all",
+            ["==", "meta", "vertex"],
+            ["==", "$type", "Point"],
+            ["!=", "mode", "static"],
+          ],
+          paint: {
+            "circle-radius": 5,
+            "circle-color": "#fff",
+          },
+        },
+        {
+          id: "gl-draw-polygon-and-line-vertex-inactive",
+          type: "circle",
+          filter: [
+            "all",
+            ["==", "meta", "vertex"],
+            ["==", "$type", "Point"],
+            ["!=", "mode", "static"],
+          ],
+          paint: {
+            "circle-radius": 3,
+            "circle-color": "#fbb03b",
+          },
+        },
+        {
+          id: "gl-draw-point-point-stroke-inactive",
+          type: "circle",
+          filter: [
+            "all",
+            ["==", "active", "false"],
+            ["==", "$type", "Point"],
+            ["==", "meta", "feature"],
+            ["!=", "mode", "static"],
+          ],
+          paint: {
+            "circle-radius": 5,
+            "circle-opacity": 1,
+            "circle-color": "#fff",
+          },
+        },
+        {
+          id: "gl-draw-point-inactive",
+          type: "circle",
+          filter: [
+            "all",
+            ["==", "active", "false"],
+            ["==", "$type", "Point"],
+            ["==", "meta", "feature"],
+            ["!=", "mode", "static"],
+          ],
+          paint: {
+            "circle-radius": 3,
+            "circle-color": "#3bb2d0",
+          },
+        },
+        {
+          id: "gl-draw-point-stroke-active",
+          type: "circle",
+          filter: [
+            "all",
+            ["==", "$type", "Point"],
+            ["==", "active", "true"],
+            ["!=", "meta", "midpoint"],
+          ],
+          paint: {
+            "circle-radius": 7,
+            "circle-color": "#fff",
+          },
+        },
+        {
+          id: "gl-draw-point-active",
+          type: "circle",
+          filter: [
+            "all",
+            ["==", "$type", "Point"],
+            ["!=", "meta", "midpoint"],
+            ["==", "active", "true"],
+          ],
+          paint: {
+            "circle-radius": 5,
+            "circle-color": "#fbb03b",
+          },
+        },
+        {
+          id: "gl-draw-polygon-fill-static",
+          type: "fill",
+          filter: ["all", ["==", "mode", "static"], ["==", "$type", "Polygon"]],
+          paint: {
+            "fill-color": "#404040",
+            "fill-outline-color": "#404040",
+            "fill-opacity": 0.1,
+          },
+        },
+        {
+          id: "gl-draw-polygon-stroke-static",
+          type: "line",
+          filter: ["all", ["==", "mode", "static"], ["==", "$type", "Polygon"]],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": "#404040",
+            "line-width": 2,
+          },
+        },
+        {
+          id: "gl-draw-line-static",
+          type: "line",
+          filter: [
+            "all",
+            ["==", "mode", "static"],
+            ["==", "$type", "LineString"],
+          ],
+          layout: {
+            "line-cap": "round",
+            "line-join": "round",
+          },
+          paint: {
+            "line-color": "#404040",
+            "line-width": 2,
+          },
+        },
+        {
+          id: "gl-draw-point-static",
+          type: "circle",
+          filter: ["all", ["==", "mode", "static"], ["==", "$type", "Point"]],
+          paint: {
+            "circle-radius": 5,
+            "circle-color": "#404040",
+          },
+        },
+
+        // end default themes provided by MB Draw
+        // end default themes provided by MB Draw
+        // end default themes provided by MB Draw
+        // end default themes provided by MB Draw
+
+        // new styles for toggling colors
+        // new styles for toggling colors
+        // new styles for toggling colors
+        // new styles for toggling colors
+
+        {
+          id: "gl-draw-polygon-color-picker",
+          type: "fill",
+          filter: [
+            "all",
+            ["==", "$type", "Polygon"],
+            ["has", "user_portColor"],
+          ],
+          paint: {
+            "fill-color": ["get", "user_portColor"],
+            "fill-outline-color": ["get", "user_portColor"],
+            "fill-opacity": 0.5,
+          },
+        },
+        {
+          id: "gl-draw-line-color-picker",
+          type: "line",
+          filter: [
+            "all",
+            ["==", "$type", "LineString"],
+            ["has", "user_portColor"],
+          ],
+          paint: {
+            "line-color": ["get", "user_portColor"],
+            "line-width": 2,
+          },
+        },
+        {
+          id: "gl-draw-point-color-picker",
+          type: "circle",
+          filter: ["all", ["==", "$type", "Point"], ["has", "user_portColor"]],
+          paint: {
+            "circle-radius": 3,
+            "circle-color": ["get", "user_portColor"],
+          },
+        },
+      ],
     });
+
     setDraw(draw);
 
-    map.on("load", function () {
-      map.addControl(draw);
-
-      colorPicker.current.addEventListener("input", function () {
-        var selectedColor = colorPicker.value;
-
-        if (mapboxgl.accessToken !== "" && typeof draw === "object") {
-          // Установите выбранный цвет для выбранной фигуры
-          draw.setFeatureProperty(
-            mapboxgl.accessToken,
-            "portColor",
-            selectedColor
-          );
-
-          // Обновите фигуру на карте
-          var feat = draw.get(mapboxgl.accessToken);
-          draw.add(feat);
-        }
-      });
-
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-
-        // Continue with your map initialization
-        // ...
-      });
-    });
-
-    map.on("draw.create", function () {
-      newDrawFeature.current = true;
-    });
+    map.addControl(draw, "top-right");
 
     var setDrawFeature = function (e) {
       if (e.features.length && e.features[0].type === "Feature") {
         var feat = e.features[0];
-        mapboxgl.accessToken = feat.id;
+        drawFeatureID = feat.id;
       }
     };
+
     map.on("draw.update", setDrawFeature);
 
     map.on("draw.selectionchange", setDrawFeature);
 
     map.on("click", function (e) {
-      if (!newDrawFeature.current) {
+      if (!newDrawFeature) {
         var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
 
         //if another drawFeature is not found - reset drawFeatureID
-        mapboxgl.accessToken = drawFeatureAtPoint.length
-          ? drawFeatureAtPoint[0]
-          : "";
+        drawFeatureID = drawFeatureAtPoint.length ? drawFeatureAtPoint[0] : "";
       }
 
-      newDrawFeature.current = false;
+      newDrawFeature = false;
     });
+
+    map.on("draw.create", function () {
+      newDrawFeature = true;
+    });
+
     const geocoderContainerRef = geocoderContainer.current;
     geocoderContainerRef.appendChild(geocoder.onAdd(map));
 
@@ -183,6 +460,17 @@ function App() {
       toggleAllDistrictsVisibility(selectedDistricts, map);
 
       setIsAllDistrictsSelected(false);
+    }
+  }
+
+  function changeColor(selectedColor) {
+    if (drawFeatureID !== "" && typeof draw === "object") {
+      // Установите выбранный цвет для выбранной фигуры
+      draw.setFeatureProperty(drawFeatureID, "portColor", selectedColor);
+
+      // Обновите фигуру на карте
+      var feat = draw.get(drawFeatureID);
+      draw.add(feat);
     }
   }
 
@@ -334,8 +622,9 @@ function App() {
         <input
           type="color"
           ref={colorPicker}
+          id="colorPicker"
           className="palette"
-          onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
+          onChange={(event) => changeColor(event.target.value)}
         />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
