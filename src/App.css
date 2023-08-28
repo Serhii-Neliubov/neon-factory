@@ -268,14 +268,27 @@ body {
 }
 
 .palette {
-  width: 30px;
-  height: 30px;
+  border: 2px solid #c3c2bc;
+  margin-top: 20px;
+  width: 33px;
+  height: 33px;
   position: absolute;
-  top: 15%;
-  right: 10px;
+  background: #fff;
+  top: 13.5%;
+  cursor: pointer;
+  right: 8px;
   z-index: 100;
+  border-radius: 5px;
+  background-image: url("/public/iconPalette.png");
+  background-size: 70%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .logo-map {
+  display: none;
+}
+
+input[type="color"]::-webkit-color-swatch {
   display: none;
 }

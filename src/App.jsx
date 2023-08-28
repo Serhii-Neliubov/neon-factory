@@ -25,6 +25,7 @@ import {
   removeCustomMarker,
   toggleAllDistrictsVisibility,
   toggleButton,
+  changeColor
 } from "./utils/MapFunctions";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
   const mapTag = useRef();
   const colorPicker = useRef();
   const geocoderContainer = useRef();
+  const newDrawFeature = useRef(false);
   const drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const sreenLogo = document.querySelector(".logo-map");
   const palette = document.querySelector(".palette");
@@ -55,7 +57,6 @@ function App() {
   ];
   var drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
-  var newDrawFeature = false;
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -82,10 +83,9 @@ function App() {
         animate: false,
       },
     });
-    const colorPicker = document.getElementById("colorPicker");
 
-    colorPicker.addEventListener("input", function () {
-      var selectedColor = colorPicker.value;
+    colorPicker.current.addEventListener("input", function () {
+      var selectedColor = colorPicker.current.value;
 
       if (drawFeatureID !== "" && typeof draw === "object") {
         // Установите выбранный цвет для выбранной фигуры
@@ -109,7 +109,15 @@ function App() {
 
     setDraw(draw);
 
-    map.addControl(draw, "top-right");
+    map.on("load", function () {
+      map.addControl(draw);
+      map.loadImage("/pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+        // Continue with your map initialization
+        // ...
+      });
+    });
 
     var setDrawFeature = function (e) {
       if (e.features.length && e.features[0].type === "Feature") {
@@ -123,18 +131,18 @@ function App() {
     map.on("draw.selectionchange", setDrawFeature);
 
     map.on("click", function (e) {
-      if (!newDrawFeature) {
+      if (!newDrawFeature.current) {
         var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
 
         //if another drawFeature is not found - reset drawFeatureID
         drawFeatureID = drawFeatureAtPoint.length ? drawFeatureAtPoint[0] : "";
       }
 
-      newDrawFeature = false;
+      newDrawFeature.current = false;
     });
 
     map.on("draw.create", function () {
-      newDrawFeature = true;
+      newDrawFeature.current = true;
     });
 
     const geocoderContainerRef = geocoderContainer.current;
@@ -169,17 +177,6 @@ function App() {
       toggleAllDistrictsVisibility(selectedDistricts, map);
 
       setIsAllDistrictsSelected(false);
-    }
-  }
-
-  function changeColor(selectedColor) {
-    if (drawFeatureID !== "" && typeof draw === "object") {
-      // Установите выбранный цвет для выбранной фигуры
-      draw.setFeatureProperty(drawFeatureID, "portColor", selectedColor);
-
-      // Обновите фигуру на карте
-      var feat = draw.get(drawFeatureID);
-      draw.add(feat);
     }
   }
 
@@ -333,7 +330,7 @@ function App() {
           ref={colorPicker}
           id="colorPicker"
           className="palette"
-          onChange={(event) => changeColor(event.target.value)}
+          onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
         />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>

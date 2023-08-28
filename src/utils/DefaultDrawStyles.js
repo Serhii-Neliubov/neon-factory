@@ -231,7 +231,7 @@ const defaultDrawStyles = [
   },
   {
     id: "highlight-active-points",
-    type: "symbol", // Измените тип на "symbol"
+    type: "symbol",
     filter: [
       "all",
       ["==", "$type", "Point"],
@@ -239,8 +239,8 @@ const defaultDrawStyles = [
       ["==", "active", "true"],
     ],
     layout: {
-      "icon-image": "custom-pin", // Имя изображения без расширения файла
-      "icon-size": 1,
+      "icon-image": "custom-pin",
+      "icon-size": 0.5,
       "icon-anchor": "bottom",
     },
     paint: {},
@@ -256,7 +256,7 @@ const defaultDrawStyles = [
     ],
     layout: {
       "icon-image": "custom-pin", // Имя изображения без расширения файла
-      "icon-size": 1,
+      "icon-size": 0.5,
       "icon-anchor": "bottom",
     },
     paint: {},
