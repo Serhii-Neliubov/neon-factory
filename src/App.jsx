@@ -29,9 +29,6 @@ import {
   changeColor,
 } from "./utils/MapFunctions";
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
-
 function App() {
   const [map, setMap] = useState(null);
   const [isControlsActive, setIsControlsActive] = useState(false);
@@ -61,6 +58,9 @@ function App() {
   ];
 
   useEffect(() => {
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
+
     let mapSettings = {
       container: "map",
       style: "mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b",
@@ -128,6 +128,7 @@ function App() {
     map.on("draw.create", function () {
       newDrawFeature.current = true;
     });
+
     var setDrawFeature = function (e) {
       if (e.features.length && e.features[0].type === "Feature") {
         var feat = e.features[0];
