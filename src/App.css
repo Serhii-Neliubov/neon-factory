@@ -268,21 +268,26 @@ body {
 }
 
 .palette {
-  border: 2px solid #c3c2bc;
+  border: 2px solid rgba(195, 194, 188, 0.7);
+  border-top: 1px solid rgba(195, 194, 188, 0.7);
   margin-top: 20px;
   width: 33px;
   height: 33px;
   position: absolute;
   background: #fff;
-  top: 13.5%;
+  top: 104px;
   cursor: pointer;
   right: 8px;
   z-index: 100;
-  border-radius: 5px;
+  border-radius: 0px 0px 5px 5px;
   background-image: url("/public/iconPalette.png");
   background-size: 70%;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.palette:hover {
+  background-color: #F2F2F2;
 }
 
 .logo-map {
