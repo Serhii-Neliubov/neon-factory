@@ -137,8 +137,7 @@ const defaultDrawStyles = [
     ],
     paint: {
       "circle-radius": 5,
-      "circle-opacity": 1,
-      "circle-color": "#fff",
+      "circle-opacity": 0,
     },
   },
   {
@@ -152,8 +151,8 @@ const defaultDrawStyles = [
       ["!=", "mode", "static"],
     ],
     paint: {
-      "circle-radius": 3,
-      "circle-color": "#3bb2d0",
+      "circle-radius": 0,
+      "circle-color": "#33CC99",
     },
   },
   {
@@ -167,6 +166,7 @@ const defaultDrawStyles = [
     ],
     paint: {
       "circle-radius": 7,
+      "circle-opacity": 0,
       "circle-color": "#fff",
     },
   },
@@ -181,7 +181,7 @@ const defaultDrawStyles = [
     ],
     paint: {
       "circle-radius": 5,
-      "circle-color": "#fbb03b",
+      "circle-opacity": 0,
     },
   },
   {
