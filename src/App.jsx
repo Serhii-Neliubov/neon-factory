@@ -25,7 +25,7 @@ import {
   removeCustomMarker,
   toggleAllDistrictsVisibility,
   toggleButton,
-  changeColor
+  changeColor,
 } from "./utils/MapFunctions";
 
 function App() {
@@ -111,12 +111,13 @@ function App() {
 
     map.on("load", function () {
       map.addControl(draw);
-      map.loadImage("/pin.png", function (error, image) {
+      map.loadImage("pin.png", function (error, image) {
         if (error) throw error;
         map.addImage("custom-pin", image);
         // Continue with your map initialization
         // ...
       });
+      colorPicker.current.style.display = "block";
     });
 
     var setDrawFeature = function (e) {

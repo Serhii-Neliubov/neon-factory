@@ -36,18 +36,13 @@ const defaultDrawStyles = [
   {
     id: "gl-draw-polygon-stroke-inactive",
     type: "line",
-    filter: [
-      "all",
-      ["==", "active", "false"],
-      ["==", "$type", "Polygon"],
-      ["!=", "mode", "static"],
-    ],
+    filter: ["all", ["==", "$type", "LineString"], ["has", "user_portColor"]],
     layout: {
       "line-cap": "round",
       "line-join": "round",
     },
     paint: {
-      "line-color": "#3bb2d0",
+      "line-color": ["get", "user_portColor"],
       "line-width": 2,
     },
   },
@@ -68,18 +63,13 @@ const defaultDrawStyles = [
   {
     id: "gl-draw-line-inactive",
     type: "line",
-    filter: [
-      "all",
-      ["==", "active", "false"],
-      ["==", "$type", "LineString"],
-      ["!=", "mode", "static"],
-    ],
+    filter: ["all", ["==", "$type", "LineString"], ["has", "user_portColor"]],
     layout: {
       "line-cap": "round",
       "line-join": "round",
     },
     paint: {
-      "line-color": "#3bb2d0",
+      "line-color": ["get", "user_portColor"],
       "line-width": 2,
     },
   },
