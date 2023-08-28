@@ -268,11 +268,14 @@ body {
 }
 
 .palette {
-  
   width: 30px;
   height: 30px;
   position: absolute;
   top: 15%;
   right: 10px;
   z-index: 100;
+}
+
+.logo-map {
+  display: none;
 }

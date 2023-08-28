@@ -44,6 +44,8 @@ function App() {
   const colorPicker = useRef();
   const geocoderContainer = useRef();
   const drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
+  const sreenLogo = document.querySelector(".logo-map");
+  const palette = document.querySelector(".palette");
   let newDrawFeature = useRef(false);
   const allDistricts = [
     "SW",
@@ -165,14 +167,12 @@ function App() {
 
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
-
       setSelectedDistricts(allDistricts);
       toggleAllDistrictsVisibility(selectedDistricts, map);
       map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
 
       setIsAllDistrictsSelected(true);
     } else {
-
       setSelectedDistricts([]);
       allDistricts.forEach((district) => {
         if (selectedDistricts.includes(district)) {
@@ -319,7 +319,12 @@ function App() {
           </AllDistrictsButton>
           <div className="greenLine"></div>
 
-          <PrintScreen drawMenu={drawMenu} mapTag={mapTag.current}>
+          <PrintScreen
+            palette={palette}
+            sreenLogo={sreenLogo}
+            drawMenu={drawMenu}
+            mapTag={mapTag.current}
+          >
             Print Screen
           </PrintScreen>
         </div>
