@@ -55,6 +55,8 @@ function App() {
     "North",
     "South",
   ];
+  let [openBrussels, setOpenBrussels] = useState(false);
+  const [Sqm, setSqml] = useState(0);
   var drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
 
@@ -117,7 +119,6 @@ function App() {
         // Continue with your map initialization
         // ...
       });
-      colorPicker.current.style.display = "block";
     });
 
     var setDrawFeature = function (e) {
@@ -148,6 +149,22 @@ function App() {
 
     const geocoderContainerRef = geocoderContainer.current;
     geocoderContainerRef.appendChild(geocoder.onAdd(map));
+
+    map.on("draw.create", updateArea);
+    map.on("draw.delete", updateArea);
+    map.on("draw.update", updateArea);
+
+    function updateArea() {
+      const data = draw.getAll();
+      const area = turf.area(data);
+      const sqm = Math.round(area * 100) / 100;
+
+      if (data.features.length > 0) {
+        setSqml(sqm);
+      } else {
+        setSqml(0);
+      }
+    }
 
     return () => {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
@@ -181,10 +198,33 @@ function App() {
     }
   }
 
+  function openBrusselsHandler() {
+    setOpenBrussels(!openBrussels);
+  }
+
   return (
     <div id="mapContainer">
       <div className="sidebar">
-        <img alt="Logo" className="logo" src="logo.png" />
+        <a href="https://neon-factory.design/">
+          <img alt="Logo" className="logo" src="logo.png" />
+        </a>
+        <input
+          type="color"
+          ref={colorPicker}
+          id="colorPicker"
+          className="palette"
+          onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
+        />
+        <div className="rightTopMenu">
+          <div className="rightTopMenu-button">Line</div>
+          <div className="rightTopMenu-button">Shape</div>
+          <div className="rightTopMenu-button">Add Location</div>
+          <div className="rightTopMenu-button">Erase</div>
+          <div className="rightTopMenu-button">Color</div>
+        </div>
+        <div className="calculation-box">
+          <div id="calculated-area">{Sqm}sqm</div>
+        </div>
         <div ref={geocoderContainer}></div>
         <div className="greenLine"></div>
         <SubMenu
@@ -195,6 +235,7 @@ function App() {
         ></SubMenu>
         <div className="greenLine"></div>
         <ResetMap
+          setSqml={setSqml}
           draw={draw}
           map={map}
           removeCustomMarker={removeCustomMarker}
@@ -202,137 +243,141 @@ function App() {
           setIsAllDistrictsVisible={setIsAllDistrictsVisible}
         ></ResetMap>
         <div className="greenLine"></div>
-        Brussels
+        <button
+          onClick={openBrusselsHandler}
+          className={`BrusselsButton ${
+            openBrussels ? "BrusselsButton_open" : ""
+          }`}
+        >
+          Brussels
+        </button>
         <div className="greenLine"></div>
-        <div className="toggleContainer">
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="CD"
-            id="CBDButton"
-          >
-            Center District
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="EU"
-            id="EUButton"
-          >
-            European District
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="Louise"
-            id="LouiseButton"
-          >
-            Louise
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="North"
-            id="NorthButton"
-          >
-            North
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="NE"
-            id="NEButton"
-          >
-            North-East
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="NW"
-            id="NEButton"
-          >
-            North-West
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="South"
-            id="NEButton"
-          >
-            South
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="SE"
-            id="SEButton"
-          >
-            South-East
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="SW"
-            id="SEButton"
-          >
-            South-West
-          </ToggleButton>
-          <ToggleButton
-            isAllDistrictsSelected={isAllDistrictsSelected}
-            toggleButton={toggleButton}
-            map={map}
-            selectedDistricts={selectedDistricts}
-            data="Airport"
-            id="SEButton"
-          >
-            Airport
-          </ToggleButton>
-          <AllDistrictsButton
-            setIsAllDistrictsVisible={setIsAllDistrictsVisible}
-            allDistrictsButtonHandler={allDistrictsButtonHandler}
-            isAllDistrictsVisible={isAllDistrictsVisible}
-            selectedDistricts={selectedDistricts}
-          >
-            All Districts
-          </AllDistrictsButton>
-          <div className="greenLine"></div>
+        {openBrussels ? (
+          <div className="toggleContainer">
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="CD"
+              id="CBDButton"
+            >
+              Center District
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="EU"
+              id="EUButton"
+            >
+              European District
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="Louise"
+              id="LouiseButton"
+            >
+              Louise
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="North"
+              id="NorthButton"
+            >
+              North
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="NE"
+              id="NEButton"
+            >
+              North-East
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="NW"
+              id="NWButton"
+            >
+              North-West
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="South"
+              id="South"
+            >
+              South
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="SE"
+              id="SEButton"
+            >
+              South-East
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="SW"
+              id="SWButton"
+            >
+              South-West
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
+              data="Airport"
+              id="Airport"
+            >
+              Airport
+            </ToggleButton>
 
-          <PrintScreen
-            palette={palette}
-            sreenLogo={sreenLogo}
-            drawMenu={drawMenu}
-            mapTag={mapTag.current}
-          >
-            Print Screen
-          </PrintScreen>
-        </div>
+            <AllDistrictsButton
+              setIsAllDistrictsVisible={setIsAllDistrictsVisible}
+              allDistrictsButtonHandler={allDistrictsButtonHandler}
+              isAllDistrictsVisible={isAllDistrictsVisible}
+              selectedDistricts={selectedDistricts}
+            >
+              All Districts
+            </AllDistrictsButton>
+
+            <div className="greenLine"></div>
+          </div>
+        ) : null}
+        <PrintScreen
+          palette={palette}
+          sreenLogo={sreenLogo}
+          drawMenu={drawMenu}
+          mapTag={mapTag.current}
+          colorPicker={colorPicker}
+        >
+          Print Screen
+        </PrintScreen>
       </div>
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
-        <input
-          type="color"
-          ref={colorPicker}
-          id="colorPicker"
-          className="palette"
-          onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
-        />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
     </div>

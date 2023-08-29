@@ -1,12 +1,12 @@
 import html2canvas from "html2canvas";
 import React from "react";
 
-const PrintScreen = ({ mapTag, drawMenu, sreenLogo, palette }) => {
+const PrintScreen = ({ mapTag, drawMenu, sreenLogo, colorPicker }) => {
   async function printScreenHandler() {
     // Спрячьте drawMenu
     drawMenu.style.display = "none";
-    palette.style.display = "none";
     sreenLogo.style.display = "block";
+    colorPicker.current.style.display = "none";
     // Сделайте снимок экрана с использованием html2canvas
     const canvas = await html2canvas(mapTag);
 
@@ -14,7 +14,9 @@ const PrintScreen = ({ mapTag, drawMenu, sreenLogo, palette }) => {
     drawMenu.style.display = "block";
 
     // Создайте ссылку на изображение в формате data URL
-    const imgData = canvas.toDataURL("image/png");
+    const imgData = canvas
+      .toDataURL("image/png")
+      .replace(/^data:image\/[^;]/, "data:application/octet-stream");
 
     // Создайте элемент "a" для загрузки изображения
     const downloadLink = document.createElement("a");
@@ -33,7 +35,7 @@ const PrintScreen = ({ mapTag, drawMenu, sreenLogo, palette }) => {
     // Удалите ссылку с DOM (если она больше не нужна)
     document.body.removeChild(downloadLink);
     sreenLogo.style.display = "none";
-    palette.style.display = "block";
+    colorPicker.current.style.display = "block";
   }
 
   return (

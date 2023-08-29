@@ -5,11 +5,13 @@ const ResetMap = ({
   setSelectedDistricts,
   removeCustomMarker,
   draw,
-  setIsAllDistrictsVisible
+  setSqml,
+  setIsAllDistrictsVisible,
 }) => {
   function resetMapButtonHandler() {
     setIsAllDistrictsVisible(true);
     removeCustomMarker();
+    setSqml(0);
     draw.deleteAll();
     map.flyTo({
       center: [4.387564, 50.838193],
