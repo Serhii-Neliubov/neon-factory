@@ -16,9 +16,9 @@ import ResetMap from "./components/ResetMap";
 import PrintScreen from "./components/PrintScreen";
 import ToggleButton from "./components/ToggleMenu/ToggleButton";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
-import CentralisedDistrictsButton from './components/ToggleMenu/CentralisedDistrictsButton';
-import DecentralisedDistrictsButton from './components/ToggleMenu/DecentralisedDistrictsButton';
-import MapIconsToggle from './components/ToggleMenu/MapIconsToggle'
+import CentralisedDistrictsButton from "./components/ToggleMenu/CentralisedDistrictsButton";
+import DecentralisedDistrictsButton from "./components/ToggleMenu/DecentralisedDistrictsButton";
+import MapIconsToggle from "./components/ToggleMenu/MapIconsToggle";
 // Utils
 import defaultDrawStyles from "./utils/DefaultDrawStyles";
 //Map functions
@@ -35,8 +35,10 @@ function App() {
   const [isControlsActive, setIsControlsActive] = useState(false);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
-  const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] = useState(true);
-  const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] = useState(true);
+  const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] =
+    useState(true);
+  const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
+    useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   const [servicesAction, setServicesAction] = useState(false);
   const [draw, setDraw] = useState(null);
@@ -60,22 +62,11 @@ function App() {
     "North",
     "South",
   ];
-  const centralisedDistricts = [
-    "Louise",
-    "North",
-    "South",
-    "CD",
-    "EU",
-  ];
-  const decentralisedDistricts = [
-    "NE",
-    "NW",
-    "Airport",
-    "SW",
-    "SE",
-  ]
+  const centralisedDistricts = ["Louise", "North", "South", "CD", "EU"];
+  const decentralisedDistricts = ["NE", "NW", "Airport", "SW", "SE"];
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   let drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -137,19 +128,26 @@ function App() {
         if (error) throw error;
         map.addImage("custom-pin", image);
         // Continue with your map initialization
+
         // ...
       });
+    });
+
+    map.on("click", "0", function (e) {
+      const clickedPolygon = e.features[0]; // Получаем информацию о кликнутом полигоне
+      // Вызываем функцию для отображения метров полигона
+
+      showPolygonArea(clickedPolygon);
     });
 
     var setDrawFeature = function (e) {
       if (e.features.length && e.features[0].type === "Feature") {
         var feat = e.features[0];
-        drawFeatureID = feat.id;
+        setSelectedFeatures([feat.id]);
       }
     };
 
     map.on("draw.update", setDrawFeature);
-
     map.on("draw.selectionchange", setDrawFeature);
 
     map.on("click", function (e) {
@@ -158,31 +156,56 @@ function App() {
 
         //if another drawFeature is not found - reset drawFeatureID
         drawFeatureID = drawFeatureAtPoint.length ? drawFeatureAtPoint[0] : "";
+        if (drawFeatureAtPoint.length) {
+          // Если была найдена фигура, покажите её размер
+          var clickedFeature = draw.get(drawFeatureAtPoint[0]);
+          showPolygonArea(clickedFeature);
+        } else {
+          // Если фигура не была найдена, сбросьте отображение размера
+          setSqml(0);
+        }
       }
 
       newDrawFeature.current = false;
     });
+    colorPicker.current.addEventListener("change", function (event) {
+      changeColor(event.target.value, mapboxgl, draw);
+    });
 
-    map.on("draw.create", function () {
+    function showPolygonArea(polygonFeature) {
+      const area = turf.area(polygonFeature.geometry);
+      const sqm = Math.round(area * 100) / 100;
+      // Выводим метры полигона в какой-либо элемент (например, модальное окно)
+      setSqml(sqm);
+    }
+
+    map.on("draw.create", function (e) {
       newDrawFeature.current = true;
+      updateArea(e); // Вызываем функцию обновления размера при создании новой фигуры
+    });
+
+    map.on("draw.delete", function () {
+      newDrawFeature.current = true;
+      setSqml(0); // Сбрасываем размер при удалении фигуры
+    });
+
+    map.on("draw.update", function (e) {
+      if (newDrawFeature.current) {
+        // Вызываем функцию обновления размера только если была создана новая фигура или произошло обновление
+        updateArea(e);
+      }
     });
 
     const geocoderContainerRef = geocoderContainer.current;
     geocoderContainerRef.appendChild(geocoder.onAdd(map));
 
-    map.on("draw.create", updateArea);
-    map.on("draw.delete", updateArea);
-    map.on("draw.update", updateArea);
+    function updateArea(e) {
+      const selectedFeature = e.features[0];
 
-    function updateArea() {
-      const data = draw.getAll();
-      const area = turf.area(data);
-      const sqm = Math.round(area * 100) / 100;
-
-      if (data.features.length > 0) {
+      if (selectedFeature) {
+        const area = turf.area(selectedFeature.geometry);
+        const sqm = Math.round(area * 100) / 100;
         setSqml(sqm);
-      } else {
-        setSqml(0);
       }
     }
 
@@ -223,8 +246,10 @@ function App() {
       toggleDistrictsVisibility(centralisedDistricts, map);
       setIsCentralisedDistrictsVisible(false);
     } else {
-      const withoutCentralisedDistricts = selectedDistricts.filter(district => !centralisedDistricts.includes(district));
-      setSelectedDistricts(withoutCentralisedDistricts)
+      const withoutCentralisedDistricts = selectedDistricts.filter(
+        (district) => !centralisedDistricts.includes(district)
+      );
+      setSelectedDistricts(withoutCentralisedDistricts);
       toggleDistrictsVisibility(withoutCentralisedDistricts, map);
       setIsCentralisedDistrictsVisible(true);
     }
@@ -236,15 +261,17 @@ function App() {
       toggleDistrictsVisibility(decentralisedDistricts, map);
       setIsDecentralisedDistrictsVisible(false);
     } else {
-      const withoutDecentralisedDistricts = selectedDistricts.filter(district => !decentralisedDistricts.includes(district));
-      setSelectedDistricts(withoutDecentralisedDistricts)
+      const withoutDecentralisedDistricts = selectedDistricts.filter(
+        (district) => !decentralisedDistricts.includes(district)
+      );
+      setSelectedDistricts(withoutDecentralisedDistricts);
       toggleDistrictsVisibility(withoutDecentralisedDistricts, map);
       setIsDecentralisedDistrictsVisible(true);
     }
   }
 
   function toggleDistrictLayerVisibility() {
-    setServicesAction(prev => !prev);
+    setServicesAction((prev) => !prev);
     var layerId = "poi-label";
 
     if (servicesAction) {
@@ -284,7 +311,7 @@ function App() {
           </div>
         </div>
         <div className="calculation-box">
-          <div id="calculated-area">{Sqm}sqm</div>
+          <div id="calculated-area">{Sqm} sqm</div>
         </div>
         <div ref={geocoderContainer}></div>
         <div className="greenLine"></div>
@@ -399,7 +426,6 @@ function App() {
             </ToggleButton>
             <ToggleButton
               isAllDistrictsSelected={isAllDistrictsSelected}
-
               toggleButton={toggleButton}
               map={map}
               selectedDistricts={selectedDistricts}
@@ -410,13 +436,17 @@ function App() {
             </ToggleButton>
 
             <CentralisedDistrictsButton
-              centralisedDistrictsButtonHandler={centralisedDistrictsButtonHandler}
+              centralisedDistrictsButtonHandler={
+                centralisedDistrictsButtonHandler
+              }
             >
               Centralised Districts
             </CentralisedDistrictsButton>
 
             <DecentralisedDistrictsButton
-              decentralisedDistrictsButtonHandler={decentralisedDistrictsButtonHandler} 
+              decentralisedDistrictsButtonHandler={
+                decentralisedDistrictsButtonHandler
+              }
             >
               Decentralised Districts
             </DecentralisedDistrictsButton>
@@ -443,11 +473,11 @@ function App() {
         </PrintScreen>
 
         <div className="greenLine"></div>
-          <MapIconsToggle
-            toggleDistrictLayerVisibility={toggleDistrictLayerVisibility}
-          >
-            Shop, Restaurants, Services...
-          </MapIconsToggle>
+        <MapIconsToggle
+          toggleDistrictLayerVisibility={toggleDistrictLayerVisibility}
+        >
+          Shop, Restaurants, Services...
+        </MapIconsToggle>
         <div className="greenLine"></div>
         <ResetMap
           setSqml={setSqml}

@@ -333,7 +333,7 @@ input[type="color"]::-webkit-color-swatch {
   opacity: 0.5;
 }
 .calculation-box {
-  min-width: 150px;
+  min-width: 151px;
   border-radius: 10px;
   position: absolute;
   top: 165px;
@@ -342,8 +342,12 @@ input[type="color"]::-webkit-color-swatch {
   border: 1px solid rgba(0, 0, 0, 0.3);
   background-color: rgba(255, 255, 255, 1);
   text-align: center;
-  height: 30px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: 60px;
   overflow: hidden;
+  margin-top: 250px;
 }
 
 p {
