@@ -4,7 +4,9 @@ export const ActionControls = ({ isControlsActive, controlsButtonHandler }) => {
   return (
     <button
       onClick={controlsButtonHandler}
-      className="controlButton"
+      className={`BrusselsButton ${
+        isControlsActive ? "BrusselsButton_open" : ""
+      }`}
       id="controlsButton"
     >
       {isControlsActive ? "Close Controls" : "Open Controls"}

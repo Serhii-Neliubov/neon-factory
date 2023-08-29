@@ -57,7 +57,8 @@ function App() {
   ];
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
-  var drawFeatureID =
+
+  let drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
 
   useEffect(() => {
@@ -197,11 +198,6 @@ function App() {
       setIsAllDistrictsSelected(false);
     }
   }
-
-  function openBrusselsHandler() {
-    setOpenBrussels(!openBrussels);
-  }
-
   return (
     <div id="mapContainer">
       <div className="sidebar">
@@ -216,11 +212,21 @@ function App() {
           onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
         />
         <div className="rightTopMenu">
-          <div className="rightTopMenu-button">Line</div>
-          <div className="rightTopMenu-button">Shape</div>
-          <div className="rightTopMenu-button">Add Location</div>
-          <div className="rightTopMenu-button">Erase</div>
-          <div className="rightTopMenu-button">Color</div>
+          <div className="rightTopMenu-button rightTopMenu-button-line">
+            Line
+          </div>
+          <div className="rightTopMenu-button rightTopMenu-button-shape">
+            Shape
+          </div>
+          <div className="rightTopMenu-button rightTopMenu-button-location">
+            Add Location
+          </div>
+          <div className="rightTopMenu-button rightTopMenu-button-erase">
+            Erase
+          </div>
+          <div className="rightTopMenu-button rightTopMenu-button-color">
+            Color
+          </div>
         </div>
         <div className="calculation-box">
           <div id="calculated-area">{Sqm}sqm</div>
@@ -234,17 +240,9 @@ function App() {
           submenuTag={submenuTag}
         ></SubMenu>
         <div className="greenLine"></div>
-        <ResetMap
-          setSqml={setSqml}
-          draw={draw}
-          map={map}
-          removeCustomMarker={removeCustomMarker}
-          setSelectedDistricts={setSelectedDistricts}
-          setIsAllDistrictsVisible={setIsAllDistrictsVisible}
-        ></ResetMap>
-        <div className="greenLine"></div>
+
         <button
-          onClick={openBrusselsHandler}
+          onClick={() => setOpenBrussels(!openBrussels)}
           className={`BrusselsButton ${
             openBrussels ? "BrusselsButton_open" : ""
           }`}
@@ -376,6 +374,15 @@ function App() {
         >
           Print Screen
         </PrintScreen>
+        <div className="greenLine"></div>
+        <ResetMap
+          setSqml={setSqml}
+          draw={draw}
+          map={map}
+          removeCustomMarker={removeCustomMarker}
+          setSelectedDistricts={setSelectedDistricts}
+          setIsAllDistrictsVisible={setIsAllDistrictsVisible}
+        ></ResetMap>
       </div>
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
         <img alt="Logo" className="logo-map" src="logo.png" />

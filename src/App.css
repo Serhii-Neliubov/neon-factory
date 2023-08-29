@@ -94,7 +94,6 @@ body {
   transition: color 0.3s ease; /* Add a smooth color transition */
   color: white; /* Set the text color to white */
   outline: none; /* Remove the outline when button is clicked */
-  flex: 1 1 auto;
 }
 
 /* Change the text color when hovered */
@@ -321,6 +320,7 @@ input[type="color"]::-webkit-color-swatch {
   background-color: #fff;
   border: none;
   padding: 4.5px 10px;
+  max-height: 29px;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   font-weight: 800;
@@ -391,5 +391,27 @@ p {
 
 /* Стили для кнопки, когда она открыта (с классом .BrusselsButton_open) */
 .BrusselsButton_open::after {
+  transform: rotate(90deg) !important;
+}
+.controlButton-actions {
+  position: relative;
+}
+.controlButton-actions::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 4px;
+  width: 30px;
+  height: 30px;
+  color: #4cc0ad;
+  background-image: url("arrow.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* Изначально поворачиваем стрелку на -90 градусов */
+  transform: rotate(-90deg);
+}
+
+/* Стили для кнопки, когда она открыта (с классом .BrusselsButton_open) */
+.controlButton-actions_open::after {
   transform: rotate(90deg) !important;
 }
