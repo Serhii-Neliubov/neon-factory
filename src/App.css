@@ -298,6 +298,8 @@ body {
   background-color: #f2f2f2;
 }
 
+
+
 .logo-map {
   display: none;
 }
@@ -316,6 +318,7 @@ input[type="color"]::-webkit-color-swatch {
   gap: 2px;
 }
 .rightTopMenu-button {
+  display: none;
   font-family: "Helvetica";
   background-color: #fff;
   border: none;
@@ -332,6 +335,27 @@ input[type="color"]::-webkit-color-swatch {
 .rightTopMenu-button:hover {
   opacity: 0.5;
 }
+
+.rightTopMenu-button-line {
+  margin-top: 3px;
+}
+
+.rightTopMenu-button-shape {
+  margin-top: 32px;
+} 
+
+.rightTopMenu-button-location {
+ margin-top: 60px;
+}
+
+.rightTopMenu-button-erase {
+  margin-top: 88px;
+}
+
+.rightTopMenu-button-color {
+  margin-top: 117px;
+}
+
 .calculation-box {
   min-width: 151px;
   border-radius: 10px;

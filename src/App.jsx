@@ -66,7 +66,7 @@ function App() {
   const decentralisedDistricts = ["NE", "NW", "Airport", "SW", "SE"];
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [, setSelectedFeatures] = useState([]);
 
   let drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -280,6 +280,49 @@ function App() {
       map.setLayoutProperty(layerId, "visibility", "none");
     }
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+
+      document.querySelector('.mapbox-gl-draw_line').addEventListener('mouseover', function() {
+        document.querySelector('.rightTopMenu-button-line').style.display = 'unset';
+      });
+      document.querySelector('.mapbox-gl-draw_line').addEventListener('mouseout', function() {
+        document.querySelector('.rightTopMenu-button-line').style.display = 'none';
+      });
+
+      document.querySelector('.mapbox-gl-draw_polygon').addEventListener('mouseover', function() {
+        document.querySelector('.rightTopMenu-button-shape').style.display = 'unset';
+      });
+      document.querySelector('.mapbox-gl-draw_polygon').addEventListener('mouseout', function() {
+        document.querySelector('.rightTopMenu-button-shape').style.display = 'none';
+      });
+
+      document.querySelector('.mapbox-gl-draw_point').addEventListener('mouseover', function() {
+        document.querySelector('.rightTopMenu-button-location').style.display = 'unset';
+      });
+      document.querySelector('.mapbox-gl-draw_point').addEventListener('mouseout', function() {
+        document.querySelector('.rightTopMenu-button-location').style.display = 'none';
+      });
+
+      document.querySelector('.mapbox-gl-draw_trash').addEventListener('mouseover', function() {
+        document.querySelector('.rightTopMenu-button-erase').style.display = 'unset';
+      });
+      document.querySelector('.mapbox-gl-draw_trash').addEventListener('mouseout', function() {
+        document.querySelector('.rightTopMenu-button-erase').style.display = 'none';
+      });
+
+      document.querySelector('.palette').addEventListener('mouseover', function() {
+        document.querySelector('.rightTopMenu-button-color').style.display = 'unset';
+      });
+      document.querySelector('.palette').addEventListener('mouseout', function() {
+        document.querySelector('.rightTopMenu-button-color').style.display = 'none';
+      });
+
+    }, 1000)
+  }, [])
+
+
   return (
     <div id="mapContainer">
       <div className="sidebar">
