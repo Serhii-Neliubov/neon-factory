@@ -16,14 +16,16 @@ import ResetMap from "./components/ResetMap";
 import PrintScreen from "./components/PrintScreen";
 import ToggleButton from "./components/ToggleMenu/ToggleButton";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
-
+import CentralisedDistrictsButton from './components/ToggleMenu/CentralisedDistrictsButton';
+import DecentralisedDistrictsButton from './components/ToggleMenu/DecentralisedDistrictsButton';
+import MapIconsToggle from './components/ToggleMenu/MapIconsToggle'
 // Utils
 import defaultDrawStyles from "./utils/DefaultDrawStyles";
 //Map functions
 import {
   createCustomMarkerElement,
   removeCustomMarker,
-  toggleAllDistrictsVisibility,
+  toggleDistrictsVisibility,
   toggleButton,
   changeColor,
 } from "./utils/MapFunctions";
@@ -33,7 +35,10 @@ function App() {
   const [isControlsActive, setIsControlsActive] = useState(false);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
+  const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] = useState(true);
+  const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] = useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
+  const [servicesAction, setServicesAction] = useState(false);
   const [draw, setDraw] = useState(null);
   const submenuTag = useRef();
   const mapTag = useRef();
@@ -55,6 +60,20 @@ function App() {
     "North",
     "South",
   ];
+  const centralisedDistricts = [
+    "Louise",
+    "North",
+    "South",
+    "CD",
+    "EU",
+  ];
+  const decentralisedDistricts = [
+    "NE",
+    "NW",
+    "Airport",
+    "SW",
+    "SE",
+  ]
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
 
@@ -182,7 +201,7 @@ function App() {
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
       setSelectedDistricts(allDistricts);
-      toggleAllDistrictsVisibility(selectedDistricts, map);
+      toggleDistrictsVisibility(selectedDistricts, map);
       map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
 
       setIsAllDistrictsSelected(true);
@@ -193,9 +212,45 @@ function App() {
           toggleButton(district, selectedDistricts, map);
         }
       });
-      toggleAllDistrictsVisibility(selectedDistricts, map);
-
+      toggleDistrictsVisibility(selectedDistricts, map);
       setIsAllDistrictsSelected(false);
+    }
+  }
+
+  function centralisedDistrictsButtonHandler() {
+    if (isCentralisedDistrictsVisible) {
+      setSelectedDistricts(centralisedDistricts);
+      toggleDistrictsVisibility(centralisedDistricts, map);
+      setIsCentralisedDistrictsVisible(false);
+    } else {
+      const withoutCentralisedDistricts = selectedDistricts.filter(district => !centralisedDistricts.includes(district));
+      setSelectedDistricts(withoutCentralisedDistricts)
+      toggleDistrictsVisibility(withoutCentralisedDistricts, map);
+      setIsCentralisedDistrictsVisible(true);
+    }
+  }
+
+  function decentralisedDistrictsButtonHandler() {
+    if (isDecentralisedDistrictsVisible) {
+      setSelectedDistricts(decentralisedDistricts);
+      toggleDistrictsVisibility(decentralisedDistricts, map);
+      setIsDecentralisedDistrictsVisible(false);
+    } else {
+      const withoutDecentralisedDistricts = selectedDistricts.filter(district => !decentralisedDistricts.includes(district));
+      setSelectedDistricts(withoutDecentralisedDistricts)
+      toggleDistrictsVisibility(withoutDecentralisedDistricts, map);
+      setIsDecentralisedDistrictsVisible(true);
+    }
+  }
+
+  function toggleDistrictLayerVisibility() {
+    setServicesAction(prev => !prev);
+    var layerId = "poi-label";
+
+    if (servicesAction) {
+      map.setLayoutProperty(layerId, "visibility", "visible");
+    } else {
+      map.setLayoutProperty(layerId, "visibility", "none");
     }
   }
   return (
@@ -344,6 +399,7 @@ function App() {
             </ToggleButton>
             <ToggleButton
               isAllDistrictsSelected={isAllDistrictsSelected}
+
               toggleButton={toggleButton}
               map={map}
               selectedDistricts={selectedDistricts}
@@ -353,11 +409,22 @@ function App() {
               Airport
             </ToggleButton>
 
+            <CentralisedDistrictsButton
+              centralisedDistrictsButtonHandler={centralisedDistrictsButtonHandler}
+            >
+              Centralised Districts
+            </CentralisedDistrictsButton>
+
+            <DecentralisedDistrictsButton
+              decentralisedDistrictsButtonHandler={decentralisedDistrictsButtonHandler} 
+            >
+              Decentralised Districts
+            </DecentralisedDistrictsButton>
+
             <AllDistrictsButton
               setIsAllDistrictsVisible={setIsAllDistrictsVisible}
               allDistrictsButtonHandler={allDistrictsButtonHandler}
               isAllDistrictsVisible={isAllDistrictsVisible}
-              selectedDistricts={selectedDistricts}
             >
               All Districts
             </AllDistrictsButton>
@@ -374,6 +441,13 @@ function App() {
         >
           Print Screen
         </PrintScreen>
+
+        <div className="greenLine"></div>
+          <MapIconsToggle
+            toggleDistrictLayerVisibility={toggleDistrictLayerVisibility}
+          >
+            Shop, Restaurants, Services...
+          </MapIconsToggle>
         <div className="greenLine"></div>
         <ResetMap
           setSqml={setSqml}

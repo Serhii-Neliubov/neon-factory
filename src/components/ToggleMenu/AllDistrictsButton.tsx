@@ -5,21 +5,12 @@ const AllDistrictsButton = ({
   setIsAllDistrictsVisible,
   allDistrictsButtonHandler,
   isAllDistrictsVisible,
-  selectedDistricts,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
 
   const handleClick = () => {
     setToggle((prevToggle) => !prevToggle);
   };
-
-  useEffect(() => {
-    if (selectedDistricts.length === 10) {
-      setToggle(true);
-    } else {
-      setToggle(false);
-    }
-  }, [selectedDistricts]);
 
   return (
     <div style={{ display: "flex" }}>

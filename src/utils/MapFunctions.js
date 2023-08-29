@@ -18,7 +18,7 @@ export function removeCustomMarker() {
   }
 }
 
-export function toggleAllDistrictsVisibility(selectedDistricts, map) {
+export function toggleDistrictsVisibility(selectedDistricts, map) {
   var districtsToShow = [];
 
   if (selectedDistricts.length === 0) {
@@ -35,6 +35,7 @@ export function toggleAllDistrictsVisibility(selectedDistricts, map) {
   map.triggerRepaint();
 }
 
+
 export function toggleButton(data, selectedDistricts, map) {
   const districtIndex = selectedDistricts.indexOf(data);
 
@@ -46,7 +47,8 @@ export function toggleButton(data, selectedDistricts, map) {
     selectedDistricts.splice(districtIndex, 1);
   }
   // Переключите видимость всех районов
-  toggleAllDistrictsVisibility(selectedDistricts, map);
+  toggleDistrictsVisibility(selectedDistricts, map);
+  console.log(selectedDistricts)
 }
 
 export function changeColor(selectedColor, mapboxgl, draw) {
