@@ -282,46 +282,77 @@ function App() {
   }
 
   useEffect(() => {
-    setTimeout(() => {
+    if (map) {
+      map.on("load", () => {
+        document
+          .querySelector(".mapbox-gl-draw_line")
+          .addEventListener("mouseover", function () {
+            document.querySelector(".rightTopMenu-button-line").style.display =
+              "unset";
+          });
+        document
+          .querySelector(".mapbox-gl-draw_line")
+          .addEventListener("mouseout", function () {
+            document.querySelector(".rightTopMenu-button-line").style.display =
+              "none";
+          });
 
-      document.querySelector('.mapbox-gl-draw_line').addEventListener('mouseover', function() {
-        document.querySelector('.rightTopMenu-button-line').style.display = 'unset';
-      });
-      document.querySelector('.mapbox-gl-draw_line').addEventListener('mouseout', function() {
-        document.querySelector('.rightTopMenu-button-line').style.display = 'none';
-      });
+        document
+          .querySelector(".mapbox-gl-draw_polygon")
+          .addEventListener("mouseover", function () {
+            document.querySelector(".rightTopMenu-button-shape").style.display =
+              "unset";
+          });
+        document
+          .querySelector(".mapbox-gl-draw_polygon")
+          .addEventListener("mouseout", function () {
+            document.querySelector(".rightTopMenu-button-shape").style.display =
+              "none";
+          });
 
-      document.querySelector('.mapbox-gl-draw_polygon').addEventListener('mouseover', function() {
-        document.querySelector('.rightTopMenu-button-shape').style.display = 'unset';
-      });
-      document.querySelector('.mapbox-gl-draw_polygon').addEventListener('mouseout', function() {
-        document.querySelector('.rightTopMenu-button-shape').style.display = 'none';
-      });
+        document
+          .querySelector(".mapbox-gl-draw_point")
+          .addEventListener("mouseover", function () {
+            document.querySelector(
+              ".rightTopMenu-button-location"
+            ).style.display = "unset";
+          });
+        document
+          .querySelector(".mapbox-gl-draw_point")
+          .addEventListener("mouseout", function () {
+            document.querySelector(
+              ".rightTopMenu-button-location"
+            ).style.display = "none";
+          });
 
-      document.querySelector('.mapbox-gl-draw_point').addEventListener('mouseover', function() {
-        document.querySelector('.rightTopMenu-button-location').style.display = 'unset';
-      });
-      document.querySelector('.mapbox-gl-draw_point').addEventListener('mouseout', function() {
-        document.querySelector('.rightTopMenu-button-location').style.display = 'none';
-      });
+        document
+          .querySelector(".mapbox-gl-draw_trash")
+          .addEventListener("mouseover", function () {
+            document.querySelector(".rightTopMenu-button-erase").style.display =
+              "unset";
+          });
+        document
+          .querySelector(".mapbox-gl-draw_trash")
+          .addEventListener("mouseout", function () {
+            document.querySelector(".rightTopMenu-button-erase").style.display =
+              "none";
+          });
 
-      document.querySelector('.mapbox-gl-draw_trash').addEventListener('mouseover', function() {
-        document.querySelector('.rightTopMenu-button-erase').style.display = 'unset';
+        document
+          .querySelector(".palette")
+          .addEventListener("mouseover", function () {
+            document.querySelector(".rightTopMenu-button-color").style.display =
+              "unset";
+          });
+        document
+          .querySelector(".palette")
+          .addEventListener("mouseout", function () {
+            document.querySelector(".rightTopMenu-button-color").style.display =
+              "none";
+          });
       });
-      document.querySelector('.mapbox-gl-draw_trash').addEventListener('mouseout', function() {
-        document.querySelector('.rightTopMenu-button-erase').style.display = 'none';
-      });
-
-      document.querySelector('.palette').addEventListener('mouseover', function() {
-        document.querySelector('.rightTopMenu-button-color').style.display = 'unset';
-      });
-      document.querySelector('.palette').addEventListener('mouseout', function() {
-        document.querySelector('.rightTopMenu-button-color').style.display = 'none';
-      });
-
-    }, 1000)
-  }, [])
-
+    }
+  }, [draw, map]);
 
   return (
     <div id="mapContainer">
