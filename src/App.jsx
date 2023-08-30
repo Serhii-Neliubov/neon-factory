@@ -539,17 +539,7 @@ function App() {
             <div className="greenLine"></div>
           </div>
         ) : null}
-        <PrintScreen
-          palette={palette}
-          sreenLogo={sreenLogo}
-          drawMenu={drawMenu}
-          mapTag={mapTag.current}
-          colorPicker={colorPicker}
-        >
-          Print Screen
-        </PrintScreen>
 
-        <div className="greenLine"></div>
         <MapIconsToggle
           toggleDistrictLayerVisibility={toggleDistrictLayerVisibility}
         >
@@ -564,6 +554,17 @@ function App() {
           setSelectedDistricts={setSelectedDistricts}
           setIsAllDistrictsVisible={setIsAllDistrictsVisible}
         ></ResetMap>
+        <div className="greenLine"></div>
+
+        <PrintScreen
+          palette={palette}
+          sreenLogo={sreenLogo}
+          drawMenu={drawMenu}
+          mapTag={mapTag.current}
+          colorPicker={colorPicker}
+        >
+          Print Screen
+        </PrintScreen>
       </div>
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
         <img alt="Logo" className="logo-map" src="logo.png" />
