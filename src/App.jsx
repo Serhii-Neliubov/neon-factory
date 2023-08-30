@@ -37,7 +37,7 @@ function App() {
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
   const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] =
     useState(true);
-  
+
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
@@ -71,7 +71,7 @@ function App() {
 
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
-  const [allDistrictsToggle, setAllDistrictsToggle] = useState(false)
+  const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
 
   let drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -231,22 +231,20 @@ function App() {
 
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
-
       setDecentralisedToggle(true);
-      setIsDecentralisedDistrictsVisible(false)
-      setCentralisedToggle(true)
-      setIsCentralisedDistrictsVisible(false)
+      setIsDecentralisedDistrictsVisible(false);
+      setCentralisedToggle(true);
+      setIsCentralisedDistrictsVisible(false);
 
       setSelectedDistricts(allDistricts);
       toggleDistrictsVisibility(selectedDistricts, map);
       map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
-
       setIsAllDistrictsSelected(true);
     } else {
       setDecentralisedToggle(false);
-      setIsDecentralisedDistrictsVisible(true)
-      setCentralisedToggle(false)
-      setIsCentralisedDistrictsVisible(true)
+      setIsDecentralisedDistrictsVisible(true);
+      setCentralisedToggle(false);
+      setIsCentralisedDistrictsVisible(true);
 
       setSelectedDistricts([]);
       allDistricts.forEach((district) => {
@@ -260,15 +258,13 @@ function App() {
   }
 
   function centralisedDistrictsButtonHandler() {
-    
     if (isCentralisedDistrictsVisible) {
-      
       setDecentralisedToggle(false);
-      setIsDecentralisedDistrictsVisible(true)
-      
+      setIsDecentralisedDistrictsVisible(true);
+
       setSelectedDistricts(centralisedDistricts);
       toggleDistrictsVisibility(centralisedDistricts, map);
-  
+
       setIsCentralisedDistrictsVisible(false);
     } else {
       const withoutCentralisedDistricts = selectedDistricts.filter(
@@ -281,12 +277,10 @@ function App() {
   }
 
   function decentralisedDistrictsButtonHandler() {
-    
     if (isDecentralisedDistrictsVisible) {
-      
-      setCentralisedToggle(false)
-      setIsCentralisedDistrictsVisible(true)
-      
+      setCentralisedToggle(false);
+      setIsCentralisedDistrictsVisible(true);
+
       setSelectedDistricts(decentralisedDistricts);
       toggleDistrictsVisibility(decentralisedDistricts, map);
 
@@ -587,12 +581,12 @@ function App() {
           removeCustomMarker={removeCustomMarker}
           setSelectedDistricts={setSelectedDistricts}
           setIsAllDistrictsVisible={setIsAllDistrictsVisible}
-
           setCentralisedToggle={setCentralisedToggle}
           setIsCentralisedDistrictsVisible={setIsCentralisedDistrictsVisible}
           setDecentralisedToggle={setDecentralisedToggle}
-          setIsDecentralisedDistrictsVisible={setIsDecentralisedDistrictsVisible}
-
+          setIsDecentralisedDistrictsVisible={
+            setIsDecentralisedDistrictsVisible
+          }
           setAllDistrictsToggle={setAllDistrictsToggle}
         ></ResetMap>
         <div className="greenLine"></div>
