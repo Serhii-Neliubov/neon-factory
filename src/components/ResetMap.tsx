@@ -7,8 +7,19 @@ const ResetMap = ({
   draw,
   setSqml,
   setIsAllDistrictsVisible,
+  setCentralisedToggle,
+  setIsCentralisedDistrictsVisible,
+  setDecentralisedToggle,
+  setIsDecentralisedDistrictsVisible,
+  setAllDistrictsToggle
+  
 }) => {
   function resetMapButtonHandler() {
+    setCentralisedToggle(false)
+    setIsCentralisedDistrictsVisible(true)
+    setDecentralisedToggle(false);
+    setIsDecentralisedDistrictsVisible(true)
+    setAllDistrictsToggle(false);
     setIsAllDistrictsVisible(true);
     removeCustomMarker();
     setSqml(0);

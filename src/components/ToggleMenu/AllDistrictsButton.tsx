@@ -5,11 +5,12 @@ const AllDistrictsButton = ({
   setIsAllDistrictsVisible,
   allDistrictsButtonHandler,
   isAllDistrictsVisible,
+  setAllDistrictsToggle, 
+  allDistrictsToggle 
 }) => {
-  const [toggle, setToggle] = useState<boolean>(false);
 
   const handleClick = () => {
-    setToggle((prevToggle) => !prevToggle);
+    setAllDistrictsToggle((prevToggle) => !prevToggle);
   };
 
   return (
@@ -32,7 +33,7 @@ const AllDistrictsButton = ({
           allDistrictsButtonHandler();
           handleClick();
         }}
-        className={toggle ? "switch-btn switch-on" : "switch-btn"}
+        className={allDistrictsToggle ? "switch-btn switch-on" : "switch-btn"}
       ></div>
     </div>
   );

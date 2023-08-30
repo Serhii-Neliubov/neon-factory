@@ -71,6 +71,7 @@ function App() {
 
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
+  const [allDistrictsToggle, setAllDistrictsToggle] = useState(false)
 
   let drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -563,6 +564,8 @@ function App() {
               setIsAllDistrictsVisible={setIsAllDistrictsVisible}
               allDistrictsButtonHandler={allDistrictsButtonHandler}
               isAllDistrictsVisible={isAllDistrictsVisible}
+              allDistrictsToggle={allDistrictsToggle}
+              setAllDistrictsToggle={setAllDistrictsToggle}
             >
               All Districts
             </AllDistrictsButton>
@@ -584,6 +587,13 @@ function App() {
           removeCustomMarker={removeCustomMarker}
           setSelectedDistricts={setSelectedDistricts}
           setIsAllDistrictsVisible={setIsAllDistrictsVisible}
+
+          setCentralisedToggle={setCentralisedToggle}
+          setIsCentralisedDistrictsVisible={setIsCentralisedDistrictsVisible}
+          setDecentralisedToggle={setDecentralisedToggle}
+          setIsDecentralisedDistrictsVisible={setIsDecentralisedDistrictsVisible}
+
+          setAllDistrictsToggle={setAllDistrictsToggle}
         ></ResetMap>
         <div className="greenLine"></div>
 
