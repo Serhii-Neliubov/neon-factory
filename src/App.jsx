@@ -230,12 +230,23 @@ function App() {
 
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
+
+      setDecentralisedToggle(true);
+      setIsDecentralisedDistrictsVisible(false)
+      setCentralisedToggle(true)
+      setIsCentralisedDistrictsVisible(false)
+
       setSelectedDistricts(allDistricts);
       toggleDistrictsVisibility(selectedDistricts, map);
       map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
 
       setIsAllDistrictsSelected(true);
     } else {
+      setDecentralisedToggle(false);
+      setIsDecentralisedDistrictsVisible(true)
+      setCentralisedToggle(false)
+      setIsCentralisedDistrictsVisible(true)
+
       setSelectedDistricts([]);
       allDistricts.forEach((district) => {
         if (selectedDistricts.includes(district)) {
@@ -248,11 +259,11 @@ function App() {
   }
 
   function centralisedDistrictsButtonHandler() {
-    setDecentralisedToggle(false);
-    setIsDecentralisedDistrictsVisible(true)
     
     if (isCentralisedDistrictsVisible) {
       
+      setDecentralisedToggle(false);
+      setIsDecentralisedDistrictsVisible(true)
       
       setSelectedDistricts(centralisedDistricts);
       toggleDistrictsVisibility(centralisedDistricts, map);
@@ -269,11 +280,11 @@ function App() {
   }
 
   function decentralisedDistrictsButtonHandler() {
-    setCentralisedToggle(false)
-    setIsCentralisedDistrictsVisible(true)
     
     if (isDecentralisedDistrictsVisible) {
-
+      
+      setCentralisedToggle(false)
+      setIsCentralisedDistrictsVisible(true)
       
       setSelectedDistricts(decentralisedDistricts);
       toggleDistrictsVisibility(decentralisedDistricts, map);
