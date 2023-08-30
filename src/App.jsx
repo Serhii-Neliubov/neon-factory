@@ -37,6 +37,7 @@ function App() {
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
   const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] =
     useState(true);
+  
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
@@ -66,7 +67,10 @@ function App() {
   const decentralisedDistricts = ["NE", "NW", "Airport", "SW", "SE"];
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [, setSelectedFeatures] = useState([]);
+
+  const [centralisedToggle, setCentralisedToggle] = useState(false);
+  const [decentralisedToggle, setDecentralisedToggle] = useState(false);
 
   let drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -244,9 +248,15 @@ function App() {
   }
 
   function centralisedDistrictsButtonHandler() {
+    setDecentralisedToggle(false);
+    setIsDecentralisedDistrictsVisible(true)
+    
     if (isCentralisedDistrictsVisible) {
+      
+      
       setSelectedDistricts(centralisedDistricts);
       toggleDistrictsVisibility(centralisedDistricts, map);
+  
       setIsCentralisedDistrictsVisible(false);
     } else {
       const withoutCentralisedDistricts = selectedDistricts.filter(
@@ -259,9 +269,15 @@ function App() {
   }
 
   function decentralisedDistrictsButtonHandler() {
+    setCentralisedToggle(false)
+    setIsCentralisedDistrictsVisible(true)
+    
     if (isDecentralisedDistrictsVisible) {
+
+      
       setSelectedDistricts(decentralisedDistricts);
       toggleDistrictsVisibility(decentralisedDistricts, map);
+
       setIsDecentralisedDistrictsVisible(false);
     } else {
       const withoutDecentralisedDistricts = selectedDistricts.filter(
@@ -516,6 +532,8 @@ function App() {
               centralisedDistrictsButtonHandler={
                 centralisedDistrictsButtonHandler
               }
+              centralisedToggle={centralisedToggle}
+              setCentralisedToggle={setCentralisedToggle}
             >
               Centralised Districts
             </CentralisedDistrictsButton>
@@ -524,6 +542,8 @@ function App() {
               decentralisedDistrictsButtonHandler={
                 decentralisedDistrictsButtonHandler
               }
+              decentralisedToggle={decentralisedToggle}
+              setDecentralisedToggle={setDecentralisedToggle}
             >
               Decentralised Districts
             </DecentralisedDistrictsButton>

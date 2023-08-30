@@ -1,12 +1,11 @@
 import React from "react";
 import { useState } from 'react';
-const CentralisedDistrictsButton = ({children, centralisedDistrictsButtonHandler}) => {
+const CentralisedDistrictsButton = ({children, centralisedDistrictsButtonHandler, centralisedToggle, setCentralisedToggle}) => {
 
-  const [toggle, setToggle] = useState<boolean>(false);
 
   const handleClick = () => {
-    setToggle((prevToggle) => !prevToggle);
-    
+    centralisedDistrictsButtonHandler()
+    setCentralisedToggle((prevToggle) => !prevToggle);
   };
 
   return (
@@ -14,8 +13,6 @@ const CentralisedDistrictsButton = ({children, centralisedDistrictsButtonHandler
       <div style={{ display: "flex" }}>
         <button
           onClick={() => {
-            centralisedDistrictsButtonHandler()
-
             handleClick();
           }}
           data-district="Centralised"
@@ -26,11 +23,9 @@ const CentralisedDistrictsButton = ({children, centralisedDistrictsButtonHandler
         </button>
         <div
           onClick={() => {
-            centralisedDistrictsButtonHandler();
-
             handleClick();
           }}
-          className={toggle ? "switch-btn switch-on" : "switch-btn"}
+          className={centralisedToggle ? "switch-btn switch-on" : "switch-btn"}
         ></div>
       </div>
     </>
