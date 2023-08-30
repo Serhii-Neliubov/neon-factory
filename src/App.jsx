@@ -173,6 +173,7 @@ function App() {
     });
 
     function showPolygonArea(polygonFeature) {
+      // eslint-disable-next-line no-undef
       const area = turf.area(polygonFeature.geometry);
       const sqm = Math.round(area * 100) / 100;
       // Выводим метры полигона в какой-либо элемент (например, модальное окно)
@@ -203,6 +204,7 @@ function App() {
       const selectedFeature = e.features[0];
 
       if (selectedFeature) {
+        // eslint-disable-next-line no-undef
         const area = turf.area(selectedFeature.geometry);
         const sqm = Math.round(area * 100) / 100;
         setSqml(sqm);
@@ -453,6 +455,16 @@ function App() {
               toggleButton={toggleButton}
               map={map}
               selectedDistricts={selectedDistricts}
+              data="South"
+              id="South"
+            >
+              South
+            </ToggleButton>
+            <ToggleButton
+              isAllDistrictsSelected={isAllDistrictsSelected}
+              toggleButton={toggleButton}
+              map={map}
+              selectedDistricts={selectedDistricts}
               data="NE"
               id="NEButton"
             >
@@ -468,16 +480,7 @@ function App() {
             >
               North-West
             </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="South"
-              id="South"
-            >
-              South
-            </ToggleButton>
+
             <ToggleButton
               isAllDistrictsSelected={isAllDistrictsSelected}
               toggleButton={toggleButton}
@@ -508,7 +511,7 @@ function App() {
             >
               Airport
             </ToggleButton>
-
+            <div className="greenLine"></div>
             <CentralisedDistrictsButton
               centralisedDistrictsButtonHandler={
                 centralisedDistrictsButtonHandler
