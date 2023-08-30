@@ -74,8 +74,7 @@ function App() {
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
 
-  let drawFeatureID =
-    "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
+  const drawFeatureID = useRef("pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A");
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -106,12 +105,12 @@ function App() {
     colorPicker.current.addEventListener("input", function () {
       var selectedColor = colorPicker.current.value;
 
-      if (drawFeatureID !== "" && typeof draw === "object") {
+      if (drawFeatureID.current !== "" && typeof draw === "object") {
         // Установите выбранный цвет для выбранной фигуры
-        draw.setFeatureProperty(drawFeatureID, "portColor", selectedColor);
+        draw.setFeatureProperty(drawFeatureID.current, "portColor", selectedColor);
 
         // Обновите фигуру на карте
-        var feat = draw.get(drawFeatureID);
+        var feat = draw.get(drawFeatureID.current);
         draw.add(feat);
       }
     });
@@ -162,7 +161,7 @@ function App() {
         var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
 
         //if another drawFeature is not found - reset drawFeatureID
-        drawFeatureID = drawFeatureAtPoint.length ? drawFeatureAtPoint[0] : "";
+        drawFeatureID.current = drawFeatureAtPoint.length ? drawFeatureAtPoint[0] : "";
         if (drawFeatureAtPoint.length) {
           // Если была найдена фигура, покажите её размер
           var clickedFeature = draw.get(drawFeatureAtPoint[0]);
