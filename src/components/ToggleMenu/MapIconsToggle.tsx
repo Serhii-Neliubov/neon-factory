@@ -1,21 +1,19 @@
 import React from "react";
-import { useState } from 'react';
+import { useState } from "react";
 
 const MapIconsToggle = ({ children, toggleDistrictLayerVisibility }) => {
-  const [toggle, setToggle] = useState(true)
+  const [toggle, setToggle] = useState(true);
 
   const handleClick = () => {
-    setToggle(prev => !prev);
-  }
+    setToggle((prev) => !prev);
+  };
 
   return (
     <>
-    
-
       <div style={{ display: "flex" }}>
         <button
           onClick={() => {
-            toggleDistrictLayerVisibility()
+            toggleDistrictLayerVisibility();
             handleClick();
           }}
           className="toggleButton"
@@ -25,7 +23,7 @@ const MapIconsToggle = ({ children, toggleDistrictLayerVisibility }) => {
         </button>
         <div
           onClick={() => {
-            toggleDistrictLayerVisibility()
+            toggleDistrictLayerVisibility();
             handleClick();
           }}
           className={!toggle ? "switch-btn switch-on" : "switch-btn"}

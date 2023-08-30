@@ -40,7 +40,7 @@ function App() {
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
-  const [servicesAction, setServicesAction] = useState(false);
+  const [servicesAction, setServicesAction] = useState(true);
   const [draw, setDraw] = useState(null);
   const submenuTag = useRef();
   const mapTag = useRef();
@@ -66,7 +66,7 @@ function App() {
   const decentralisedDistricts = ["NE", "NW", "Airport", "SW", "SE"];
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
-  const [, setSelectedFeatures] = useState([]);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   let drawFeatureID =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -131,6 +131,7 @@ function App() {
 
         // ...
       });
+      map.setLayoutProperty("poi-label", "visibility", "none");
     });
 
     map.on("click", "0", function (e) {
@@ -275,7 +276,6 @@ function App() {
   function toggleDistrictLayerVisibility() {
     setServicesAction((prev) => !prev);
     var layerId = "poi-label";
-
     if (servicesAction) {
       map.setLayoutProperty(layerId, "visibility", "visible");
     } else {
