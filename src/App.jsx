@@ -357,6 +357,19 @@ function App() {
     if (map) {
       map.on("load", () => {
         document
+          .querySelector(".mapboxgl-ctrl-group")
+          .addEventListener("mouseover", function () {
+            document.querySelector(".rightTopMenu-button-north").style.display =
+              "unset";
+          });
+        document
+          .querySelector(".mapboxgl-ctrl-group")
+          .addEventListener("mouseout", function () {
+            document.querySelector(".rightTopMenu-button-north").style.display =
+              "none";
+          });
+
+        document
           .querySelector(".mapbox-gl-draw_line")
           .addEventListener("mouseover", function () {
             document.querySelector(".rightTopMenu-button-line").style.display =
