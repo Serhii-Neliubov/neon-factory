@@ -323,16 +323,34 @@ function App() {
 
   function satelitteStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+
+    const inputElement = document.querySelector(".SatelitteInput");
+    if (inputElement) {
+      inputElement.checked = true;
+    }
   }
   function monochromeStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
+    const inputElement = document.querySelector(".MonochromeInput");
+    if (inputElement) {
+      inputElement.checked = true;
+    }
   }
   function darkStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
+    const inputElement = document.querySelector(".DarkInput");
+    if (inputElement) {
+      inputElement.checked = true;
+    }
   }
   function defaultStyleHandler() {
     setShowTransport(true);
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+
+    const inputElement = document.querySelector(".DefaultInput");
+    if (inputElement) {
+      inputElement.checked = true;
+    }
   }
 
   useEffect(() => {
@@ -645,19 +663,24 @@ function App() {
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
         <div className="menuMapStyle">
           <div onClick={defaultStyleHandler} className="menuMapStyleButton">
-            <input type="radio" name="rtoggle" defaultChecked />
+            <input
+              className="DefaultInput"
+              type="radio"
+              name="rtoggle"
+              defaultChecked
+            />
             <label>Default Style</label>
           </div>
           <div onClick={satelitteStyleHandler} className="menuMapStyleButton">
-            <input type="radio" name="rtoggle" />
+            <input className="SatelitteInput" type="radio" name="rtoggle" />
             <label>Satelitte Style</label>
           </div>
           <div onClick={monochromeStyleHandler} className="menuMapStyleButton">
-            <input type="radio" name="rtoggle" />
+            <input className="MonochromeInput" type="radio" name="rtoggle" />
             <label>Monochrome Style</label>
           </div>
           <div onClick={darkStyleHandler} className="menuMapStyleButton">
-            <input type="radio" name="rtoggle" />
+            <input className="DarkInput" type="radio" name="rtoggle" />
             <label>Dark Mode</label>
           </div>
         </div>
