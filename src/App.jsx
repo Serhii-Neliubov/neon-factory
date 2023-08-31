@@ -344,7 +344,6 @@ function App() {
     }
   }
   function defaultStyleHandler() {
-    setShowTransport(true);
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
 
     const inputElement = document.querySelector(".DefaultInput");
@@ -669,19 +668,19 @@ function App() {
               name="rtoggle"
               defaultChecked
             />
-            <label>Default Style</label>
+            <label>Default</label>
           </div>
           <div onClick={satelitteStyleHandler} className="menuMapStyleButton">
             <input className="SatelitteInput" type="radio" name="rtoggle" />
-            <label>Satelitte Style</label>
+            <label>Satelitte</label>
           </div>
           <div onClick={monochromeStyleHandler} className="menuMapStyleButton">
             <input className="MonochromeInput" type="radio" name="rtoggle" />
-            <label>Monochrome Style</label>
+            <label>Monochrome</label>
           </div>
           <div onClick={darkStyleHandler} className="menuMapStyleButton">
             <input className="DarkInput" type="radio" name="rtoggle" />
-            <label>Dark Mode</label>
+            <label>Dark</label>
           </div>
         </div>
         <img alt="Logo" className="logo-map" src="logo.png" />
