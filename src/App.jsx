@@ -74,7 +74,9 @@ function App() {
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
 
-  const drawFeatureID = useRef("pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A");
+  const drawFeatureID = useRef(
+    "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
+  );
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -107,7 +109,11 @@ function App() {
 
       if (drawFeatureID.current !== "" && typeof draw === "object") {
         // Установите выбранный цвет для выбранной фигуры
-        draw.setFeatureProperty(drawFeatureID.current, "portColor", selectedColor);
+        draw.setFeatureProperty(
+          drawFeatureID.current,
+          "portColor",
+          selectedColor
+        );
 
         // Обновите фигуру на карте
         var feat = draw.get(drawFeatureID.current);
@@ -161,7 +167,9 @@ function App() {
         var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
 
         //if another drawFeature is not found - reset drawFeatureID
-        drawFeatureID.current = drawFeatureAtPoint.length ? drawFeatureAtPoint[0] : "";
+        drawFeatureID.current = drawFeatureAtPoint.length
+          ? drawFeatureAtPoint[0]
+          : "";
         if (drawFeatureAtPoint.length) {
           // Если была найдена фигура, покажите её размер
           var clickedFeature = draw.get(drawFeatureAtPoint[0]);
@@ -311,6 +319,20 @@ function App() {
     } else {
       map.setLayoutProperty("transit-label", "visibility", "none");
     }
+  }
+
+  function satelitteStyleHandler() {
+    map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+  }
+  function monochromeStyleHandler() {
+    map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
+  }
+  function darkStyleHandler() {
+    map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
+  }
+  function defaultStyleHandler() {
+    setShowTransport(true);
+    map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
   }
 
   useEffect(() => {
@@ -621,6 +643,24 @@ function App() {
         </PrintScreen>
       </div>
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
+        <div className="menuMapStyle">
+          <div onClick={defaultStyleHandler} className="menuMapStyleButton">
+            <input type="radio" name="rtoggle" defaultChecked />
+            <label>Default Style</label>
+          </div>
+          <div onClick={satelitteStyleHandler} className="menuMapStyleButton">
+            <input type="radio" name="rtoggle" />
+            <label>Satelitte Style</label>
+          </div>
+          <div onClick={monochromeStyleHandler} className="menuMapStyleButton">
+            <input type="radio" name="rtoggle" />
+            <label>Monochrome Style</label>
+          </div>
+          <div onClick={darkStyleHandler} className="menuMapStyleButton">
+            <input type="radio" name="rtoggle" />
+            <label>Dark Mode</label>
+          </div>
+        </div>
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
     </div>
