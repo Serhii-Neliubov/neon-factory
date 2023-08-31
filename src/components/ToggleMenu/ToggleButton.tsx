@@ -8,7 +8,7 @@ const ToggleButton = ({
   isAllDistrictsSelected,
   selectedDistricts,
   map,
-  isCentralisedDistrictsVisible
+  isCentralisedDistrictsVisible,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggleClass, setToggleClass] = useState<string>("");
@@ -19,14 +19,10 @@ const ToggleButton = ({
     setToggle(isDataSelected);
   };
 
-  // useEffect(() => {
-  //   setToggle(isAllDistrictsSelected);
-  // }, [isAllDistrictsSelected]);
-
   useEffect(() => {
     const isDataSelected = selectedDistricts.includes(data);
     setToggle(isDataSelected);
-  }, [selectedDistricts])
+  }, [selectedDistricts]);
 
   useEffect(() => {
     if (toggle) {

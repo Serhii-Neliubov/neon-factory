@@ -1,12 +1,31 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const TransportButton = ({ children, toggleTransportLayerVisibility }) => {
+const TransportButton = ({
+  children,
+  showTransport,
+  setShowTransport,
+  map,
+}) => {
   const [toggle, setToggle] = useState(false);
+  const [toggleClass, setToggleClass] = useState<string>("");
 
-  const handleClick = () => {
-    setToggle((prev) => !prev);
-  };
+  function toggleTransportLayerVisibility() {
+    setShowTransport((prev) => !prev);
+    if (!showTransport) {
+      map.setLayoutProperty("transit-label", "visibility", "visible");
+    } else {
+      map.setLayoutProperty("transit-label", "visibility", "none");
+    }
+  }
+
+  useEffect(() => {
+    if (showTransport) {
+      setToggleClass("switch-btn switch-on");
+    } else {
+      setToggleClass("switch-btn");
+    }
+  }, [showTransport]);
 
   return (
     <>
@@ -14,7 +33,6 @@ const TransportButton = ({ children, toggleTransportLayerVisibility }) => {
         <button
           onClick={() => {
             toggleTransportLayerVisibility();
-            handleClick();
           }}
           className="toggleButton"
           id="mapIconsToggle"
@@ -24,9 +42,8 @@ const TransportButton = ({ children, toggleTransportLayerVisibility }) => {
         <div
           onClick={() => {
             toggleTransportLayerVisibility();
-            handleClick();
           }}
-          className={!toggle ? "switch-btn switch-on" : "switch-btn"}
+          className={toggleClass}
         ></div>
       </div>
     </>
