@@ -1,11 +1,18 @@
 import html2canvas from "html2canvas";
 import React from "react";
 
-const PrintScreen = ({ mapTag, drawMenu, sreenLogo, colorPicker }) => {
+const PrintScreen = ({
+  mapTag,
+  drawMenu,
+  sreenLogo,
+  colorPicker,
+  menuStyle,
+}) => {
   async function printScreenHandler() {
     // Спрячьте drawMenu
     drawMenu.style.display = "none";
     sreenLogo.style.display = "block";
+    menuStyle.style.display = "none";
     colorPicker.current.style.display = "none";
     // Сделайте снимок экрана с использованием html2canvas
     const canvas = await html2canvas(mapTag);
@@ -36,6 +43,7 @@ const PrintScreen = ({ mapTag, drawMenu, sreenLogo, colorPicker }) => {
     document.body.removeChild(downloadLink);
     sreenLogo.style.display = "none";
     colorPicker.current.style.display = "block";
+    menuStyle.style.display = "flex";
   }
 
   return (

@@ -11,14 +11,13 @@ const ResetMap = ({
   setIsCentralisedDistrictsVisible,
   setDecentralisedToggle,
   setIsDecentralisedDistrictsVisible,
-  setAllDistrictsToggle
-  
+  setAllDistrictsToggle,
 }) => {
   function resetMapButtonHandler() {
-    setCentralisedToggle(false)
-    setIsCentralisedDistrictsVisible(true)
+    setCentralisedToggle(false);
+    setIsCentralisedDistrictsVisible(true);
     setDecentralisedToggle(false);
-    setIsDecentralisedDistrictsVisible(true)
+    setIsDecentralisedDistrictsVisible(true);
     setAllDistrictsToggle(false);
     setIsAllDistrictsVisible(true);
     removeCustomMarker();

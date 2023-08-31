@@ -52,6 +52,7 @@ function App() {
   const drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const sreenLogo = document.querySelector(".logo-map");
   const palette = document.querySelector(".palette");
+  const menuStyle = document.querySelector(".menuMapStyle");
   const allDistricts = [
     "SW",
     "SE",
@@ -654,6 +655,7 @@ function App() {
           sreenLogo={sreenLogo}
           drawMenu={drawMenu}
           mapTag={mapTag.current}
+          menuStyle={menuStyle}
           colorPicker={colorPicker}
         >
           Print Screen
