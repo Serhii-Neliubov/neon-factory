@@ -6,19 +6,25 @@ const AllDistrictsButton = ({
   allDistrictsButtonHandler,
   isAllDistrictsVisible,
   setAllDistrictsToggle, 
-  allDistrictsToggle 
+  allDistrictsToggle,
+
 }) => {
+
+
 
   const handleClick = () => {
     setAllDistrictsToggle((prevToggle) => !prevToggle);
+    setIsAllDistrictsVisible(!isAllDistrictsVisible);
+    allDistrictsButtonHandler();
+
   };
+
+
 
   return (
     <div style={{ display: "flex" }}>
       <button
         onClick={() => {
-          setIsAllDistrictsVisible(!isAllDistrictsVisible);
-          allDistrictsButtonHandler();
           handleClick();
         }}
         data-district="All"
@@ -29,8 +35,6 @@ const AllDistrictsButton = ({
       </button>
       <div
         onClick={() => {
-          setIsAllDistrictsVisible(!isAllDistrictsVisible);
-          allDistrictsButtonHandler();
           handleClick();
         }}
         className={allDistrictsToggle ? "switch-btn switch-on" : "switch-btn"}
