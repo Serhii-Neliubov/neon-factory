@@ -29,6 +29,7 @@ import {
   toggleButton,
   changeColor,
 } from "./utils/MapFunctions";
+import TransportButton from "./components/ToggleMenu/TransportButton";
 
 function App() {
   const [map, setMap] = useState(null);
@@ -67,8 +68,8 @@ function App() {
   const decentralisedDistricts = ["NE", "NW", "Airport", "SW", "SE"];
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
-  const [, setSelectedFeatures] = useState([]);
-
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [showTransport, setShowTransport] = useState(false);
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
@@ -126,6 +127,7 @@ function App() {
     });
 
     setDraw(draw);
+    map.addControl(new mapboxgl.NavigationControl());
 
     map.on("load", function () {
       map.addControl(draw);
@@ -138,7 +140,6 @@ function App() {
       });
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
-
     map.on("click", "0", function (e) {
       const clickedPolygon = e.features[0]; // Получаем информацию о кликнутом полигоне
       // Вызываем функцию для отображения метров полигона
@@ -297,11 +298,19 @@ function App() {
 
   function toggleDistrictLayerVisibility() {
     setServicesAction((prev) => !prev);
-    var layerId = "poi-label";
     if (servicesAction) {
-      map.setLayoutProperty(layerId, "visibility", "visible");
+      map.setLayoutProperty("poi-label", "visibility", "visible");
     } else {
-      map.setLayoutProperty(layerId, "visibility", "none");
+      map.setLayoutProperty("poi-label", "visibility", "none");
+    }
+  }
+
+  function toggleTransportLayerVisibility() {
+    setShowTransport(!showTransport);
+    if (showTransport) {
+      map.setLayoutProperty("transit-label", "visibility", "visible");
+    } else {
+      map.setLayoutProperty("transit-label", "visibility", "none");
     }
   }
 
@@ -327,6 +336,7 @@ function App() {
             document.querySelector(".rightTopMenu-button-shape").style.display =
               "unset";
           });
+
         document
           .querySelector(".mapbox-gl-draw_polygon")
           .addEventListener("mouseout", function () {
@@ -406,6 +416,9 @@ function App() {
           </div>
           <div className="rightTopMenu-button rightTopMenu-button-color">
             Color
+          </div>
+          <div className="rightTopMenu-button rightTopMenu-button-north">
+            Reset North
           </div>
         </div>
         <div className="calculation-box">
@@ -567,12 +580,19 @@ function App() {
             <div className="greenLine"></div>
           </div>
         ) : null}
+        <div className="toggleIcons">
+          <MapIconsToggle
+            toggleDistrictLayerVisibility={toggleDistrictLayerVisibility}
+          >
+            Shop, Restaurants, Services...
+          </MapIconsToggle>
+          <TransportButton
+            toggleTransportLayerVisibility={toggleTransportLayerVisibility}
+          >
+            Transport
+          </TransportButton>
+        </div>
 
-        <MapIconsToggle
-          toggleDistrictLayerVisibility={toggleDistrictLayerVisibility}
-        >
-          Shop, Restaurants, Services...
-        </MapIconsToggle>
         <div className="greenLine"></div>
         <ResetMap
           setSqml={setSqml}

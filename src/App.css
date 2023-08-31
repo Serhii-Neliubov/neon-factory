@@ -27,6 +27,9 @@ body {
 .toggleContainer {
   width: 100%;
 }
+.toggleIcons {
+  width: 100%;
+}
 
 ::-webkit-scrollbar {
   display: none;
@@ -251,10 +254,6 @@ body {
   left: 16px;
 }
 
-/* .mapboxgl-ctrl-group.mapboxgl-ctrl button:nth-last-child(-n + 2) {
-  display: none;
-} */
-
 .logo-map {
   position: absolute;
   top: 20px; /* Установите желаемый отступ сверху */
@@ -265,7 +264,12 @@ body {
   background-repeat: no-repeat;
   z-index: 1000;
 }
-
+.mapboxgl-ctrl-group > .mapboxgl-ctrl-zoom-in {
+  display: none;
+}
+.mapboxgl-ctrl-group > .mapboxgl-ctrl-zoom-out {
+  display: none;
+}
 .line-palette {
   position: absolute;
   top: 50%;
@@ -283,7 +287,7 @@ body {
   height: 33px;
   position: absolute;
   background: #fff;
-  top: 104px;
+  top: 143px;
   cursor: pointer;
   right: 8px;
   z-index: 100;
@@ -335,23 +339,25 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .rightTopMenu-button-line {
-  margin-top: 3px;
+  margin-top: 43px;
 }
 
 .rightTopMenu-button-shape {
-  margin-top: 32px;
+  margin-top: 72px;
 }
 
 .rightTopMenu-button-location {
-  margin-top: 60px;
+  margin-top: 100px;
 }
 
 .rightTopMenu-button-erase {
-  margin-top: 88px;
+  margin-top: 128px;
 }
 
 .rightTopMenu-button-color {
-  margin-top: 117px;
+  margin-top: 157px;
+}
+.rightTopMenu-button-north {
 }
 
 .calculation-box {
