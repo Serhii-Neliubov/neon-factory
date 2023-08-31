@@ -279,17 +279,17 @@ body {
 }
 
 .palette {
-  border: 2px solid rgba(171, 170, 165, 0.6);
-  border-top: 1px solid rgba(195, 194, 188, 0.9);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  border: none;
   margin-top: 20px;
   /* box-shadow: 1px 1px 5px rgba(0, 0, 0, 1); */
-  width: 33px;
-  height: 33px;
+  width: 29px;
+  height: 29px;
   position: absolute;
   background: #fff;
   top: 143px;
   cursor: pointer;
-  right: 8px;
+  right: 10px;
   z-index: 100;
   border-radius: 0px 0px 5px 5px;
   background-image: url("iconPalette.png");
@@ -356,8 +356,6 @@ input[type="color"]::-webkit-color-swatch {
 
 .rightTopMenu-button-color {
   margin-top: 157px;
-}
-.rightTopMenu-button-north {
 }
 
 .calculation-box {
@@ -450,8 +448,11 @@ p {
 
 .menuMapStyle {
   position: absolute;
+  bottom: 130px;
+  right: 10px;
   z-index: 100;
   display: flex;
+  flex-direction: column;
   gap: 10px;
   margin-top: 10px;
   margin-left: 10px;
@@ -460,19 +461,21 @@ p {
 .menuMapStyleButton {
   cursor: pointer;
   background-color: #fff;
-  border: 1px solid #4cc0ad;
+  border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 15px;
-  width: 110px;
-  padding: 10px 10px 10px 5px;
+  width: 133px;
+  padding: 10px 5px 10px 10px;
   display: flex;
   gap: 5px;
+  display: flex;
+  flex-direction: row-reverse;
 }
 .menuMapStyleButton:hover {
   background-color: rgba(255, 255, 255, 0.686);
 }
 .menuMapStyleButton label {
   cursor: pointer;
-
+  flex: 1 1 auto;
   margin-top: 2px;
   font-family: "Helvetica";
 }

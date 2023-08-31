@@ -42,7 +42,7 @@ function App() {
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
-  const [servicesAction, setServicesAction] = useState(true);
+  const [servicesAction, setServicesAction] = useState(false);
   const [draw, setDraw] = useState(null);
   const submenuTag = useRef();
   const mapTag = useRef();
@@ -70,7 +70,7 @@ function App() {
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const [showTransport, setShowTransport] = useState(false);
+  const [showTransport, setShowTransport] = useState(true);
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
@@ -137,13 +137,7 @@ function App() {
 
     map.on("load", function () {
       map.addControl(draw);
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-        // Continue with your map initialization
 
-        // ...
-      });
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
     map.on("click", "0", function (e) {
@@ -230,6 +224,16 @@ function App() {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
   }, []);
+  useEffect(() => {
+    if (map) {
+      map.loadImage("pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+      });
+
+      // Остальной код обработки карты также может быть здесь
+    }
+  }, [map]); // Обратите внимание на зависимость от map
 
   function controlsButtonHandler() {
     let submenuDisplay =
@@ -304,30 +308,21 @@ function App() {
     }
   }
 
-  function toggleDistrictLayerVisibility() {
-    setServicesAction((prev) => !prev);
-    if (servicesAction) {
-      map.setLayoutProperty("poi-label", "visibility", "visible");
-    } else {
-      map.setLayoutProperty("poi-label", "visibility", "none");
-    }
-  }
-
-  function toggleTransportLayerVisibility() {
-    setShowTransport(!showTransport);
-    if (showTransport) {
-      map.setLayoutProperty("transit-label", "visibility", "visible");
-    } else {
-      map.setLayoutProperty("transit-label", "visibility", "none");
-    }
-  }
-
   function satelitteStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
 
     const inputElement = document.querySelector(".SatelitteInput");
     if (inputElement) {
       inputElement.checked = true;
+    }
+
+    if (map) {
+      map.loadImage("pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+      });
+
+      // Остальной код обработки карты также может быть здесь
     }
   }
   function monochromeStyleHandler() {
@@ -336,20 +331,50 @@ function App() {
     if (inputElement) {
       inputElement.checked = true;
     }
+
+    if (map) {
+      map.loadImage("pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+      });
+
+      // Остальной код обработки карты также может быть здесь
+    }
   }
   function darkStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
     const inputElement = document.querySelector(".DarkInput");
+
     if (inputElement) {
       inputElement.checked = true;
+    }
+
+    if (map) {
+      map.loadImage("pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+      });
+
+      // Остальной код обработки карты также может быть здесь
     }
   }
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+    setShowTransport(true);
+    setServicesAction(false);
 
     const inputElement = document.querySelector(".DefaultInput");
     if (inputElement) {
       inputElement.checked = true;
+    }
+
+    if (map) {
+      map.loadImage("pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+      });
+
+      // Остальной код обработки карты также может быть здесь
     }
   }
 
@@ -634,12 +659,16 @@ function App() {
         ) : null}
         <div className="toggleIcons">
           <MapIconsToggle
-            toggleDistrictLayerVisibility={toggleDistrictLayerVisibility}
+            servicesAction={servicesAction}
+            setServicesAction={setServicesAction}
+            map={map}
           >
             Shop, Restaurants, Services...
           </MapIconsToggle>
           <TransportButton
-            toggleTransportLayerVisibility={toggleTransportLayerVisibility}
+            setShowTransport={setShowTransport}
+            showTransport={showTransport}
+            map={map}
           >
             Transport
           </TransportButton>
@@ -647,6 +676,8 @@ function App() {
 
         <div className="greenLine"></div>
         <ResetMap
+          setServicesAction={setServicesAction}
+          setShowTransport={setShowTransport}
           setSqml={setSqml}
           draw={draw}
           map={map}
@@ -687,7 +718,7 @@ function App() {
           </div>
           <div onClick={satelitteStyleHandler} className="menuMapStyleButton">
             <input className="SatelitteInput" type="radio" name="rtoggle" />
-            <label>Satelitte</label>
+            <label>Satellite</label>
           </div>
           <div onClick={monochromeStyleHandler} className="menuMapStyleButton">
             <input className="MonochromeInput" type="radio" name="rtoggle" />

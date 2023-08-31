@@ -1,12 +1,33 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const MapIconsToggle = ({ children, toggleDistrictLayerVisibility }) => {
-  const [toggle, setToggle] = useState(true);
+const MapIconsToggle = ({
+  children,
+  setServicesAction,
+  servicesAction,
+  map,
+}) => {
+  const [toggle, setToggle] = useState(false);
+  const [toggleClass, setToggleClass] = useState<string>("");
 
-  const handleClick = () => {
-    setToggle((prev) => !prev);
-  };
+  function toggleDistrictLayerVisibility() {
+    setServicesAction((prev) => !prev);
+    if (!servicesAction) {
+      map.setLayoutProperty("poi-label", "visibility", "visible");
+      setToggle(true);
+    } else {
+      map.setLayoutProperty("poi-label", "visibility", "none");
+      setToggle(false);
+    }
+  }
+
+  useEffect(() => {
+    if (servicesAction) {
+      setToggleClass("switch-btn switch-on");
+    } else {
+      setToggleClass("switch-btn");
+    }
+  }, [servicesAction]);
 
   return (
     <>
@@ -14,7 +35,6 @@ const MapIconsToggle = ({ children, toggleDistrictLayerVisibility }) => {
         <button
           onClick={() => {
             toggleDistrictLayerVisibility();
-            handleClick();
           }}
           className="toggleButton"
           id="mapIconsToggle"
@@ -24,9 +44,8 @@ const MapIconsToggle = ({ children, toggleDistrictLayerVisibility }) => {
         <div
           onClick={() => {
             toggleDistrictLayerVisibility();
-            handleClick();
           }}
-          className={!toggle ? "switch-btn switch-on" : "switch-btn"}
+          className={toggleClass}
         ></div>
       </div>
     </>
