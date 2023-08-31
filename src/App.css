@@ -447,3 +447,52 @@ p {
 .controlButton-actions_open::after {
   transform: rotate(90deg) !important;
 }
+
+.menuMapStyle {
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.menuMapStyleButton {
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #4cc0ad;
+  border-radius: 15px;
+  width: 140px;
+  padding: 10px 10px 10px 5px;
+  display: flex;
+  gap: 5px;
+}
+.menuMapStyleButton:hover {
+  background-color: rgba(255, 255, 255, 0.686);
+}
+.menuMapStyleButton label {
+  cursor: pointer;
+
+  margin-top: 2px;
+  font-family: "Helvetica";
+}
+
+input[type="radio"] {
+  /* Скройте стандартный кружок радиокнопки */
+  margin-top: 5px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 14px; /* Задайте желаемый размер */
+  height: 14px;
+  border-radius: 50%; /* Создайте круглую форму */
+
+  /* Установите цвет фона (цвет кружка) */
+  border: 1px solid #4cc0ad; /* Установите цвет обводки */
+  outline: none; /* Уберите обводку при фокусировке */
+}
+
+/* Стилизация для выбранной радиокнопки */
+input[type="radio"]:checked {
+  background-color: #4cc0ad; /* Измените цвет кружка при выборе */
+}
