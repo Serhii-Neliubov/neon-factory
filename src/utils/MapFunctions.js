@@ -35,7 +35,6 @@ export function toggleDistrictsVisibility(selectedDistricts, map) {
   map.triggerRepaint();
 }
 
-
 export function toggleButton(data, selectedDistricts, map) {
   const districtIndex = selectedDistricts.indexOf(data);
 
@@ -48,7 +47,6 @@ export function toggleButton(data, selectedDistricts, map) {
   }
   // Переключите видимость всех районов
   toggleDistrictsVisibility(selectedDistricts, map);
-  console.log(selectedDistricts)
 }
 
 export function changeColor(selectedColor, mapboxgl, draw) {

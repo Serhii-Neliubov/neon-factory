@@ -69,7 +69,6 @@ function App() {
   const decentralisedDistricts = ["NE", "NW", "Airport", "SW", "SE"];
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [showTransport, setShowTransport] = useState(true);
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
@@ -147,16 +146,6 @@ function App() {
 
       showPolygonArea(clickedPolygon);
     });
-
-    var setDrawFeature = function (e) {
-      if (e.features.length && e.features[0].type === "Feature") {
-        var feat = e.features[0];
-        setSelectedFeatures([feat.id]);
-      }
-    };
-
-    map.on("draw.update", setDrawFeature);
-    map.on("draw.selectionchange", setDrawFeature);
 
     map.on("click", function (e) {
       if (!newDrawFeature.current) {
@@ -331,8 +320,6 @@ function App() {
         if (error) throw error;
         map.addImage("custom-pin", image);
       });
-
-      // Остальной код обработки карты также может быть здесь
     }
     setSelectedDistricts([]);
     setCentralisedToggle(false);
@@ -526,7 +513,6 @@ function App() {
           map={map}
           submenuTag={submenuTag}
         ></SubMenu>
-
         <button
           onClick={() => setOpenBrussels(!openBrussels)}
           className={`BrusselsButton ${
@@ -563,7 +549,6 @@ function App() {
             >
               All Districts
             </AllDistrictsButton>
-            <div className="greenLine"></div>
           </div>
         ) : null}
         <div className="toggleIcons">

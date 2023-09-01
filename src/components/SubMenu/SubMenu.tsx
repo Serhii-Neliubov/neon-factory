@@ -16,7 +16,6 @@ const SubMenu = ({
   return (
     <>
       <div className="greenLine"></div>
-
       <ActionControls
         isControlsActive={isControlsActive}
         controlsButtonHandler={controlsButtonHandler}
