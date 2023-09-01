@@ -14,6 +14,7 @@ const ResetMap = ({
   setAllDistrictsToggle,
   setServicesAction,
   setShowTransport,
+  mapStyleSetter,
 }) => {
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
@@ -35,11 +36,15 @@ const ResetMap = ({
     });
 
     setSelectedDistricts([]);
-    map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
 
-    const inputElement = document.querySelector(".DefaultInput");
-    if (inputElement) {
-      inputElement.checked = true;
+    if (mapStyleSetter == 1) {
+      map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+    } else if (mapStyleSetter == 2) {
+      map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+    } else if (mapStyleSetter == 3) {
+      map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
+    } else {
+      map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
     }
 
     if (map) {
@@ -58,9 +63,17 @@ const ResetMap = ({
   }
 
   return (
-    <button onClick={resetMapButtonHandler} className="controlButton resetMap">
-      Reset Map
-    </button>
+    <>
+      <div className="greenLine"></div>
+
+      <button
+        onClick={resetMapButtonHandler}
+        className="controlButton resetMap"
+      >
+        Reset Map
+      </button>
+      <div className="greenLine"></div>
+    </>
   );
 };
 

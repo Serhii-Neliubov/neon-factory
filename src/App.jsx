@@ -14,10 +14,7 @@ import "mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import SubMenu from "./components/SubMenu/SubMenu";
 import ResetMap from "./components/ResetMap";
 import PrintScreen from "./components/PrintScreen";
-import ToggleButton from "./components/ToggleMenu/ToggleButton";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
-import CentralisedDistrictsButton from "./components/ToggleMenu/CentralisedDistrictsButton";
-import DecentralisedDistrictsButton from "./components/ToggleMenu/DecentralisedDistrictsButton";
 import MapIconsToggle from "./components/ToggleMenu/MapIconsToggle";
 // Utils
 import defaultDrawStyles from "./utils/DefaultDrawStyles";
@@ -30,6 +27,9 @@ import {
   changeColor,
 } from "./utils/MapFunctions";
 import TransportButton from "./components/ToggleMenu/TransportButton";
+import LayoutChanger from "./components/LayoutChanger/LayoutChanger";
+import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
+import RightTopMenuText from "./components/RightTopMenuText";
 
 function App() {
   const [map, setMap] = useState(null);
@@ -74,6 +74,7 @@ function App() {
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
+  const [mapStyleSetter, setMapStyleSetter] = useState(1);
 
   const drawFeatureID = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
@@ -251,7 +252,15 @@ function App() {
 
       setSelectedDistricts(allDistricts);
       toggleDistrictsVisibility(selectedDistricts, map);
-      map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+      if (mapStyleSetter == 1) {
+        map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+      } else if (mapStyleSetter == 2) {
+        map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+      } else if (mapStyleSetter == 3) {
+        map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
+      } else {
+        map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
+      }
       setIsAllDistrictsSelected(true);
     } else {
       setDecentralisedToggle(false);
@@ -315,6 +324,7 @@ function App() {
     if (inputElement) {
       inputElement.checked = true;
     }
+    setMapStyleSetter(2);
 
     if (map) {
       map.loadImage("pin.png", function (error, image) {
@@ -324,13 +334,21 @@ function App() {
 
       // Остальной код обработки карты также может быть здесь
     }
+    setSelectedDistricts([]);
+    setCentralisedToggle(false);
+    setDecentralisedToggle(false);
+    setAllDistrictsToggle(false);
+    setShowTransport(true);
+    setServicesAction(false);
   }
+
   function monochromeStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
     const inputElement = document.querySelector(".MonochromeInput");
     if (inputElement) {
       inputElement.checked = true;
     }
+    setMapStyleSetter(3);
 
     if (map) {
       map.loadImage("pin.png", function (error, image) {
@@ -340,11 +358,18 @@ function App() {
 
       // Остальной код обработки карты также может быть здесь
     }
+    setSelectedDistricts([]);
+    setCentralisedToggle(false);
+    setDecentralisedToggle(false);
+    setAllDistrictsToggle(false);
+    setShowTransport(true);
+    setServicesAction(false);
   }
+
   function darkStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
     const inputElement = document.querySelector(".DarkInput");
-
+    setMapStyleSetter(4);
     if (inputElement) {
       inputElement.checked = true;
     }
@@ -357,9 +382,17 @@ function App() {
 
       // Остальной код обработки карты также может быть здесь
     }
+    setSelectedDistricts([]);
+    setCentralisedToggle(false);
+    setDecentralisedToggle(false);
+    setAllDistrictsToggle(false);
+    setShowTransport(true);
+    setServicesAction(false);
   }
+
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+    setMapStyleSetter(1);
     setShowTransport(true);
     setServicesAction(false);
 
@@ -376,6 +409,10 @@ function App() {
 
       // Остальной код обработки карты также может быть здесь
     }
+    setSelectedDistricts([]);
+    setCentralisedToggle(false);
+    setDecentralisedToggle(false);
+    setAllDistrictsToggle(false);
   }
 
   useEffect(() => {
@@ -478,38 +515,17 @@ function App() {
           className="palette"
           onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
         />
-        <div className="rightTopMenu">
-          <div className="rightTopMenu-button rightTopMenu-button-line">
-            Line
-          </div>
-          <div className="rightTopMenu-button rightTopMenu-button-shape">
-            Shape
-          </div>
-          <div className="rightTopMenu-button rightTopMenu-button-location">
-            Add Location
-          </div>
-          <div className="rightTopMenu-button rightTopMenu-button-erase">
-            Erase
-          </div>
-          <div className="rightTopMenu-button rightTopMenu-button-color">
-            Color
-          </div>
-          <div className="rightTopMenu-button rightTopMenu-button-north">
-            Reset North
-          </div>
-        </div>
+        <RightTopMenuText />
         <div className="calculation-box">
           <div id="calculated-area">{Sqm} sqm</div>
         </div>
         <div ref={geocoderContainer}></div>
-        <div className="greenLine"></div>
         <SubMenu
           controlsButtonHandler={controlsButtonHandler}
           isControlsActive={isControlsActive}
           map={map}
           submenuTag={submenuTag}
         ></SubMenu>
-        <div className="greenLine"></div>
 
         <button
           onClick={() => setOpenBrussels(!openBrussels)}
@@ -522,128 +538,22 @@ function App() {
         <div className="greenLine"></div>
         {openBrussels ? (
           <div className="toggleContainer">
-            <ToggleButton
+            <ToggleMenu
               isAllDistrictsSelected={isAllDistrictsSelected}
               toggleButton={toggleButton}
               map={map}
               selectedDistricts={selectedDistricts}
-              data="CD"
-              id="CBDButton"
-            >
-              Center District
-            </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="EU"
-              id="EUButton"
-            >
-              European District
-            </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="Louise"
-              id="LouiseButton"
-            >
-              Louise
-            </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="North"
-              id="NorthButton"
-            >
-              North
-            </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="South"
-              id="South"
-            >
-              South
-            </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="NE"
-              id="NEButton"
-            >
-              North-East
-            </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="NW"
-              id="NWButton"
-            >
-              North-West
-            </ToggleButton>
-
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="SE"
-              id="SEButton"
-            >
-              South-East
-            </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="SW"
-              id="SWButton"
-            >
-              South-West
-            </ToggleButton>
-            <ToggleButton
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              data="Airport"
-              id="Airport"
-            >
-              Airport
-            </ToggleButton>
-            <div className="greenLine"></div>
-            <CentralisedDistrictsButton
               centralisedDistrictsButtonHandler={
                 centralisedDistrictsButtonHandler
               }
               centralisedToggle={centralisedToggle}
               setCentralisedToggle={setCentralisedToggle}
-            >
-              Centralised Districts
-            </CentralisedDistrictsButton>
-
-            <DecentralisedDistrictsButton
               decentralisedDistrictsButtonHandler={
                 decentralisedDistrictsButtonHandler
               }
               decentralisedToggle={decentralisedToggle}
               setDecentralisedToggle={setDecentralisedToggle}
-            >
-              Decentralised Districts
-            </DecentralisedDistrictsButton>
-
+            />
             <AllDistrictsButton
               setIsAllDistrictsVisible={setIsAllDistrictsVisible}
               allDistrictsButtonHandler={allDistrictsButtonHandler}
@@ -653,7 +563,6 @@ function App() {
             >
               All Districts
             </AllDistrictsButton>
-
             <div className="greenLine"></div>
           </div>
         ) : null}
@@ -674,8 +583,8 @@ function App() {
           </TransportButton>
         </div>
 
-        <div className="greenLine"></div>
         <ResetMap
+          mapStyleSetter={mapStyleSetter}
           setServicesAction={setServicesAction}
           setShowTransport={setShowTransport}
           setSqml={setSqml}
@@ -692,7 +601,6 @@ function App() {
           }
           setAllDistrictsToggle={setAllDistrictsToggle}
         ></ResetMap>
-        <div className="greenLine"></div>
 
         <PrintScreen
           palette={palette}
@@ -706,29 +614,12 @@ function App() {
         </PrintScreen>
       </div>
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
-        <div className="menuMapStyle">
-          <div onClick={defaultStyleHandler} className="menuMapStyleButton">
-            <input
-              className="DefaultInput"
-              type="radio"
-              name="rtoggle"
-              defaultChecked
-            />
-            <label>Default</label>
-          </div>
-          <div onClick={satelitteStyleHandler} className="menuMapStyleButton">
-            <input className="SatelitteInput" type="radio" name="rtoggle" />
-            <label>Satellite</label>
-          </div>
-          <div onClick={monochromeStyleHandler} className="menuMapStyleButton">
-            <input className="MonochromeInput" type="radio" name="rtoggle" />
-            <label>Monochrome</label>
-          </div>
-          <div onClick={darkStyleHandler} className="menuMapStyleButton">
-            <input className="DarkInput" type="radio" name="rtoggle" />
-            <label>Dark</label>
-          </div>
-        </div>
+        <LayoutChanger
+          defaultStyleHandler={defaultStyleHandler}
+          satelitteStyleHandler={satelitteStyleHandler}
+          monochromeStyleHandler={monochromeStyleHandler}
+          darkStyleHandler={darkStyleHandler}
+        />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
     </div>
