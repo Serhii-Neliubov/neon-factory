@@ -23,7 +23,10 @@ body {
   width: 360px;
 }
 .toggleContainer {
-  width: 100%;
+  width: 358px;
+  min-height: 279px;
+  overflow: scroll;
+  border-radius: 10px;
   border: 1px solid #606060;
 }
 .toggleIcons {
@@ -37,11 +40,9 @@ body {
 .mapboxgl-ctrl-geocoder--icon-search {
   display: none;
 }
-
 ::-webkit-scrollbar {
   display: none;
 }
-
 .controlButton:hover {
   color: #4cc0ad;
 }
@@ -56,7 +57,7 @@ body {
 /* Map container styles */
 .mapboxgl-map {
   border-radius: 10px;
-  border: 1px solid black;
+  border: 1px solid #606060;
 }
 #mapContainer {
   position: relative;
@@ -76,7 +77,8 @@ body {
   position: absolute;
   bottom: -22px;
   left: 0;
-  width: 200%;
+  overflow: hidden;
+  width: 130%;
   height: 2px;
   background-color: #4cc0ad;
 }
@@ -132,24 +134,26 @@ body {
 }
 
 .toggleButton {
-  display: block;
-  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: start;
+  align-items: center;
+  gap: 17px;
   cursor: pointer;
   font-size: 14px;
   background: none; /* Remove background color and border */
   border: none;
-  padding: 5px; /* Add padding of 5px */
   text-align: left;
-  width: 100%;
+  text-transform: uppercase;
+  padding: 15px;
   font-family: "Helvetica";
   transition: color 0.3s ease; /* Add a smooth color transition */
   color: #606060; /* Set the text color to white */
-  outline: none; /* Remove the outline when button is clicked */
 }
 .mapboxgl-ctrl-geocoder.mapboxgl-ctrl-geocoder {
   box-shadow: none;
   border: 1px solid #606060;
-  width: 1000px;
+  width: 450px;
   border-radius: 10px;
   margin-bottom: 15px;
   display: flex;
@@ -305,12 +309,35 @@ body {
 .toggleButton input:hover {
   color: #4cc0ad;
 }
-
-@media print {
-  .submenu,
-  .controlButton {
-    display: none;
-  }
+.submenu {
+  border: 1px solid #606060;
+  width: 328px;
+  display: none;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  align-items: start;
+}
+.submenu_open {
+  display: flex;
+}
+.actionButton {
+  cursor: pointer;
+  display: block;
+  font-size: 14px;
+  border: none;
+  color: #606060;
+  background: none;
+  text-transform: uppercase;
+  font-family: "Helvetica";
+  transition: all 0.3s ease;
+}
+.actionButton:hover {
+  color: #4cc0ad;
+}
+.actionButton:not(:last-child) {
+  margin-bottom: 15px;
 }
 
 .switch-btn {
@@ -344,7 +371,7 @@ body {
   background: #4cc0ad;
 }
 .switch-on::after {
-  left: 16px;
+  left: 21px;
 }
 
 .logo-map {
@@ -519,6 +546,7 @@ p {
 .controlButton-actions {
   position: relative;
 }
+
 .controlButton-actions::after {
   content: "";
   position: absolute;

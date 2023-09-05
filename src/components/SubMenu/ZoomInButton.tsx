@@ -6,7 +6,7 @@ export const ZoomInButton = ({ map, children }) => {
   }
 
   return (
-    <button onClick={zoomInHandler} className="controlButton zoomIn">
+    <button onClick={zoomInHandler} className="actionButton zoomIn">
       {children}
     </button>
   );

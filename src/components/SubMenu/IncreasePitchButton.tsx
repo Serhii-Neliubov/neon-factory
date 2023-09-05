@@ -8,7 +8,7 @@ const IncreasePitchButton = ({ map, children }) => {
   return (
     <button
       onClick={increasePitchButtonHandler}
-      className="controlButton increasePitch"
+      className="actionButton increasePitch"
     >
       {children}
     </button>
