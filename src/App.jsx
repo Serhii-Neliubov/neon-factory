@@ -30,6 +30,7 @@ import TransportButton from "./components/ToggleMenu/TransportButton";
 import LayoutChanger from "./components/LayoutChanger/LayoutChanger";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
 import RightTopMenuText from "./components/RightTopMenuText";
+import MyModal from "./components/MyModal/MyModal";
 
 function App() {
   const [map, setMap] = useState(null);
@@ -599,6 +600,8 @@ function App() {
         ></PrintScreen>
       </div>
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
+        <MyModal></MyModal>
+
         <LayoutChanger
           defaultStyleHandler={defaultStyleHandler}
           satelitteStyleHandler={satelitteStyleHandler}
