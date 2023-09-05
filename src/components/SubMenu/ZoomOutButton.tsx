@@ -6,7 +6,7 @@ const ZoomOutButton = ({ map, children }) => {
   }
 
   return (
-    <button onClick={zoomOutButtonHandler} className="controlButton zoomOut">
+    <button onClick={zoomOutButtonHandler} className="actionButton zoomOut">
       {children}
     </button>
   );

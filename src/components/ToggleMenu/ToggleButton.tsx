@@ -5,10 +5,8 @@ const ToggleButton = ({
   id,
   children,
   toggleButton,
-  isAllDistrictsSelected,
   selectedDistricts,
   map,
-  isCentralisedDistrictsVisible,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggleClass, setToggleClass] = useState<string>("");
@@ -33,16 +31,11 @@ const ToggleButton = ({
   }, [toggle]);
 
   return (
-    <div style={{ display: "flex" }}>
-      <div
-        onClick={handleClick}
-        className="toggleButton"
-        data-district={data}
-        id={id}
-      >
+    <div onClick={handleClick} className="toggleButton">
+      <div data-district={data} id={id}>
         {children}
       </div>
-      <div className={toggleClass} onClick={handleClick}></div>
+      <div className={toggleClass}></div>
     </div>
   );
 };

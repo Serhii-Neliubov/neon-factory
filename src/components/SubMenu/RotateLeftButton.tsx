@@ -7,7 +7,7 @@ const RotateLeftButton = ({ map, children }) => {
   }
 
   return (
-    <button onClick={rotateLeftHandler} className="controlButton rotateLeft">
+    <button onClick={rotateLeftHandler} className="actionButton rotateLeft">
       {children}
     </button>
   );

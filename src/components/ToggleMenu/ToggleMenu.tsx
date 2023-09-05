@@ -4,7 +4,6 @@ import CentralisedDistrictsButton from "./CentralisedDistrictsButton";
 import DecentralisedDistrictsButton from "./DecentralisedDistrictsButton";
 
 const ToggleMenu = ({
-  isAllDistrictsSelected,
   map,
   toggleButton,
   selectedDistricts,
@@ -72,7 +71,6 @@ const ToggleMenu = ({
     <>
       {buttons.map((button) => (
         <ToggleButton
-          isAllDistrictsSelected={isAllDistrictsSelected}
           toggleButton={toggleButton}
           map={map}
           selectedDistricts={selectedDistricts}

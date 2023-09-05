@@ -15,21 +15,16 @@ const AllDistrictsButton = ({
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <button
-        onClick={() => {
-          handleClick();
-        }}
-        data-district="All"
-        className="toggleButton"
-        id="allDistrictsButton"
-      >
+    <div
+      className="toggleButton"
+      onClick={() => {
+        handleClick();
+      }}
+    >
+      <div data-district="All" id="allDistrictsButton">
         {children}
-      </button>
+      </div>
       <div
-        onClick={() => {
-          handleClick();
-        }}
         className={allDistrictsToggle ? "switch-btn switch-on" : "switch-btn"}
       ></div>
     </div>

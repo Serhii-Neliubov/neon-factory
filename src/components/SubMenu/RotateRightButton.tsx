@@ -8,7 +8,7 @@ const RotateRightButton = ({ map, children }) => {
   return (
     <button
       onClick={rotateRightButtonHandler}
-      className="controlButton rotateRight"
+      className="actionButton rotateRight"
     >
       {children}
     </button>

@@ -66,7 +66,7 @@ function App() {
     "South",
   ];
   const centralisedDistricts = ["Louise", "North", "South", "CD", "EU"];
-  const decentralisedDistricts = ["NE", "NW", "Airport", "SW", "SE"];
+  const decentralisedDistricts = ["NE", "NW", "SW", "SE"];
   let [openBrussels, setOpenBrussels] = useState(false);
   const [Sqm, setSqml] = useState(0);
   const [showTransport, setShowTransport] = useState(true);
@@ -225,13 +225,6 @@ function App() {
       // Остальной код обработки карты также может быть здесь
     }
   }, [map]);
-
-  function controlsButtonHandler() {
-    let submenuDisplay =
-      submenuTag.current.style.display === "none" ? "block" : "none";
-    setIsControlsActive(!isControlsActive);
-    submenuTag.current.style.display = submenuDisplay;
-  }
 
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
@@ -518,7 +511,7 @@ function App() {
         </div>
         <div ref={geocoderContainer}></div>
         <SubMenu
-          controlsButtonHandler={controlsButtonHandler}
+          setIsControlsActive={setIsControlsActive}
           isControlsActive={isControlsActive}
           map={map}
           submenuTag={submenuTag}

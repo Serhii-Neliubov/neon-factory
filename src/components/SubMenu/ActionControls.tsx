@@ -1,12 +1,14 @@
 import React from "react";
 
-export const ActionControls = ({ isControlsActive, controlsButtonHandler }) => {
+export const ActionControls = ({
+  isControlsActive,
+  controlsButtonHandler,
+  setIsControlsActive,
+}) => {
   return (
     <button
-      onClick={controlsButtonHandler}
-      className={`BrusselsButton ${
-        isControlsActive ? "BrusselsButton_open" : ""
-      }`}
+      onClick={() => setIsControlsActive(!isControlsActive)}
+      className={`BrusselsButton`}
       id="controlsButton"
     >
       {isControlsActive ? "Close Controls" : "Open Controls"}

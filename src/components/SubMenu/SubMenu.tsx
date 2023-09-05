@@ -10,20 +10,19 @@ import { ActionControls } from "./ActionControls";
 const SubMenu = ({
   map,
   isControlsActive,
-  controlsButtonHandler,
   submenuTag,
+  setIsControlsActive,
 }) => {
   return (
     <>
       <ActionControls
+        setIsControlsActive={setIsControlsActive}
         isControlsActive={isControlsActive}
-        controlsButtonHandler={controlsButtonHandler}
       ></ActionControls>
       <div
-        className="submenu"
+        className={isControlsActive ? "submenu submenu_open" : "submenu"}
         ref={submenuTag}
         id="controlsSubMenu"
-        style={{ display: "none" }}
       >
         <ZoomInButton map={map}>Zoom In</ZoomInButton>
         <ZoomOutButton map={map}>Zoom Out</ZoomOutButton>
