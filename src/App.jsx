@@ -214,6 +214,7 @@ function App() {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
   }, []);
+
   useEffect(() => {
     if (map) {
       map.loadImage("pin.png", function (error, image) {
@@ -223,7 +224,7 @@ function App() {
 
       // Остальной код обработки карты также может быть здесь
     }
-  }, [map]); // Обратите внимание на зависимость от map
+  }, [map]);
 
   function controlsButtonHandler() {
     let submenuDisplay =
@@ -492,9 +493,18 @@ function App() {
   return (
     <div id="mapContainer">
       <div className="sidebar">
-        <a href="https://neon-factory.design/">
-          <img alt="Logo" className="logo" src="logo.png" />
-        </a>
+        <div className="logo">
+          <div className="logo__name">
+            <a href="https://neon-factory.design/">
+              <img alt="Logo" className="logo__icon" src="logo.svg" />
+            </a>
+            <h2>NEON-FACTORY</h2>
+          </div>
+          <p className="logo__text">
+            A <span>DESIGN AGENSY</span> FOR COMMERCIAL REAL ESTATE
+          </p>
+        </div>
+        <h1 className="title">Districts map</h1>
         <input
           type="color"
           ref={colorPicker}
@@ -594,9 +604,7 @@ function App() {
           mapTag={mapTag.current}
           menuStyle={menuStyle}
           colorPicker={colorPicker}
-        >
-          Print Screen
-        </PrintScreen>
+        ></PrintScreen>
       </div>
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
         <LayoutChanger

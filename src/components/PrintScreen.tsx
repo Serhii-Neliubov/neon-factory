@@ -48,7 +48,7 @@ const PrintScreen = ({
 
   return (
     <button onClick={printScreenHandler} className="PrintScreen">
-      Print Screen
+      DOWNLOAD YOUR MAP
     </button>
   );
 };

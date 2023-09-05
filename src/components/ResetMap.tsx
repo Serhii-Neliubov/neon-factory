@@ -63,17 +63,9 @@ const ResetMap = ({
   }
 
   return (
-    <>
-      <div className="greenLine"></div>
-
-      <button
-        onClick={resetMapButtonHandler}
-        className="controlButton resetMap"
-      >
-        Reset Map
-      </button>
-      <div className="greenLine"></div>
-    </>
+    <button onClick={resetMapButtonHandler} className="controlButton resetMap">
+      Reset Map
+    </button>
   );
 };
 
