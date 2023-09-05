@@ -83,9 +83,6 @@ const ToggleMenu = ({
           {button.name}
         </ToggleButton>
       ))}
-
-      <div className="greenLine"></div>
-
       <CentralisedDistrictsButton
         centralisedDistrictsButtonHandler={centralisedDistrictsButtonHandler}
         centralisedToggle={centralisedToggle}
@@ -93,7 +90,6 @@ const ToggleMenu = ({
       >
         Centralised Districts
       </CentralisedDistrictsButton>
-
       <DecentralisedDistrictsButton
         decentralisedDistrictsButtonHandler={
           decentralisedDistrictsButtonHandler

@@ -15,27 +15,24 @@ const AllDistrictsButton = ({
   };
 
   return (
-    <>
-      <div style={{ display: "flex" }}>
-        <button
-          onClick={() => {
-            handleClick();
-          }}
-          data-district="All"
-          className="toggleButton"
-          id="allDistrictsButton"
-        >
-          {children}
-        </button>
-        <div
-          onClick={() => {
-            handleClick();
-          }}
-          className={allDistrictsToggle ? "switch-btn switch-on" : "switch-btn"}
-        ></div>
-      </div>
-      <div className="greenLine"></div>
-    </>
+    <div style={{ display: "flex" }}>
+      <button
+        onClick={() => {
+          handleClick();
+        }}
+        data-district="All"
+        className="toggleButton"
+        id="allDistrictsButton"
+      >
+        {children}
+      </button>
+      <div
+        onClick={() => {
+          handleClick();
+        }}
+        className={allDistrictsToggle ? "switch-btn switch-on" : "switch-btn"}
+      ></div>
+    </div>
   );
 };
 

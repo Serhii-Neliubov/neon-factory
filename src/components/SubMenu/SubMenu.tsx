@@ -15,7 +15,6 @@ const SubMenu = ({
 }) => {
   return (
     <>
-      <div className="greenLine"></div>
       <ActionControls
         isControlsActive={isControlsActive}
         controlsButtonHandler={controlsButtonHandler}
@@ -33,7 +32,6 @@ const SubMenu = ({
         <IncreasePitchButton map={map}>Increase Pitch</IncreasePitchButton>
         <DecreasePitchButton map={map}>Decrease Pitch</DecreasePitchButton>
       </div>
-      <div className="greenLine"></div>
     </>
   );
 };

@@ -514,7 +514,7 @@ function App() {
         />
         <RightTopMenuText />
         <div className="calculation-box">
-          <div id="calculated-area">{Sqm} sqm</div>
+          <div id="calculated-area">{Sqm}.SQM</div>
         </div>
         <div ref={geocoderContainer}></div>
         <SubMenu
@@ -531,7 +531,6 @@ function App() {
         >
           Brussels
         </button>
-        <div className="greenLine"></div>
         {openBrussels ? (
           <div className="toggleContainer">
             <ToggleMenu
