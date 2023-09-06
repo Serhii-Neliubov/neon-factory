@@ -211,7 +211,6 @@ function App() {
         setSqml(sqm);
       }
     }
-
     return () => {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
@@ -627,7 +626,6 @@ function App() {
         ) : (
           ""
         )}
-
         <LayoutChanger
           defaultStyleHandler={defaultStyleHandler}
           satelitteStyleHandler={satelitteStyleHandler}
