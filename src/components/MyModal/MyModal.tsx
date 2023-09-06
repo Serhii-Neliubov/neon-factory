@@ -1,10 +1,13 @@
 import React from "react";
 
-const MyModal = () => {
+const MyModal = ({ modalWindowHandler }) => {
   return (
     <div className="modal-window">
       <div className="modal-window__content">
-        <div className="modal-window__close-button">&times;</div>
+        <div
+          onClick={modalWindowHandler}
+          className="modal-window__close-button"
+        ></div>
         <div className="modal-window__text">
           <div className="modal-window__logo">
             <a href="https://neon-factory.design/">
@@ -16,21 +19,16 @@ const MyModal = () => {
             AND COMPANY
           </h3>
           <div className="modal-window__inputs">
-            <input
-              className="modal-window__input"
-              type="text"
-              placeholder="e-mail"
-            />
-            <input
-              className="modal-window__input"
-              type="text"
-              placeholder="name"
-            />
-            <input
-              className="modal-window__input"
-              type="text"
-              placeholder="company"
-            />
+            <div className="modal-window__input">
+              <input type="text" placeholder="e-mail" />
+            </div>
+            <div className="modal-window__input">
+              <input type="text" placeholder="name" />
+            </div>
+
+            <div className="modal-window__input">
+              <input type="text" placeholder="company" />
+            </div>
           </div>
           <div className="modal-window__toggles">
             <div className="modal-window__toggle">
