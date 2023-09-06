@@ -69,6 +69,7 @@ function App() {
   const centralisedDistricts = ["Louise", "North", "South", "CD", "EU"];
   const decentralisedDistricts = ["NE", "NW", "SW", "SE"];
   let [openBrussels, setOpenBrussels] = useState(false);
+  let [openTransport, setOpenTransport] = useState(false);
   const [Sqm, setSqml] = useState(0);
   const [showTransport, setShowTransport] = useState(true);
   const [centralisedToggle, setCentralisedToggle] = useState(false);
@@ -563,22 +564,34 @@ function App() {
             </AllDistrictsButton>
           </div>
         ) : null}
-        <div className="toggleIcons">
-          <MapIconsToggle
-            servicesAction={servicesAction}
-            setServicesAction={setServicesAction}
-            map={map}
-          >
-            Shop, Restaurants, Services...
-          </MapIconsToggle>
-          <TransportButton
-            setShowTransport={setShowTransport}
-            showTransport={showTransport}
-            map={map}
-          >
-            Transport
-          </TransportButton>
-        </div>
+        <button
+          onClick={() => setOpenTransport(!openTransport)}
+          className={`TransportButton TransportButton_bg ${
+            openTransport ? "TransportButton_open" : ""
+          }`}
+        >
+          transport & amenities
+        </button>
+        {openTransport ? (
+          <div className="toggleIcons">
+            <MapIconsToggle
+              servicesAction={servicesAction}
+              setServicesAction={setServicesAction}
+              map={map}
+            >
+              Shop, Restaurants, Services...
+            </MapIconsToggle>
+            <TransportButton
+              setShowTransport={setShowTransport}
+              showTransport={showTransport}
+              map={map}
+            >
+              Transport
+            </TransportButton>
+          </div>
+        ) : (
+          ""
+        )}
 
         <ResetMap
           mapStyleSetter={mapStyleSetter}
