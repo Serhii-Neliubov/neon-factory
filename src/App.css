@@ -513,6 +513,13 @@ body {
   background-repeat: no-repeat;
   z-index: 1000;
 }
+.down-sidebar__buttons {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  flex-direction: column;
+  width: 100%;
+}
 .mapboxgl-ctrl-group > .mapboxgl-ctrl-zoom-in {
   display: none;
 }
