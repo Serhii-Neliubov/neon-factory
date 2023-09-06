@@ -30,22 +30,14 @@ const MapIconsToggle = ({
   }, [servicesAction]);
 
   return (
-    <div style={{ display: "flex" }}>
-      <button
-        onClick={() => {
-          toggleDistrictLayerVisibility();
-        }}
-        className="toggleButton"
-        id="mapIconsToggle"
-      >
-        {children}
-      </button>
-      <div
-        onClick={() => {
-          toggleDistrictLayerVisibility();
-        }}
-        className={toggleClass}
-      ></div>
+    <div
+      className="toggleButton"
+      onClick={() => {
+        toggleDistrictLayerVisibility();
+      }}
+    >
+      <div id="mapIconsToggle">{children}</div>
+      <div className={toggleClass}></div>
     </div>
   );
 };

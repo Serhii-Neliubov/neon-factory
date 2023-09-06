@@ -7,7 +7,6 @@ const TransportButton = ({
   setShowTransport,
   map,
 }) => {
-  const [toggle, setToggle] = useState(false);
   const [toggleClass, setToggleClass] = useState<string>("");
 
   function toggleTransportLayerVisibility() {
@@ -28,22 +27,14 @@ const TransportButton = ({
   }, [showTransport]);
 
   return (
-    <div style={{ display: "flex" }}>
-      <button
-        onClick={() => {
-          toggleTransportLayerVisibility();
-        }}
-        className="toggleButton"
-        id="mapIconsToggle"
-      >
-        {children}
-      </button>
-      <div
-        onClick={() => {
-          toggleTransportLayerVisibility();
-        }}
-        className={toggleClass}
-      ></div>
+    <div
+      className="toggleButton"
+      onClick={() => {
+        toggleTransportLayerVisibility();
+      }}
+    >
+      <div id="mapIconsToggle">{children}</div>
+      <div className={toggleClass}></div>
     </div>
   );
 };
