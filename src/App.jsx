@@ -35,11 +35,11 @@ import MyModal from "./components/MyModal/MyModal";
 function App() {
   const [map, setMap] = useState(null);
   const [isControlsActive, setIsControlsActive] = useState(false);
+  const [isModalActive, setIsModalActive] = useState(false);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
   const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] =
     useState(true);
-
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
@@ -263,6 +263,11 @@ function App() {
     }
   }
 
+  function modalWindowHandler() {
+    setIsModalActive(!isModalActive);
+    defaultStyleHandler();
+  }
+
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
       setDecentralisedToggle(false);
@@ -322,6 +327,7 @@ function App() {
     setAllDistrictsToggle(false);
     setShowTransport(true);
     setServicesAction(false);
+    setIsModalActive(!isModalActive);
   }
 
   function monochromeStyleHandler() {
@@ -345,6 +351,7 @@ function App() {
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     setShowTransport(true);
+    setIsModalActive(!isModalActive);
     setServicesAction(false);
   }
 
@@ -368,6 +375,7 @@ function App() {
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
+    setIsModalActive(!isModalActive);
     setShowTransport(true);
     setServicesAction(false);
   }
@@ -393,6 +401,7 @@ function App() {
     }
     setSelectedDistricts([]);
     setCentralisedToggle(false);
+    setIsModalActive(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
   }
@@ -519,7 +528,7 @@ function App() {
         ></SubMenu>
         <button
           onClick={() => setOpenBrussels(!openBrussels)}
-          className={`BrusselsButton ${
+          className={`BrusselsButton BrusselsButton_bg ${
             openBrussels ? "BrusselsButton_open" : ""
           }`}
         >
@@ -600,7 +609,11 @@ function App() {
         ></PrintScreen>
       </div>
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
-        <MyModal></MyModal>
+        {isModalActive ? (
+          <MyModal modalWindowHandler={modalWindowHandler}></MyModal>
+        ) : (
+          ""
+        )}
 
         <LayoutChanger
           defaultStyleHandler={defaultStyleHandler}

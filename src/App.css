@@ -38,12 +38,15 @@ body {
 .mapboxgl-ctrl-geocoder--icon-loading {
   display: none;
 }
+
 .mapboxgl-ctrl-geocoder--icon-search {
   display: none;
 }
+
 ::-webkit-scrollbar {
   display: none;
 }
+
 .controlButton:hover {
   color: #4cc0ad;
 }
@@ -90,10 +93,14 @@ body {
   justify-content: center;
 }
 .modal-window__close-button {
-  position: absolute;
+  background: url(search-clear.png);
+  background-repeat: no-repeat;
+  top: 12px;
   cursor: pointer;
-  top: 0;
-  right: 0;
+  right: 5px;
+  position: absolute;
+  width: 20px;
+  height: 20px;
 }
 .modal-window__logo {
   display: flex;
@@ -114,11 +121,22 @@ body {
 .modal-window__input {
   border: 1px solid rgb(52, 52, 52);
   width: 100%;
-  padding: 10px 0;
+  padding: 10px 0px;
   border-radius: 10px;
-  outline: none;
+  text-align: center;
 }
-.modal-window__input::placeholder {
+.modal-window__input input {
+  outline: none;
+  border: none;
+  overflow: hidden;
+  width: 90%;
+  font-family: "Helvetica";
+  background: transparent;
+}
+.modal-window__input input:focus::placeholder {
+  opacity: 0;
+}
+.modal-window__input input::placeholder {
   text-transform: uppercase;
   text-align: center;
   font-family: "Helvetica";
@@ -630,6 +648,9 @@ p {
   border-radius: 10px;
   transition: color 0.3s ease; /* Add a smooth color transition */
   outline: none; /* Remove the outline when button is clicked */
+}
+.BrusselsButton_bg {
+  background: #434343;
 }
 
 .BrusselsButton::after {
