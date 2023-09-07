@@ -613,7 +613,12 @@ function App() {
         ) : (
           ""
         )}
-
+        <LayoutChanger
+          defaultStyleHandler={defaultStyleHandler}
+          satelitteStyleHandler={satelitteStyleHandler}
+          monochromeStyleHandler={monochromeStyleHandler}
+          darkStyleHandler={darkStyleHandler}
+        />
         <div className="down-sidebar__buttons">
           <ResetMap
             mapStyleSetter={mapStyleSetter}
@@ -650,12 +655,7 @@ function App() {
         ) : (
           ""
         )}
-        <LayoutChanger
-          defaultStyleHandler={defaultStyleHandler}
-          satelitteStyleHandler={satelitteStyleHandler}
-          monochromeStyleHandler={monochromeStyleHandler}
-          darkStyleHandler={darkStyleHandler}
-        />
+
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
     </div>
