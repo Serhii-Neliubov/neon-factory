@@ -287,9 +287,9 @@ body {
   align-items: center;
   gap: 17px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 11px;
   text-transform: uppercase;
-  padding: 10px 0 10px 15px;
+  padding: 6px 0 6px 15px;
   font-family: "Helvetica";
   font-weight: 400;
 
@@ -309,14 +309,13 @@ body {
 .mapboxgl-ctrl-geocoder--input {
   font-family: "Helvetica";
   font-weight: 700;
-
-  text-transform: uppercase;
   color: #4cc0ad;
   position: relative;
 }
 .mapboxgl-ctrl-geocoder--input::placeholder {
   color: #4cc0ad;
-  padding-left: 70px;
+  padding-left: 75px;
+  font-size: 12px;
 }
 .mapboxgl-ctrl-geocoder--input:focus::placeholder {
   opacity: 0;
@@ -405,7 +404,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   top: 13px;
-  right: 6px;
+  right: 2px;
   background-color: #fff;
   position: absolute;
   width: 35px;
@@ -480,7 +479,7 @@ body {
 .actionButton {
   cursor: pointer;
   display: block;
-  font-size: 14px;
+  font-size: 11px;
   border: none;
   color: #606060;
   background: none;
