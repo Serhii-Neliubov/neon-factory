@@ -29,7 +29,7 @@ const ResetMap = ({
     setSqml(0);
     draw.deleteAll();
     map.flyTo({
-      center: [4.387564, 50.838193],
+      center: [4.387564, 50.845193],
       zoom: 11,
       bearing: 0,
       pitch: 0,

@@ -88,7 +88,7 @@ function App() {
     let mapSettings = {
       container: "map",
       style: "mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b",
-      center: [4.387564, 50.838193],
+      center: [4.387564, 50.845193],
       zoom: 11,
       preserveDrawingBuffer: true,
     };
@@ -584,7 +584,7 @@ function App() {
             openTransport ? "TransportButton_open" : ""
           }`}
         >
-          transport & amenities
+          Transports & Amenieties
         </button>
         {openTransport ? (
           <div className="toggleIcons">
@@ -593,7 +593,7 @@ function App() {
               setServicesAction={setServicesAction}
               map={map}
             >
-              Shop, Restaurants, Services...
+              SHOPS, RESTAURANTS & SERVICES
             </MapIconsToggle>
             <TransportButton
               setShowTransport={setShowTransport}

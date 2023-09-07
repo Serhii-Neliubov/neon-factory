@@ -1,7 +1,7 @@
 export function createCustomMarkerElement() {
   let element = document.createElement("div");
   element.className = "custom-marker";
-  element.style.backgroundImage = "url(pin.svg)";
+  element.style.backgroundImage = "url(pin.png)";
   element.style.width = "32px"; // Установите желаемую ширину и высоту маркера
   element.style.height = "32px";
 
