@@ -6,6 +6,14 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "Helvetica";
+  src: url("Helvetica-Regular.woff2") format("woff2"),
+    url("Helvetica-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 body {
   padding: 36px;
@@ -115,6 +123,8 @@ body {
   text-align: center;
   color: rgb(52, 52, 52);
   font-family: "Helvetica";
+  font-weight: 700;
+
   text-transform: uppercase;
   font-size: 14px;
 }
@@ -136,6 +146,8 @@ body {
   overflow: hidden;
   width: 90%;
   font-family: "Helvetica";
+  font-weight: 700;
+
   background: transparent;
 }
 .modal-window__input input:focus::placeholder {
@@ -145,6 +157,7 @@ body {
   text-transform: uppercase;
   text-align: center;
   font-family: "Helvetica";
+  font-weight: 700;
 }
 .modal-window__toggles {
   margin-top: 15px;
@@ -162,6 +175,7 @@ body {
   font-size: 14px;
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.7);
+  font-weight: 700;
 }
 .modal-window__toggle input {
   width: 20px;
@@ -181,6 +195,7 @@ body {
   color: #4cc0ad;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: 700;
 }
 .modal-window__button:hover {
   background-color: #4cc0ad;
@@ -215,6 +230,8 @@ body {
 .logo__name h2 {
   color: rgba(0, 0, 0, 0.7);
   font-family: "Helvetica";
+  font-weight: 700;
+
   font-size: 14px;
   letter-spacing: 4.56px;
   margin-top: 42px;
@@ -227,6 +244,8 @@ body {
 .logo__text {
   color: rgba(0, 0, 0, 0.7);
   font-family: "Helvetica";
+  font-weight: 700;
+
   font-size: 9px;
   font-style: normal;
   font-weight: 500;
@@ -243,6 +262,8 @@ body {
 .title {
   color: rgba(0, 0, 0, 0.7);
   font-family: "Helvetica";
+  font-weight: 700;
+
   text-transform: uppercase;
   font-size: 16px;
   font-style: normal;
@@ -270,6 +291,8 @@ body {
   text-transform: uppercase;
   padding: 10px 0 10px 15px;
   font-family: "Helvetica";
+  font-weight: 400;
+
   transition: color 0.3s ease; /* Add a smooth color transition */
   color: #606060; /* Set the text color to white */
 }
@@ -285,6 +308,8 @@ body {
 }
 .mapboxgl-ctrl-geocoder--input {
   font-family: "Helvetica";
+  font-weight: 700;
+
   text-transform: uppercase;
   color: #4cc0ad;
   position: relative;
@@ -322,6 +347,8 @@ body {
   border-radius: 10px;
 
   font-family: "Helvetica";
+  font-weight: 700;
+
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -345,6 +372,9 @@ body {
   border-radius: 10px;
 
   font-family: "Helvetica";
+  font-weight: 700;
+
+  font-weight: 700;
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -456,6 +486,7 @@ body {
   background: none;
   text-transform: uppercase;
   font-family: "Helvetica";
+
   transition: all 0.3s ease;
 }
 .actionButton:hover {
@@ -582,7 +613,7 @@ input[type="color"]::-webkit-color-swatch {
   max-height: 29px;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.3);
-  font-weight: 800;
+  font-weight: 400;
   color: black;
   text-align: center;
   transition: opacity 0.3s ease;
@@ -654,6 +685,7 @@ p {
   background: none; /* Remove background color and border */
   width: 100%;
   font-family: "Helvetica";
+  font-weight: 700;
   color: #4cc0ad;
   border-radius: 10px;
   transition: color 0.3s ease; /* Add a smooth color transition */
@@ -683,6 +715,8 @@ p {
   text-transform: uppercase;
   border: 1px solid #606060;
   padding: 15px 0;
+  font-weight: 700;
+
   position: relative;
   margin-bottom: 13.2px;
   cursor: pointer;
@@ -709,6 +743,8 @@ p {
   font-size: 12px;
   background: none; /* Remove background color and border */
   width: 100%;
+  font-weight: 700;
+
   font-family: "Helvetica";
   color: #4cc0ad;
   border-radius: 10px;
@@ -790,6 +826,7 @@ p {
   flex: 1 1 auto;
   margin-top: 2px;
   font-family: "Helvetica";
+  font-weight: 700;
 }
 
 input[type="radio"] {

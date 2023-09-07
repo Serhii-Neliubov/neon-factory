@@ -58,7 +58,7 @@ const ToggleMenu = ({
     {
       data: "SW",
       id: "SWButton",
-      name: "North-West",
+      name: "South-West",
     },
     {
       data: "Airport",
