@@ -516,7 +516,7 @@ function App() {
             <h2>NEON-FACTORY</h2>
           </div>
           <p className="logo__text">
-            A <span>DESIGN AGENSY</span> FOR COMMERCIAL REAL ESTATE
+            A <span>DESIGN AGENCY</span> FOR COMMERCIAL REAL ESTATE
           </p>
         </div>
         <h1 className="title">Districts map</h1>

@@ -18,7 +18,7 @@ const ToggleMenu = ({
     {
       data: "CD",
       id: "CBDButton",
-      name: "Center District",
+      name: "Centre",
     },
     {
       data: "EU",

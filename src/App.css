@@ -314,6 +314,7 @@ body {
 }
 .mapboxgl-ctrl-geocoder--input::placeholder {
   color: #4cc0ad;
+  text-transform: uppercase;
   padding-left: 75px;
   font-size: 12px;
 }
