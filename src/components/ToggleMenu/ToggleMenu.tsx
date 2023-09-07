@@ -38,7 +38,7 @@ const ToggleMenu = ({
     {
       data: "South",
       id: "South",
-      name: "South",
+      name: "Midi District",
     },
     {
       data: "NE",
@@ -86,7 +86,7 @@ const ToggleMenu = ({
         centralisedToggle={centralisedToggle}
         setCentralisedToggle={setCentralisedToggle}
       >
-        Centralised Districts
+        CBD
       </CentralisedDistrictsButton>
       <DecentralisedDistrictsButton
         decentralisedDistrictsButtonHandler={
