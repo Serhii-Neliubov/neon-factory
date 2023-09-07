@@ -25,7 +25,7 @@ body {
 }
 .toggleContainer {
   margin-bottom: 15px;
-  width: 100%;
+  width: 99.5%;
   overflow: scroll;
   overflow-x: hidden;
   min-height: 279px;
@@ -52,10 +52,6 @@ body {
 .mapboxgl-ctrl-geocoder--icon-search {
   display: none;
 }
-
-::-webkit-scrollbar {
-}
-
 .controlButton:hover {
   color: #4cc0ad;
 }
@@ -272,7 +268,7 @@ body {
   cursor: pointer;
   font-size: 14px;
   text-transform: uppercase;
-  padding: 15px;
+  padding: 10px 0 10px 15px;
   font-family: "Helvetica";
   transition: color 0.3s ease; /* Add a smooth color transition */
   color: #606060; /* Set the text color to white */
@@ -367,21 +363,23 @@ body {
   width: 0;
   height: 0;
 }
+.mapboxgl-ctrl-geocoder--icon-close {
+  display: none;
+}
 .mapboxgl-ctrl-geocoder--button {
   display: block !important;
 }
 .mapboxgl-ctrl-geocoder--button::before {
   content: "";
   background: url(search-clear.png);
+  background-position: center;
   background-repeat: no-repeat;
-  top: 16px;
-  right: 5px;
+  top: 13px;
+  right: 6px;
+  background-color: #fff;
   position: absolute;
-  width: 20px;
+  width: 35px;
   height: 20px;
-}
-.mapboxgl-ctrl-geocoder--icon {
-  display: none;
 }
 
 .mapboxgl-ctrl-geocoder--powered-by {
@@ -444,6 +442,7 @@ body {
   padding: 15px;
   margin-bottom: 15px;
   align-items: start;
+  position: relative;
 }
 .submenu_open {
   display: flex;
@@ -554,10 +553,13 @@ body {
   background-color: #f2f2f2;
 }
 
-.logo-map {
+::-webkit-scrollbar {
   display: none;
 }
 
+.logo-map {
+  display: none;
+}
 input[type="color"]::-webkit-color-swatch {
   display: none;
 }
@@ -694,6 +696,24 @@ p {
   outline: none; /* Remove the outline when button is clicked */
 }
 .BrusselsButton_bg {
+  background: #434343;
+}
+
+.AreasButton {
+  text-transform: uppercase;
+  border: 1px solid #606060;
+  padding: 15px 0;
+  position: relative;
+  margin-bottom: 13.2px;
+  cursor: pointer;
+  font-size: 12px;
+  background: none; /* Remove background color and border */
+  width: 100%;
+  font-family: "Helvetica";
+  color: #4cc0ad;
+  border-radius: 10px;
+  transition: color 0.3s ease; /* Add a smooth color transition */
+  outline: none; /* Remove the outline when button is clicked */
   background: #434343;
 }
 

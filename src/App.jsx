@@ -379,7 +379,6 @@ function App() {
     setShowTransport(true);
     setServicesAction(false);
   }
-
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     setMapStyleSetter(1);
@@ -576,15 +575,9 @@ function App() {
             </AllDistrictsButton>
           </div>
         ) : null}
-        <button className="TransportButton TransportButton_bg">
-          antwerp (soon)
-        </button>
-        <button className="TransportButton TransportButton_bg">
-          Gent (soon)
-        </button>
-        <button className="TransportButton TransportButton_bg">
-          luxembourg (soon)
-        </button>
+        <button className="AreasButton">antwerp (soon)</button>
+        <button className="AreasButton">Gent (soon)</button>
+        <button className="AreasButton">luxembourg (soon)</button>
         <button
           onClick={() => setOpenTransport(!openTransport)}
           className={`TransportButton TransportButton_bg ${
@@ -613,12 +606,7 @@ function App() {
         ) : (
           ""
         )}
-        <LayoutChanger
-          defaultStyleHandler={defaultStyleHandler}
-          satelitteStyleHandler={satelitteStyleHandler}
-          monochromeStyleHandler={monochromeStyleHandler}
-          darkStyleHandler={darkStyleHandler}
-        />
+
         <div className="down-sidebar__buttons">
           <ResetMap
             mapStyleSetter={mapStyleSetter}
@@ -655,7 +643,12 @@ function App() {
         ) : (
           ""
         )}
-
+        <LayoutChanger
+          defaultStyleHandler={defaultStyleHandler}
+          satelitteStyleHandler={satelitteStyleHandler}
+          monochromeStyleHandler={monochromeStyleHandler}
+          darkStyleHandler={darkStyleHandler}
+        />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
     </div>
