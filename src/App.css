@@ -732,7 +732,9 @@ p {
 .BrusselsButton_bg {
   background: #434343;
 }
-
+.BrusselsButton_open::after {
+  transform: rotate(90deg) !important;
+}
 .AreasButton {
   text-transform: uppercase;
   border: 1px solid #606060;
