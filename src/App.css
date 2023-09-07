@@ -19,20 +19,21 @@ body {
   font-family: "Open Sans", sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  overflow-x: scroll;
-  max-width: 360px;
+  width: 360px;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 .toggleContainer {
   margin-bottom: 15px;
-  width: 358px;
+  width: 100%;
+  overflow: scroll;
+  overflow-x: hidden;
   min-height: 279px;
-  overflow-x: scroll;
   border-radius: 10px;
   border: 1px solid #606060;
 }
 .toggleIcons {
-  width: 99.583%;
+  width: 99.5%;
   border-radius: 10px;
   border: 1px solid #606060;
   margin-bottom: 15px;
@@ -53,7 +54,6 @@ body {
 }
 
 ::-webkit-scrollbar {
-  display: none;
 }
 
 .controlButton:hover {
@@ -201,8 +201,6 @@ body {
 /* Logo styles */
 .logo {
   margin: 0 0 9px 0;
-  display: flex;
-  flex-direction: column;
   position: relative;
 }
 .logo::before {
@@ -210,8 +208,7 @@ body {
   position: absolute;
   bottom: -22px;
   left: 0;
-  overflow: hidden;
-  width: 360px;
+  width: 100%;
   height: 2px;
   background-color: #4cc0ad;
 }
@@ -283,7 +280,7 @@ body {
 .mapboxgl-ctrl-geocoder.mapboxgl-ctrl-geocoder {
   box-shadow: none;
   border: 1px solid #606060;
-  width: 450px;
+  width: 100%;
   border-radius: 10px;
   margin-bottom: 15px;
   display: flex;
@@ -440,7 +437,7 @@ body {
 }
 .submenu {
   border: 1px solid #606060;
-  width: 328px;
+  width: 360;
   display: none;
   flex-direction: column;
   border-radius: 10px;
