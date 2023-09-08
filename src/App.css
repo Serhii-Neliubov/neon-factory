@@ -488,7 +488,7 @@ body {
   display: none;
   flex-direction: column;
   border-radius: 10px;
-  padding: 15px;
+  padding: 8px 11px 8px 15px;
   margin-bottom: 15px;
   align-items: start;
   position: relative;
