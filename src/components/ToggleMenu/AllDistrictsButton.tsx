@@ -16,7 +16,7 @@ const AllDistrictsButton = ({
 
   return (
     <div
-      className="brusselsButton"
+      className="toggleButton"
       onClick={() => {
         handleClick();
       }}
