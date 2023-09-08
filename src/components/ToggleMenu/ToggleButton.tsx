@@ -31,7 +31,7 @@ const ToggleButton = ({
   }, [toggle]);
 
   return (
-    <div onClick={handleClick} className="toggleButton">
+    <div onClick={handleClick} className="brusselsButton">
       <div data-district={data} id={id}>
         {children}
       </div>
