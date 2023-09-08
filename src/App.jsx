@@ -27,10 +27,13 @@ import {
   changeColor,
 } from "./utils/MapFunctions";
 import TransportButton from "./components/ToggleMenu/TransportButton";
-import LayoutChanger from "./components/LayoutChanger/LayoutChanger";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
 import RightTopMenuText from "./components/RightTopMenuText";
 import MyModal from "./components/MyModal/MyModal";
+import DefaultStyle from "./components/MapStyleButtons/DefaultStyle";
+import DarkStyle from "./components/MapStyleButtons/DarkStyle";
+import MonochromeStyle from "./components/MapStyleButtons/MonochromeStyle";
+import SatelliteStyle from "./components/MapStyleButtons/SatelliteStyle";
 
 function App() {
   const [map, setMap] = useState(null);
@@ -42,6 +45,7 @@ function App() {
     useState(true);
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
+  const [mapStyleButtonOpen, setMapStyleButtonOpen] = useState(false);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   const [servicesAction, setServicesAction] = useState(false);
   const [draw, setDraw] = useState(null);
@@ -327,7 +331,7 @@ function App() {
     setAllDistrictsToggle(false);
     setShowTransport(true);
     setServicesAction(false);
-    setIsModalActive(!isModalActive);
+    setIsModalActive(true);
   }
 
   function monochromeStyleHandler() {
@@ -351,7 +355,7 @@ function App() {
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     setShowTransport(true);
-    setIsModalActive(!isModalActive);
+    setIsModalActive(true);
     setServicesAction(false);
   }
 
@@ -375,10 +379,11 @@ function App() {
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
-    setIsModalActive(!isModalActive);
+    setIsModalActive(true);
     setShowTransport(true);
     setServicesAction(false);
   }
+
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     setMapStyleSetter(1);
@@ -539,6 +544,36 @@ function App() {
           submenuTag={submenuTag}
         ></SubMenu>
         <button
+          onClick={() => setMapStyleButtonOpen(!mapStyleButtonOpen)}
+          className={`mapStyleButton ${
+            mapStyleButtonOpen ? "mapStyleButton_open" : ""
+          }`}
+        >
+          map style
+        </button>
+
+        {mapStyleButtonOpen ? (
+          <div className="toggleInputs">
+            <DefaultStyle
+              defaultStyleHandler={defaultStyleHandler}
+              mapStyleSetter={mapStyleSetter}
+            />
+            <DarkStyle
+              darkStyleHandler={darkStyleHandler}
+              mapStyleSetter={mapStyleSetter}
+            />
+            <MonochromeStyle
+              monochromeStyleHandler={monochromeStyleHandler}
+              mapStyleSetter={mapStyleSetter}
+            />
+            <SatelliteStyle
+              satelitteStyleHandler={satelitteStyleHandler}
+              mapStyleSetter={mapStyleSetter}
+            />
+          </div>
+        ) : null}
+
+        <button
           onClick={() => setOpenBrussels(!openBrussels)}
           className={`BrusselsButton BrusselsButton_bg ${
             openBrussels ? "BrusselsButton_open" : ""
@@ -575,6 +610,7 @@ function App() {
             </AllDistrictsButton>
           </div>
         ) : null}
+
         <button className="AreasButton">antwerp (soon)</button>
         <button className="AreasButton">Gent (soon)</button>
         <button className="AreasButton">luxembourg (soon)</button>
@@ -625,6 +661,10 @@ function App() {
               setIsDecentralisedDistrictsVisible
             }
             setAllDistrictsToggle={setAllDistrictsToggle}
+            setOpenBrussels={setOpenBrussels}
+            setMapStyleButtonOpen={setMapStyleButtonOpen}
+            setIsControlsActive={setIsControlsActive}
+            setOpenTransport={setOpenTransport}
           ></ResetMap>
 
           <PrintScreen
@@ -643,12 +683,6 @@ function App() {
         ) : (
           ""
         )}
-        <LayoutChanger
-          defaultStyleHandler={defaultStyleHandler}
-          satelitteStyleHandler={satelitteStyleHandler}
-          monochromeStyleHandler={monochromeStyleHandler}
-          darkStyleHandler={darkStyleHandler}
-        />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
     </div>

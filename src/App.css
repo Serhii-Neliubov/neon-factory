@@ -729,6 +729,46 @@ p {
   transition: color 0.3s ease; /* Add a smooth color transition */
   outline: none; /* Remove the outline when button is clicked */
 }
+.mapStyleButton {
+  text-transform: uppercase;
+  border: 1px solid #606060;
+  padding: 15px 0;
+  font-weight: 700;
+  position: relative;
+  margin-bottom: 13.2px;
+  cursor: pointer;
+  font-size: 12px;
+  background: none; /* Remove background color and border */
+  width: 100%;
+  font-family: "Helvetica";
+  color: #4cc0ad;
+  border-radius: 10px;
+  transition: color 0.3s ease; /* Add a smooth color transition */
+  outline: none; /* Remove the outline when button is clicked */
+}
+.mapStyleButton::after {
+  content: "";
+  position: absolute;
+  top: 9px;
+  right: 4px;
+  width: 30px;
+  height: 30px;
+  color: #4cc0ad;
+  background-image: url("arrow.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: rotate(-90deg);
+}
+.toggleInputs {
+  border: 1px solid #606060;
+  min-height: 130px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  overflow: scroll;
+}
+.mapStyleButton_open::after {
+  transform: rotate(90deg) !important;
+}
 .BrusselsButton_bg {
   background: #434343;
 }
