@@ -15,6 +15,10 @@ const ResetMap = ({
   setServicesAction,
   setShowTransport,
   mapStyleSetter,
+  setOpenBrussels,
+  setMapStyleButtonOpen,
+  setIsControlsActive,
+  setOpenTransport,
 }) => {
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
@@ -27,6 +31,10 @@ const ResetMap = ({
     setIsAllDistrictsVisible(true);
     removeCustomMarker();
     setSqml(0);
+    setIsControlsActive(false);
+    setOpenBrussels(false);
+    setMapStyleButtonOpen(false);
+    setOpenTransport(false);
     draw.deleteAll();
     map.flyTo({
       center: [4.387564, 50.845193],
