@@ -59,6 +59,9 @@ function App() {
   const sreenLogo = document.querySelector(".logo-map");
   const palette = document.querySelector(".palette");
   const menuStyle = document.querySelector(".menuMapStyle");
+  const rightTopMenu = document.querySelector(".mapboxgl-ctrl-top-right");
+
+  const sqmBox = document.querySelector(".calculation-box");
   const allDistricts = [
     "SW",
     "SE",
@@ -527,109 +530,112 @@ function App() {
         </div>
         <h1 className="title">Districts map</h1>
         <Scrollbar className="scrollbar">
-          <div ref={geocoderContainer}></div>
-          <SubMenu
-            setIsControlsActive={setIsControlsActive}
-            isControlsActive={isControlsActive}
-            map={map}
-            submenuTag={submenuTag}
-          ></SubMenu>
-          <button
-            onClick={() => setMapStyleButtonOpen(!mapStyleButtonOpen)}
-            className={`mapStyleButton ${
-              mapStyleButtonOpen ? "mapStyleButton_open" : ""
-            }`}
-          >
-            map style
-          </button>
-          {mapStyleButtonOpen ? (
-            <div className="toggleInputs">
-              <DefaultStyle
-                defaultStyleHandler={defaultStyleHandler}
-                mapStyleSetter={mapStyleSetter}
-              />
-              <DarkStyle
-                darkStyleHandler={darkStyleHandler}
-                mapStyleSetter={mapStyleSetter}
-              />
-              <MonochromeStyle
-                monochromeStyleHandler={monochromeStyleHandler}
-                mapStyleSetter={mapStyleSetter}
-              />
-              <SatelliteStyle
-                satelitteStyleHandler={satelitteStyleHandler}
-                mapStyleSetter={mapStyleSetter}
-              />
-            </div>
-          ) : null}
-          <button
-            onClick={() => setOpenBrussels(!openBrussels)}
-            className={`BrusselsButton BrusselsButton_bg ${
-              openBrussels ? "BrusselsButton_open" : ""
-            }`}
-          >
-            Brussels
-          </button>
-          {openBrussels ? (
-            <div className="toggleContainer">
-              <ToggleMenu
-                isAllDistrictsSelected={isAllDistrictsSelected}
-                toggleButton={toggleButton}
-                map={map}
-                selectedDistricts={selectedDistricts}
-                centralisedDistrictsButtonHandler={
-                  centralisedDistrictsButtonHandler
-                }
-                centralisedToggle={centralisedToggle}
-                setCentralisedToggle={setCentralisedToggle}
-                decentralisedDistrictsButtonHandler={
-                  decentralisedDistrictsButtonHandler
-                }
-                decentralisedToggle={decentralisedToggle}
-                setDecentralisedToggle={setDecentralisedToggle}
-              />
-              <AllDistrictsButton
-                setIsAllDistrictsVisible={setIsAllDistrictsVisible}
-                allDistrictsButtonHandler={allDistrictsButtonHandler}
-                isAllDistrictsVisible={isAllDistrictsVisible}
-                allDistrictsToggle={allDistrictsToggle}
-                setAllDistrictsToggle={setAllDistrictsToggle}
-              >
-                All Districts
-              </AllDistrictsButton>
-            </div>
-          ) : null}
-          <button className="AreasButton">antwerp (soon)</button>
-          <button className="AreasButton">Gent (soon)</button>
-          <button className="AreasButton">luxembourg (soon)</button>
-          <button
-            onClick={() => setOpenTransport(!openTransport)}
-            className={`TransportButton TransportButton_bg ${
-              openTransport ? "TransportButton_open" : ""
-            }`}
-          >
-            Transports & Amenieties
-          </button>
-          {openTransport ? (
-            <div className="toggleIcons">
-              <MapIconsToggle
-                servicesAction={servicesAction}
-                setServicesAction={setServicesAction}
-                map={map}
-              >
-                SHOPS, RESTAURANTS & SERVICES
-              </MapIconsToggle>
-              <TransportButton
-                setShowTransport={setShowTransport}
-                showTransport={showTransport}
-                map={map}
-              >
-                Transport
-              </TransportButton>
-            </div>
-          ) : (
-            ""
-          )}
+          <div className="mainToggleButtons">
+            <div ref={geocoderContainer}></div>
+            <SubMenu
+              setIsControlsActive={setIsControlsActive}
+              isControlsActive={isControlsActive}
+              map={map}
+              submenuTag={submenuTag}
+            ></SubMenu>
+            <button
+              onClick={() => setMapStyleButtonOpen(!mapStyleButtonOpen)}
+              className={`mapStyleButton ${
+                mapStyleButtonOpen ? "mapStyleButton_open" : ""
+              }`}
+            >
+              map style
+            </button>
+            {mapStyleButtonOpen ? (
+              <div className="toggleInputs">
+                <DefaultStyle
+                  defaultStyleHandler={defaultStyleHandler}
+                  mapStyleSetter={mapStyleSetter}
+                />
+                <DarkStyle
+                  darkStyleHandler={darkStyleHandler}
+                  mapStyleSetter={mapStyleSetter}
+                />
+                <MonochromeStyle
+                  monochromeStyleHandler={monochromeStyleHandler}
+                  mapStyleSetter={mapStyleSetter}
+                />
+                <SatelliteStyle
+                  satelitteStyleHandler={satelitteStyleHandler}
+                  mapStyleSetter={mapStyleSetter}
+                />
+              </div>
+            ) : null}
+            <button
+              onClick={() => setOpenBrussels(!openBrussels)}
+              className={`BrusselsButton BrusselsButton_bg ${
+                openBrussels ? "BrusselsButton_open" : ""
+              }`}
+            >
+              Brussels
+            </button>
+            {openBrussels ? (
+              <div className="toggleContainer">
+                <ToggleMenu
+                  isAllDistrictsSelected={isAllDistrictsSelected}
+                  toggleButton={toggleButton}
+                  map={map}
+                  selectedDistricts={selectedDistricts}
+                  centralisedDistrictsButtonHandler={
+                    centralisedDistrictsButtonHandler
+                  }
+                  centralisedToggle={centralisedToggle}
+                  setCentralisedToggle={setCentralisedToggle}
+                  decentralisedDistrictsButtonHandler={
+                    decentralisedDistrictsButtonHandler
+                  }
+                  decentralisedToggle={decentralisedToggle}
+                  setDecentralisedToggle={setDecentralisedToggle}
+                />
+                <AllDistrictsButton
+                  setIsAllDistrictsVisible={setIsAllDistrictsVisible}
+                  allDistrictsButtonHandler={allDistrictsButtonHandler}
+                  isAllDistrictsVisible={isAllDistrictsVisible}
+                  allDistrictsToggle={allDistrictsToggle}
+                  setAllDistrictsToggle={setAllDistrictsToggle}
+                >
+                  All Districts
+                </AllDistrictsButton>
+              </div>
+            ) : null}
+            <button className="AreasButton">antwerp (soon)</button>
+            <button className="AreasButton">Gent (soon)</button>
+            <button className="AreasButton">luxembourg (soon)</button>
+            <button
+              onClick={() => setOpenTransport(!openTransport)}
+              className={`TransportButton TransportButton_bg ${
+                openTransport ? "TransportButton_open" : ""
+              }`}
+            >
+              Transports & Amenieties
+            </button>
+            {openTransport ? (
+              <div className="toggleIcons">
+                <MapIconsToggle
+                  servicesAction={servicesAction}
+                  setServicesAction={setServicesAction}
+                  map={map}
+                >
+                  SHOPS, RESTAURANTS & SERVICES
+                </MapIconsToggle>
+                <TransportButton
+                  setShowTransport={setShowTransport}
+                  showTransport={showTransport}
+                  map={map}
+                >
+                  Transport
+                </TransportButton>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+
           <div className="down-sidebar__buttons">
             <ResetMap
               mapStyleSetter={mapStyleSetter}
@@ -657,12 +663,14 @@ function App() {
             ></ResetMap>
 
             <PrintScreen
+              sqmBox={sqmBox}
               palette={palette}
               sreenLogo={sreenLogo}
               drawMenu={drawMenu}
               mapTag={mapTag.current}
               menuStyle={menuStyle}
               colorPicker={colorPicker}
+              rightTopMenu={rightTopMenu}
             ></PrintScreen>
           </div>
         </Scrollbar>

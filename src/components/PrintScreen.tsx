@@ -7,12 +7,16 @@ const PrintScreen = ({
   sreenLogo,
   colorPicker,
   menuStyle,
+  sqmBox,
+  rightTopMenu,
 }) => {
   async function printScreenHandler() {
     // Спрячьте drawMenu
     drawMenu.style.display = "none";
     sreenLogo.style.display = "block";
-    menuStyle.style.display = "none";
+    sqmBox.style.display = "none";
+    // menuStyle.style.display = "none";
+    rightTopMenu.style.display = "none";
     colorPicker.current.style.display = "none";
     // Сделайте снимок экрана с использованием html2canvas
     const canvas = await html2canvas(mapTag);
@@ -44,6 +48,8 @@ const PrintScreen = ({
     sreenLogo.style.display = "none";
     colorPicker.current.style.display = "block";
     menuStyle.style.display = "flex";
+    rightTopMenu.style.display = "block";
+    sqmBox.style.display = "block";
   }
 
   return (
