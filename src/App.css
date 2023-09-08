@@ -296,6 +296,25 @@ body {
   transition: color 0.3s ease; /* Add a smooth color transition */
   color: #606060; /* Set the text color to white */
 }
+.brusselsButton {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: start;
+  align-items: center;
+  gap: 17px;
+  cursor: pointer;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 6px 0 6px 24px;
+  font-family: "Helvetica";
+  font-weight: 400;
+
+  transition: color 0.3s ease; /* Add a smooth color transition */
+  color: #606060; /* Set the text color to white */
+}
+.brusselsButton:hover {
+  color: #4cc0ad;
+}
 .mapboxgl-ctrl-geocoder.mapboxgl-ctrl-geocoder {
   box-shadow: none;
   border: 1px solid #606060;
@@ -588,6 +607,13 @@ body {
   display: none;
 }
 
+.toggleScrollbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-2%);
+}
+
 .logo-map {
   display: none;
 }
@@ -746,6 +772,7 @@ p {
   transition: color 0.3s ease; /* Add a smooth color transition */
   outline: none; /* Remove the outline when button is clicked */
 }
+
 .mapStyleButton::after {
   content: "";
   position: absolute;

@@ -12,7 +12,7 @@ const DecentralisedDistrictsButton = ({
 
   return (
     <div
-      className="toggleButton"
+      className="brusselsButton"
       onClick={() => {
         handleClick();
       }}

@@ -34,6 +34,7 @@ import DefaultStyle from "./components/MapStyleButtons/DefaultStyle";
 import DarkStyle from "./components/MapStyleButtons/DarkStyle";
 import MonochromeStyle from "./components/MapStyleButtons/MonochromeStyle";
 import SatelliteStyle from "./components/MapStyleButtons/SatelliteStyle";
+import { Scrollbar } from "react-scrollbars-custom";
 
 function App() {
   const [map, setMap] = useState(null);
@@ -525,6 +526,7 @@ function App() {
           </p>
         </div>
         <h1 className="title">Districts map</h1>
+
         <input
           type="color"
           ref={colorPicker}
@@ -551,7 +553,6 @@ function App() {
         >
           map style
         </button>
-
         {mapStyleButtonOpen ? (
           <div className="toggleInputs">
             <DefaultStyle
@@ -572,7 +573,6 @@ function App() {
             />
           </div>
         ) : null}
-
         <button
           onClick={() => setOpenBrussels(!openBrussels)}
           className={`BrusselsButton BrusselsButton_bg ${
@@ -583,34 +583,35 @@ function App() {
         </button>
         {openBrussels ? (
           <div className="toggleContainer">
-            <ToggleMenu
-              isAllDistrictsSelected={isAllDistrictsSelected}
-              toggleButton={toggleButton}
-              map={map}
-              selectedDistricts={selectedDistricts}
-              centralisedDistrictsButtonHandler={
-                centralisedDistrictsButtonHandler
-              }
-              centralisedToggle={centralisedToggle}
-              setCentralisedToggle={setCentralisedToggle}
-              decentralisedDistrictsButtonHandler={
-                decentralisedDistrictsButtonHandler
-              }
-              decentralisedToggle={decentralisedToggle}
-              setDecentralisedToggle={setDecentralisedToggle}
-            />
-            <AllDistrictsButton
-              setIsAllDistrictsVisible={setIsAllDistrictsVisible}
-              allDistrictsButtonHandler={allDistrictsButtonHandler}
-              isAllDistrictsVisible={isAllDistrictsVisible}
-              allDistrictsToggle={allDistrictsToggle}
-              setAllDistrictsToggle={setAllDistrictsToggle}
-            >
-              All Districts
-            </AllDistrictsButton>
+            <Scrollbar className="toggleScrollbar">
+              <ToggleMenu
+                isAllDistrictsSelected={isAllDistrictsSelected}
+                toggleButton={toggleButton}
+                map={map}
+                selectedDistricts={selectedDistricts}
+                centralisedDistrictsButtonHandler={
+                  centralisedDistrictsButtonHandler
+                }
+                centralisedToggle={centralisedToggle}
+                setCentralisedToggle={setCentralisedToggle}
+                decentralisedDistrictsButtonHandler={
+                  decentralisedDistrictsButtonHandler
+                }
+                decentralisedToggle={decentralisedToggle}
+                setDecentralisedToggle={setDecentralisedToggle}
+              />
+              <AllDistrictsButton
+                setIsAllDistrictsVisible={setIsAllDistrictsVisible}
+                allDistrictsButtonHandler={allDistrictsButtonHandler}
+                isAllDistrictsVisible={isAllDistrictsVisible}
+                allDistrictsToggle={allDistrictsToggle}
+                setAllDistrictsToggle={setAllDistrictsToggle}
+              >
+                All Districts
+              </AllDistrictsButton>
+            </Scrollbar>
           </div>
         ) : null}
-
         <button className="AreasButton">antwerp (soon)</button>
         <button className="AreasButton">Gent (soon)</button>
         <button className="AreasButton">luxembourg (soon)</button>
@@ -642,7 +643,6 @@ function App() {
         ) : (
           ""
         )}
-
         <div className="down-sidebar__buttons">
           <ResetMap
             mapStyleSetter={mapStyleSetter}
@@ -677,6 +677,7 @@ function App() {
           ></PrintScreen>
         </div>
       </div>
+
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
         {isModalActive ? (
           <MyModal modalWindowHandler={modalWindowHandler}></MyModal>
