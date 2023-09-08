@@ -15,7 +15,7 @@ const CentralisedDistrictsButton = ({
       onClick={() => {
         handleClick();
       }}
-      className="brusselsButton"
+      className="toggleButton"
     >
       <div data-district="Centralised" id="centralisedDistrictsButton">
         {children}
