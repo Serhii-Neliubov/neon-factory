@@ -38,7 +38,7 @@ const ResetMap = ({
     draw.deleteAll();
     map.flyTo({
       center: [4.387564, 50.845193],
-      zoom: 11,
+      zoom: 10.8,
       bearing: 0,
       pitch: 0,
     });

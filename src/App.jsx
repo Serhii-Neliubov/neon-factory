@@ -97,7 +97,7 @@ function App() {
       container: "map",
       style: "mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b",
       center: [4.387564, 50.845193],
-      zoom: 11,
+      zoom: 10.8,
       preserveDrawingBuffer: true,
     };
 
@@ -616,13 +616,6 @@ function App() {
             </button>
             {openTransport ? (
               <div className="toggleIcons">
-                <MapIconsToggle
-                  servicesAction={servicesAction}
-                  setServicesAction={setServicesAction}
-                  map={map}
-                >
-                  SHOPS, RESTAURANTS & SERVICES
-                </MapIconsToggle>
                 <TransportButton
                   setShowTransport={setShowTransport}
                   showTransport={showTransport}
@@ -630,6 +623,13 @@ function App() {
                 >
                   Transport
                 </TransportButton>
+                <MapIconsToggle
+                  servicesAction={servicesAction}
+                  setServicesAction={setServicesAction}
+                  map={map}
+                >
+                  SHOPS, RESTAURANTS & SERVICES
+                </MapIconsToggle>
               </div>
             ) : (
               ""
