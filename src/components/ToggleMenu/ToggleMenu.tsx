@@ -23,7 +23,7 @@ const ToggleMenu = ({
     {
       data: "EU",
       id: "EUButton",
-      name: "European District",
+      name: "European",
     },
     {
       data: "Louise",
@@ -38,7 +38,7 @@ const ToggleMenu = ({
     {
       data: "South",
       id: "South",
-      name: "Midi District",
+      name: "Midi",
     },
     {
       data: "NE",
@@ -95,7 +95,7 @@ const ToggleMenu = ({
         decentralisedToggle={decentralisedToggle}
         setDecentralisedToggle={setDecentralisedToggle}
       >
-        Decentralised Districts
+        Decentralised
       </DecentralisedDistrictsButton>
     </>
   );

@@ -45,16 +45,16 @@ const MyModal = ({ modalWindowHandler }) => {
           </div>
           <div className="modal-window__toggles">
             <div className="modal-window__toggle">
-              <input type="checkbox" />
-              <p>PLEASE SEND ME YOUR NEWSLETTER</p>
+              <input className="custom-checkbox" type="checkbox" />
+              <label>PLEASE SEND ME YOUR NEWSLETTER</label>
             </div>
             <div className="modal-window__toggle">
-              <input type="checkbox" />
-              <p>
+              <input className="custom-checkbox" type="checkbox" />
+              <label>
                 PLEASE CONTACT ME!
                 <br />
                 I’AM INTERESTED TO HAVE MY OWN
-              </p>
+              </label>
             </div>
           </div>
           <button className="modal-window__button">CONTINUE MAPPING</button>
