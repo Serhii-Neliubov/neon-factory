@@ -7,6 +7,8 @@ const ToggleButton = ({
   toggleButton,
   selectedDistricts,
   map,
+  center,
+  zoom,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggleClass, setToggleClass] = useState<string>("");
@@ -15,6 +17,14 @@ const ToggleButton = ({
     toggleButton(data, selectedDistricts, map);
     const isDataSelected = selectedDistricts.includes(data);
     setToggle(isDataSelected);
+
+    map.flyTo({
+      center,
+      zoom, // Fly to the selected target
+      duration: 12000, // Animate over 12 seconds
+      essential: true, // This animation is considered essential with
+      //respect to prefers-reduced-motion
+    });
   };
 
   useEffect(() => {

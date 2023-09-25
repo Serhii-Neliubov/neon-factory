@@ -19,6 +19,8 @@ const ToggleMenu = ({
       data: "CD",
       id: "CBDButton",
       name: "Centre",
+      center: [8.11862, 46.58842],
+      zoom: 11,
     },
     {
       data: "EU",
@@ -77,6 +79,8 @@ const ToggleMenu = ({
           data={button.data}
           id={button.id}
           key={button.id}
+          center={button.center}
+          zoom={button.zoom}
         >
           {button.name}
         </ToggleButton>

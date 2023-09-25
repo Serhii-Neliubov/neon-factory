@@ -29,7 +29,7 @@ import {
 import TransportButton from "./components/ToggleMenu/TransportButton";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
 import RightTopMenuText from "./components/RightTopMenuText";
-import MyModal from "./components/MyModal/MyModal";
+// import MyModal from "./components/MyModal/MyModal";
 import DefaultStyle from "./components/MapStyleButtons/DefaultStyle";
 import DarkStyle from "./components/MapStyleButtons/DarkStyle";
 import MonochromeStyle from "./components/MapStyleButtons/MonochromeStyle";
@@ -39,7 +39,7 @@ import { Scrollbar } from "react-scrollbars-custom";
 function App() {
   const [map, setMap] = useState(null);
   const [isControlsActive, setIsControlsActive] = useState(false);
-  const [isModalActive, setIsModalActive] = useState(false);
+  // const [isModalActive, setIsModalActive] = useState(false);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
   const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] =
@@ -271,10 +271,10 @@ function App() {
     }
   }
 
-  function modalWindowHandler() {
-    setIsModalActive(!isModalActive);
-    defaultStyleHandler();
-  }
+  // function modalWindowHandler() {
+  //   setIsModalActive(!isModalActive);
+  //   defaultStyleHandler();
+  // }
 
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
@@ -335,7 +335,7 @@ function App() {
     setAllDistrictsToggle(false);
     setShowTransport(true);
     setServicesAction(false);
-    setIsModalActive(true);
+    // setIsModalActive(true);
   }
 
   function monochromeStyleHandler() {
@@ -359,7 +359,7 @@ function App() {
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     setShowTransport(true);
-    setIsModalActive(true);
+    // setIsModalActive(true);
     setServicesAction(false);
   }
 
@@ -383,7 +383,7 @@ function App() {
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
-    setIsModalActive(true);
+    // setIsModalActive(true);
     setShowTransport(true);
     setServicesAction(false);
   }
@@ -409,7 +409,7 @@ function App() {
     }
     setSelectedDistricts([]);
     setCentralisedToggle(false);
-    setIsModalActive(false);
+    // setIsModalActive(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
   }
@@ -677,11 +677,11 @@ function App() {
       </div>
 
       <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
-        {isModalActive ? (
+        {/* {isModalActive ? (
           <MyModal modalWindowHandler={modalWindowHandler}></MyModal>
         ) : (
           ""
-        )}
+        )} */}
         <RightTopMenuText />
         <div className="calculation-box">
           <div id="calculated-area">{Sqm}.SQM</div>
