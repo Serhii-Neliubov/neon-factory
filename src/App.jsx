@@ -27,6 +27,7 @@ import {
   changeColor,
 } from "./utils/MapFunctions";
 import TransportButton from "./components/ToggleMenu/TransportButton";
+import CadastreButton from "./components/ToggleMenu/CadastreButton";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
 import RightTopMenuText from "./components/RightTopMenuText";
 // import MyModal from "./components/MyModal/MyModal";
@@ -85,6 +86,7 @@ function App() {
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
+  const [openCadastre, setOpenCadastre] = useState(false);
 
   const drawFeatureID = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
@@ -420,7 +422,7 @@ function App() {
     if (map) {
       map.resize(); // Обновите размеры карты
     }
-  }, [activeSidebar]);
+  }, [activeSidebar, map]);
 
   useEffect(() => {
     if (map) {
@@ -640,6 +642,27 @@ function App() {
                   >
                     SHOPS, RESTAURANTS & SERVICES
                   </MapIconsToggle>
+                </div>
+              ) : (
+                ""
+              )}
+              <button
+                onClick={() => setOpenCadastre(!openCadastre)}
+                className={`CadastreButton TransportButton_bg ${
+                  openCadastre ? "CadastreButton_open" : ""
+                }`}
+              >
+                Cadastre
+              </button>
+              {openCadastre ? (
+                <div className="toggleIcons">
+                  <CadastreButton
+                    setShowTransport={setShowTransport}
+                    showTransport={showTransport}
+                    map={map}
+                  >
+                    Cadastre
+                  </CadastreButton>
                 </div>
               ) : (
                 ""

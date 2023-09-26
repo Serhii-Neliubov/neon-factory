@@ -1,12 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const TransportButton = ({
-  children,
-  showTransport,
-  setShowTransport,
-  map,
-}) => {
+const CadastreButton = ({ children, showTransport, setShowTransport, map }) => {
   const [toggleClass, setToggleClass] = useState<string>("");
 
   function toggleTransportLayerVisibility() {
@@ -14,13 +9,9 @@ const TransportButton = ({
     if (!showTransport) {
       map.setLayoutProperty("transit-label", "visibility", "visible");
       map.setLayoutProperty("stib-2023", "visibility", "visible");
-      map.setLayoutProperty("parkings", "visibility", "visible");
-      map.setLayoutProperty("gares-bruxelles", "visibility", "visible");
     } else {
       map.setLayoutProperty("transit-label", "visibility", "none");
       map.setLayoutProperty("stib-2023", "visibility", "none");
-      map.setLayoutProperty("parkings", "visibility", "none");
-      map.setLayoutProperty("gares-bruxelles", "visibility", "none");
     }
   }
 
@@ -44,4 +35,4 @@ const TransportButton = ({
     </div>
   );
 };
-export default TransportButton;
+export default CadastreButton;
