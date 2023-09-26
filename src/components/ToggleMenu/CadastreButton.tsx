@@ -1,27 +1,35 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-const CadastreButton = ({ children, showTransport, setShowTransport, map }) => {
+const CadastreButton = ({ children, showCadastre, setShowCadastre, map }) => {
   const [toggleClass, setToggleClass] = useState<string>("");
 
   function toggleTransportLayerVisibility() {
-    setShowTransport((prev) => !prev);
-    if (!showTransport) {
-      map.setLayoutProperty("transit-label", "visibility", "visible");
-      map.setLayoutProperty("stib-2023", "visibility", "visible");
+    setShowCadastre((prev) => !prev);
+    if (!showCadastre) {
+      map.setLayoutProperty(
+        "bruxelles-cadastre-complet-7xijuk",
+        "visibility",
+        "visible"
+      );
+      map.setLayoutProperty("building", "visibility", "none");
     } else {
-      map.setLayoutProperty("transit-label", "visibility", "none");
-      map.setLayoutProperty("stib-2023", "visibility", "none");
+      map.setLayoutProperty(
+        "bruxelles-cadastre-complet-7xijuk",
+        "visibility",
+        "none"
+      );
+      map.setLayoutProperty("building", "visibility", "visible");
     }
   }
 
   useEffect(() => {
-    if (showTransport) {
+    if (showCadastre) {
       setToggleClass("switch-btn switch-on");
     } else {
       setToggleClass("switch-btn");
     }
-  }, [showTransport]);
+  }, [showCadastre]);
 
   return (
     <div

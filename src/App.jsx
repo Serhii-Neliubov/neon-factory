@@ -87,6 +87,7 @@ function App() {
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
   const [openCadastre, setOpenCadastre] = useState(false);
+  const [showCadastre, setShowCadastre] = useState(false);
 
   const drawFeatureID = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
@@ -657,8 +658,8 @@ function App() {
               {openCadastre ? (
                 <div className="toggleIcons">
                   <CadastreButton
-                    setShowTransport={setShowTransport}
-                    showTransport={showTransport}
+                    setShowCadastre={setShowCadastre}
+                    showCadastre={showCadastre}
                     map={map}
                   >
                     Cadastre
