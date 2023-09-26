@@ -39,6 +39,7 @@ import { Scrollbar } from "react-scrollbars-custom";
 function App() {
   const [map, setMap] = useState(null);
   const [isControlsActive, setIsControlsActive] = useState(false);
+  const [activeSidebar, setActiveSidebar] = useState(true);
   // const [isModalActive, setIsModalActive] = useState(false);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
@@ -503,180 +504,190 @@ function App() {
 
   return (
     <div id="mapContainer">
-      <div className="sidebar">
-        <div className="logo">
-          <div className="logo__name">
-            <a href="https://neon-factory.design/">
-              <svg
-                width="55"
-                height="60"
-                viewBox="0 0 55 60"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+      <button onClick={() => setActiveSidebar((prev) => !prev)} />
+      {activeSidebar && (
+        <div className="sidebar">
+          <div className="logo">
+            <div className="logo__name">
+              <a href="https://neon-factory.design/">
+                <svg
+                  width="55"
+                  height="60"
+                  viewBox="0 0 55 60"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21.3602 24.8521C21.3602 24.8521 20.9618 21.743 26.7845 21.5916C32.6071 21.4401 49.2018 21.5916 49.2018 21.5916C49.2018 21.5916 53.27 21.1372 53.27 16.0564C53.27 10.9771 48.1644 8.55098 43.2979 9.76402M16.414 24.8521C16.414 24.8521 15.9359 20.2984 18.0091 17.1536M8.67596 17.1551C8.67596 17.1551 10.2711 14.6177 12.9035 14.3905C15.536 14.1633 35.7989 14.3905 35.7989 14.3905C35.7989 14.3905 39.389 14.0876 40.4264 10.5242C41.4637 6.9608 38.1923 3.70028 38.1923 3.70028C38.1923 3.70028 36.1176 1.87997 32.2087 1.87997C28.2999 1.87997 26.4642 4.98905 26.2252 5.822C25.9861 6.65643 25.9065 9.45668 25.9065 9.45668M13.5425 9.45668C13.5425 9.45668 14.1815 3.54735 19.3667 3.16874C24.5519 2.79013 26.2267 5.822 26.2267 5.822M3.5704 17.1551C3.5704 17.1551 2.30807 4.36248 14.8658 5.85169M14.8658 32.4347V27.734H22.7163V32.4347M40.6295 44.5652H53.2715V57.7572H1.65503V19.8485H9.87267L9.71176 57.7572M10.5898 34.7851H37.9533V57.7572M16.3671 48.8101V53.8909M21.3539 48.8101V53.8909M26.5454 48.8101V53.8909M31.651 48.8101V53.8909M42.9792 48.8101V53.8909M48.1644 48.8101V53.8909"
+                    stroke="#4CC0AD"
+                    strokeWidth="3"
+                    strokeMiterlimit="10"
+                  />
+                </svg>
+              </a>
+              <h2>NEON-FACTORY</h2>
+            </div>
+            <p className="logo__text">
+              A <span>DESIGN AGENCY</span> FOR COMMERCIAL REAL ESTATE
+            </p>
+          </div>
+          <h1 className="title">Districts map</h1>
+          <Scrollbar className="scrollbar">
+            <div className="mainToggleButtons">
+              <div ref={geocoderContainer}></div>
+              <SubMenu
+                setIsControlsActive={setIsControlsActive}
+                isControlsActive={isControlsActive}
+                map={map}
+                submenuTag={submenuTag}
+              ></SubMenu>
+              <button
+                onClick={() => setMapStyleButtonOpen(!mapStyleButtonOpen)}
+                className={`mapStyleButton ${
+                  mapStyleButtonOpen ? "mapStyleButton_open" : ""
+                }`}
               >
-                <path
-                  d="M21.3602 24.8521C21.3602 24.8521 20.9618 21.743 26.7845 21.5916C32.6071 21.4401 49.2018 21.5916 49.2018 21.5916C49.2018 21.5916 53.27 21.1372 53.27 16.0564C53.27 10.9771 48.1644 8.55098 43.2979 9.76402M16.414 24.8521C16.414 24.8521 15.9359 20.2984 18.0091 17.1536M8.67596 17.1551C8.67596 17.1551 10.2711 14.6177 12.9035 14.3905C15.536 14.1633 35.7989 14.3905 35.7989 14.3905C35.7989 14.3905 39.389 14.0876 40.4264 10.5242C41.4637 6.9608 38.1923 3.70028 38.1923 3.70028C38.1923 3.70028 36.1176 1.87997 32.2087 1.87997C28.2999 1.87997 26.4642 4.98905 26.2252 5.822C25.9861 6.65643 25.9065 9.45668 25.9065 9.45668M13.5425 9.45668C13.5425 9.45668 14.1815 3.54735 19.3667 3.16874C24.5519 2.79013 26.2267 5.822 26.2267 5.822M3.5704 17.1551C3.5704 17.1551 2.30807 4.36248 14.8658 5.85169M14.8658 32.4347V27.734H22.7163V32.4347M40.6295 44.5652H53.2715V57.7572H1.65503V19.8485H9.87267L9.71176 57.7572M10.5898 34.7851H37.9533V57.7572M16.3671 48.8101V53.8909M21.3539 48.8101V53.8909M26.5454 48.8101V53.8909M31.651 48.8101V53.8909M42.9792 48.8101V53.8909M48.1644 48.8101V53.8909"
-                  stroke="#4CC0AD"
-                  strokeWidth="3"
-                  strokeMiterlimit="10"
-                />
-              </svg>
-            </a>
-            <h2>NEON-FACTORY</h2>
-          </div>
-          <p className="logo__text">
-            A <span>DESIGN AGENCY</span> FOR COMMERCIAL REAL ESTATE
-          </p>
+                map style
+              </button>
+              {mapStyleButtonOpen ? (
+                <div className="toggleInputs">
+                  <DefaultStyle
+                    defaultStyleHandler={defaultStyleHandler}
+                    mapStyleSetter={mapStyleSetter}
+                  />
+                  <DarkStyle
+                    darkStyleHandler={darkStyleHandler}
+                    mapStyleSetter={mapStyleSetter}
+                  />
+                  <MonochromeStyle
+                    monochromeStyleHandler={monochromeStyleHandler}
+                    mapStyleSetter={mapStyleSetter}
+                  />
+                  <SatelliteStyle
+                    satelitteStyleHandler={satelitteStyleHandler}
+                    mapStyleSetter={mapStyleSetter}
+                  />
+                </div>
+              ) : null}
+              <button
+                onClick={() => setOpenBrussels(!openBrussels)}
+                className={`BrusselsButton BrusselsButton_bg ${
+                  openBrussels ? "BrusselsButton_open" : ""
+                }`}
+              >
+                Brussels
+              </button>
+              {openBrussels ? (
+                <div className="toggleContainer">
+                  <ToggleMenu
+                    isAllDistrictsSelected={isAllDistrictsSelected}
+                    toggleButton={toggleButton}
+                    map={map}
+                    selectedDistricts={selectedDistricts}
+                    centralisedDistrictsButtonHandler={
+                      centralisedDistrictsButtonHandler
+                    }
+                    centralisedToggle={centralisedToggle}
+                    setCentralisedToggle={setCentralisedToggle}
+                    decentralisedDistrictsButtonHandler={
+                      decentralisedDistrictsButtonHandler
+                    }
+                    decentralisedToggle={decentralisedToggle}
+                    setDecentralisedToggle={setDecentralisedToggle}
+                  />
+                  <AllDistrictsButton
+                    setIsAllDistrictsVisible={setIsAllDistrictsVisible}
+                    allDistrictsButtonHandler={allDistrictsButtonHandler}
+                    isAllDistrictsVisible={isAllDistrictsVisible}
+                    allDistrictsToggle={allDistrictsToggle}
+                    setAllDistrictsToggle={setAllDistrictsToggle}
+                  >
+                    All Districts
+                  </AllDistrictsButton>
+                </div>
+              ) : null}
+              <button className="AreasButton">antwerp (soon)</button>
+              <button className="AreasButton">Gent (soon)</button>
+              <button className="AreasButton">luxembourg (soon)</button>
+              <button
+                onClick={() => setOpenTransport(!openTransport)}
+                className={`TransportButton TransportButton_bg ${
+                  openTransport ? "TransportButton_open" : ""
+                }`}
+              >
+                Transports & Amenieties
+              </button>
+              {openTransport ? (
+                <div className="toggleIcons">
+                  <TransportButton
+                    setShowTransport={setShowTransport}
+                    showTransport={showTransport}
+                    map={map}
+                  >
+                    Transport
+                  </TransportButton>
+                  <MapIconsToggle
+                    servicesAction={servicesAction}
+                    setServicesAction={setServicesAction}
+                    map={map}
+                  >
+                    SHOPS, RESTAURANTS & SERVICES
+                  </MapIconsToggle>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+
+            <div className="down-sidebar__buttons">
+              <ResetMap
+                mapStyleSetter={mapStyleSetter}
+                setServicesAction={setServicesAction}
+                setShowTransport={setShowTransport}
+                setSqml={setSqml}
+                draw={draw}
+                map={map}
+                removeCustomMarker={removeCustomMarker}
+                setSelectedDistricts={setSelectedDistricts}
+                setIsAllDistrictsVisible={setIsAllDistrictsVisible}
+                setCentralisedToggle={setCentralisedToggle}
+                setIsCentralisedDistrictsVisible={
+                  setIsCentralisedDistrictsVisible
+                }
+                setDecentralisedToggle={setDecentralisedToggle}
+                setIsDecentralisedDistrictsVisible={
+                  setIsDecentralisedDistrictsVisible
+                }
+                setAllDistrictsToggle={setAllDistrictsToggle}
+                setOpenBrussels={setOpenBrussels}
+                setMapStyleButtonOpen={setMapStyleButtonOpen}
+                setIsControlsActive={setIsControlsActive}
+                setOpenTransport={setOpenTransport}
+              ></ResetMap>
+
+              <PrintScreen
+                sqmBox={sqmBox}
+                palette={palette}
+                sreenLogo={sreenLogo}
+                drawMenu={drawMenu}
+                mapTag={mapTag.current}
+                menuStyle={menuStyle}
+                colorPicker={colorPicker}
+                rightTopMenu={rightTopMenu}
+              ></PrintScreen>
+            </div>
+          </Scrollbar>
         </div>
-        <h1 className="title">Districts map</h1>
-        <Scrollbar className="scrollbar">
-          <div className="mainToggleButtons">
-            <div ref={geocoderContainer}></div>
-            <SubMenu
-              setIsControlsActive={setIsControlsActive}
-              isControlsActive={isControlsActive}
-              map={map}
-              submenuTag={submenuTag}
-            ></SubMenu>
-            <button
-              onClick={() => setMapStyleButtonOpen(!mapStyleButtonOpen)}
-              className={`mapStyleButton ${
-                mapStyleButtonOpen ? "mapStyleButton_open" : ""
-              }`}
-            >
-              map style
-            </button>
-            {mapStyleButtonOpen ? (
-              <div className="toggleInputs">
-                <DefaultStyle
-                  defaultStyleHandler={defaultStyleHandler}
-                  mapStyleSetter={mapStyleSetter}
-                />
-                <DarkStyle
-                  darkStyleHandler={darkStyleHandler}
-                  mapStyleSetter={mapStyleSetter}
-                />
-                <MonochromeStyle
-                  monochromeStyleHandler={monochromeStyleHandler}
-                  mapStyleSetter={mapStyleSetter}
-                />
-                <SatelliteStyle
-                  satelitteStyleHandler={satelitteStyleHandler}
-                  mapStyleSetter={mapStyleSetter}
-                />
-              </div>
-            ) : null}
-            <button
-              onClick={() => setOpenBrussels(!openBrussels)}
-              className={`BrusselsButton BrusselsButton_bg ${
-                openBrussels ? "BrusselsButton_open" : ""
-              }`}
-            >
-              Brussels
-            </button>
-            {openBrussels ? (
-              <div className="toggleContainer">
-                <ToggleMenu
-                  isAllDistrictsSelected={isAllDistrictsSelected}
-                  toggleButton={toggleButton}
-                  map={map}
-                  selectedDistricts={selectedDistricts}
-                  centralisedDistrictsButtonHandler={
-                    centralisedDistrictsButtonHandler
-                  }
-                  centralisedToggle={centralisedToggle}
-                  setCentralisedToggle={setCentralisedToggle}
-                  decentralisedDistrictsButtonHandler={
-                    decentralisedDistrictsButtonHandler
-                  }
-                  decentralisedToggle={decentralisedToggle}
-                  setDecentralisedToggle={setDecentralisedToggle}
-                />
-                <AllDistrictsButton
-                  setIsAllDistrictsVisible={setIsAllDistrictsVisible}
-                  allDistrictsButtonHandler={allDistrictsButtonHandler}
-                  isAllDistrictsVisible={isAllDistrictsVisible}
-                  allDistrictsToggle={allDistrictsToggle}
-                  setAllDistrictsToggle={setAllDistrictsToggle}
-                >
-                  All Districts
-                </AllDistrictsButton>
-              </div>
-            ) : null}
-            <button className="AreasButton">antwerp (soon)</button>
-            <button className="AreasButton">Gent (soon)</button>
-            <button className="AreasButton">luxembourg (soon)</button>
-            <button
-              onClick={() => setOpenTransport(!openTransport)}
-              className={`TransportButton TransportButton_bg ${
-                openTransport ? "TransportButton_open" : ""
-              }`}
-            >
-              Transports & Amenieties
-            </button>
-            {openTransport ? (
-              <div className="toggleIcons">
-                <TransportButton
-                  setShowTransport={setShowTransport}
-                  showTransport={showTransport}
-                  map={map}
-                >
-                  Transport
-                </TransportButton>
-                <MapIconsToggle
-                  servicesAction={servicesAction}
-                  setServicesAction={setServicesAction}
-                  map={map}
-                >
-                  SHOPS, RESTAURANTS & SERVICES
-                </MapIconsToggle>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
+      )}
 
-          <div className="down-sidebar__buttons">
-            <ResetMap
-              mapStyleSetter={mapStyleSetter}
-              setServicesAction={setServicesAction}
-              setShowTransport={setShowTransport}
-              setSqml={setSqml}
-              draw={draw}
-              map={map}
-              removeCustomMarker={removeCustomMarker}
-              setSelectedDistricts={setSelectedDistricts}
-              setIsAllDistrictsVisible={setIsAllDistrictsVisible}
-              setCentralisedToggle={setCentralisedToggle}
-              setIsCentralisedDistrictsVisible={
-                setIsCentralisedDistrictsVisible
-              }
-              setDecentralisedToggle={setDecentralisedToggle}
-              setIsDecentralisedDistrictsVisible={
-                setIsDecentralisedDistrictsVisible
-              }
-              setAllDistrictsToggle={setAllDistrictsToggle}
-              setOpenBrussels={setOpenBrussels}
-              setMapStyleButtonOpen={setMapStyleButtonOpen}
-              setIsControlsActive={setIsControlsActive}
-              setOpenTransport={setOpenTransport}
-            ></ResetMap>
-
-            <PrintScreen
-              sqmBox={sqmBox}
-              palette={palette}
-              sreenLogo={sreenLogo}
-              drawMenu={drawMenu}
-              mapTag={mapTag.current}
-              menuStyle={menuStyle}
-              colorPicker={colorPicker}
-              rightTopMenu={rightTopMenu}
-            ></PrintScreen>
-          </div>
-        </Scrollbar>
-      </div>
-
-      <div id="map" ref={mapTag} style={{ flex: 1, position: "relative" }}>
+      <div
+        id="map"
+        ref={mapTag}
+        style={{
+          flex: 1,
+          position: "relative",
+        }}
+      >
         {/* {isModalActive ? (
           <MyModal modalWindowHandler={modalWindowHandler}></MyModal>
         ) : (
