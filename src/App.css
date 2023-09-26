@@ -99,6 +99,7 @@ body {
 .mapboxgl-map {
   border-radius: 10px;
   border: 1px solid #606060;
+  overflow: hidden;
 }
 /*================================================= Modal Window =================================================*/
 .modal-window {

@@ -114,6 +114,7 @@ function App() {
         element: createCustomMarkerElement(),
         animate: false,
       },
+      clearOnBlur: false,
     });
 
     colorPicker.current.addEventListener("input", function () {
@@ -414,6 +415,12 @@ function App() {
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
   }
+
+  useEffect(() => {
+    if (map) {
+      map.resize(); // Обновите размеры карты
+    }
+  }, [activeSidebar]);
 
   useEffect(() => {
     if (map) {

@@ -4,6 +4,7 @@ export function createCustomMarkerElement() {
   element.style.backgroundImage = "url(pin.png)";
   element.style.width = "32px"; // Установите желаемую ширину и высоту маркера
   element.style.height = "32px";
+  element.draggable = true;
 
   return element;
 }
