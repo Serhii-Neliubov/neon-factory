@@ -277,8 +277,9 @@ body {
   height: 90vh;
   display: flex;
 }
-
 /* Logo styles */
+#map {
+}
 .logo {
   margin: 0 0 9px 0;
   position: relative;
