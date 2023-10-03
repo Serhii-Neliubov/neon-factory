@@ -107,14 +107,61 @@ function App() {
 
     let map = new mapboxgl.Map(mapSettings);
     setMap(map);
+    // Переменная для хранения текущего маркера
+    let currentMarker = null;
+
+    function createMarkerElement() {
+      let container = document.createElement("div");
+
+      // Создайте элемент маркера
+      let marker = document.createElement("div");
+      marker.className = "custom-marker";
+      marker.style.backgroundImage = "url(pin.png)";
+      marker.style.width = "32px"; // Установите желаемую ширину и высоту маркера
+      marker.style.height = "32px";
+      marker.draggable = true;
+
+      // Создайте кнопку удаления
+      let deleteButton = document.createElement("button");
+      deleteButton.innerText = "Delete";
+      deleteButton.className = "delete-button";
+
+      // Добавьте обработчик события на кнопку удаления
+      deleteButton.addEventListener("click", function () {
+        // Удалите маркер и его контейнер из карты
+        container.remove();
+        currentMarker = null; // Сброс текущего маркера
+      });
+
+      // Добавьте маркер и кнопку в контейнер
+      container.appendChild(marker);
+      container.appendChild(deleteButton);
+
+      return container;
+    }
+
+    // Ваш код для инициализации карты и геокодера
+
+    // В обработчике для получения новых координат (newLng, newLat) при поиске адреса
+    function onNewAddressFound(newLng, newLat) {
+      // Удалите предыдущий маркер, если он существует
+      if (currentMarker) {
+        currentMarker.remove();
+      }
+
+      // Создайте новый маркер с новыми координатами и сохраните его в currentMarker
+      currentMarker = new mapboxgl.Marker(createMarkerElement())
+        .setLngLat([newLng, newLat])
+        .addTo(map);
+    }
 
     let geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
       placeholder: "Your Address Here",
       marker: {
-        draggable: false,
-        element: createCustomMarkerElement(),
+        draggable: true,
+        element: createMarkerElement(),
         animate: false,
       },
       clearOnBlur: false,
