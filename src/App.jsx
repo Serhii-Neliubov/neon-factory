@@ -20,7 +20,6 @@ import MapIconsToggle from "./components/ToggleMenu/MapIconsToggle";
 import defaultDrawStyles from "./utils/DefaultDrawStyles";
 //Map functions
 import {
-  createCustomMarkerElement,
   removeCustomMarker,
   toggleDistrictsVisibility,
   toggleButton,
@@ -107,9 +106,6 @@ function App() {
 
     let map = new mapboxgl.Map(mapSettings);
     setMap(map);
-    // Переменная для хранения текущего маркера
-    let currentMarker = null;
-
     function createMarkerElement() {
       let container = document.createElement("div");
 
@@ -130,7 +126,6 @@ function App() {
       deleteButton.addEventListener("click", function () {
         // Удалите маркер и его контейнер из карты
         container.remove();
-        currentMarker = null; // Сброс текущего маркера
       });
 
       // Добавьте маркер и кнопку в контейнер
@@ -138,21 +133,6 @@ function App() {
       container.appendChild(deleteButton);
 
       return container;
-    }
-
-    // Ваш код для инициализации карты и геокодера
-
-    // В обработчике для получения новых координат (newLng, newLat) при поиске адреса
-    function onNewAddressFound(newLng, newLat) {
-      // Удалите предыдущий маркер, если он существует
-      if (currentMarker) {
-        currentMarker.remove();
-      }
-
-      // Создайте новый маркер с новыми координатами и сохраните его в currentMarker
-      currentMarker = new mapboxgl.Marker(createMarkerElement())
-        .setLngLat([newLng, newLat])
-        .addTo(map);
     }
 
     let geocoder = new MapboxGeocoder({
