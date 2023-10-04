@@ -188,7 +188,57 @@ function App() {
 
       showPolygonArea(clickedPolygon);
     });
+    map.on("load", function () {
+      map.on("mousemove", "custom-tileset-layer", function (e) {
+        // Получите фичи под указателем мыши
+        var features = map.queryRenderedFeatures(e.point, {
+          layers: ["custom-tileset-layer"],
+        });
 
+        if (features.length > 0) {
+          var feature = features[0]; // Получите первую фичу (дом)
+
+          // Установите цвет обводки только для выбранной фичи (дома)
+          map.setPaintProperty(
+            "custom-tileset-layer",
+            "line-color",
+            "rgba(255, 255, 255, 0)"
+          ); // Сброс цвета для всех фич
+          map.setPaintProperty("custom-tileset-layer", "line-color", [
+            "match",
+            ["id"],
+            feature.id,
+            "blue",
+            "rgba(255, 255, 255, 0)",
+          ]); // Установите цвет для выбранной фичи
+        }
+      });
+      // Add a Tileset source and layer
+      map.addLayer({
+        id: "custom-tileset-layer", // Layer ID
+        type: "line", // Измените тип на "line"
+        source: {
+          type: "vector",
+          url: "mapbox://neon-factory.12ssh55s",
+        },
+        "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+        paint: {
+          "line-color": "rgba(255, 255, 255, 0)", // Цвет обводки
+          "line-width": 2, // Ширина обводки
+        },
+      });
+
+      // Handle hover interactions
+
+      // Сбросьте стиль при уходе мыши с слоя
+      map.on("mouseleave", "custom-tileset-layer", function () {
+        map.setPaintProperty(
+          "custom-tileset-layer",
+          "line-color",
+          "rgba(255, 255, 255, 0)"
+        ); // Возвращаем цвет обводки к исходному
+      });
+    });
     map.on("click", function (e) {
       if (!newDrawFeature.current) {
         var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
@@ -764,6 +814,7 @@ function App() {
         />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
+      <div id="map-overlay" className="map-overlay"></div>
     </div>
   );
 }
