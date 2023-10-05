@@ -179,7 +179,60 @@ function App() {
 
     map.on("load", function () {
       map.addControl(draw);
+      const selectedFeatures = [];
+      map.on("click", "custom-tileset-layer", function (e) {
+        var features = map.queryRenderedFeatures(e.point, {
+          layers: ["custom-tileset-layer"],
+        });
 
+        if (features.length > 0) {
+          var feature = features[0];
+
+          // Проверяем, есть ли этот полигон уже в массиве
+          var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
+
+          if (index === -1) {
+            // Если полигон не найден в массиве, добавляем его и окрашиваем в синий цвет
+            selectedFeatures.push(feature.properties.CaPaKey);
+          } else {
+            // Если полигон уже в массиве, удаляем его
+            selectedFeatures.splice(index, 1);
+          }
+        }
+      });
+
+      map.on("idle", function () {
+        // Define the style expression to dynamically set fill color based on "CaPaKey"
+        var fillColorExpression = [
+          "match",
+          ["to-string", ["get", "CaPaKey"]],
+          selectedFeatures.map(String),
+          "rgb(76, 192, 173)", // Color for selected features
+          "rgba(255, 255, 255, 0)", // Default color for other features
+        ];
+
+        // Update the fill-color property of the "custom-tileset-layer"
+        map.setPaintProperty(
+          "custom-tileset-layer",
+          "fill-color",
+          fillColorExpression
+        );
+      });
+
+      // Add a Tileset source and layer
+      map.addLayer({
+        id: "custom-tileset-layer",
+        type: "fill",
+        source: {
+          type: "vector",
+          url: "mapbox://neon-factory.12ssh55s",
+        },
+        "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+        paint: {
+          "fill-color": "rgba(255, 255, 255, 0)",
+          "fill-opacity": 0.3,
+        },
+      });
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
     map.on("click", "0", function (e) {
