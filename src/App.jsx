@@ -91,6 +91,7 @@ function App() {
   const drawFeatureID = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
   );
+  const selectedFeatures = [];
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -191,11 +192,7 @@ function App() {
     });
 
     map.on("load", function () {
-      const selectedFeatures = [];
       console.log(selectedFeatures);
-      map.on("mousemove", "custom-tileset-layer", function (e) {
-        // ... Код обработки наведения мыши
-      });
       map.on("click", "custom-tileset-layer", function (e) {
         var features = map.queryRenderedFeatures(e.point, {
           layers: ["custom-tileset-layer"],
@@ -223,7 +220,7 @@ function App() {
           "match",
           ["to-string", ["get", "CaPaKey"]],
           selectedFeatures.map(String),
-          "blue", // Установите цвет заливки для выбранных фич (например, синий)
+          "rgb(76, 192, 173)", // Установите цвет заливки для выбранных фич (например, синий)
           "rgba(255, 255, 255, 0)", // Цвет заливки для остальных фич
         ]);
       });
@@ -384,6 +381,53 @@ function App() {
   function satelitteStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
 
+    map.on("click", "custom-tileset-layer", function (e) {
+      var features = map.queryRenderedFeatures(e.point, {
+        layers: ["custom-tileset-layer"],
+      });
+
+      if (features.length > 0) {
+        var feature = features[0];
+
+        // Проверяем, есть ли этот полигон уже в массиве
+        var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
+
+        if (index === -1) {
+          // Если полигон не найден в массиве, добавляем его и окрашиваем в синий цвет
+          selectedFeatures.push(feature.properties.CaPaKey);
+        } else {
+          // Если полигон уже в массиве, удаляем его
+          selectedFeatures.splice(index, 1);
+        }
+      }
+    });
+
+    map.on("idle", function () {
+      // Обновляем стиль для всех фич в слое на основе массива selectedFeatures
+      map.setPaintProperty("custom-tileset-layer", "fill-color", [
+        "match",
+        ["to-string", ["get", "CaPaKey"]],
+        selectedFeatures.map(String),
+        "rgb(76, 192, 173)", // Установите цвет заливки для выбранных фич (например, синий)
+        "rgba(255, 255, 255, 0)", // Цвет заливки для остальных фич
+      ]);
+    });
+
+    // Add a Tileset source and layer
+    map.addLayer({
+      id: "custom-tileset-layer",
+      type: "fill",
+      source: {
+        type: "vector",
+        url: "mapbox://neon-factory.12ssh55s",
+      },
+      "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+      paint: {
+        "fill-color": "rgba(255, 255, 255, 0)",
+        "fill-opacity": 0.3,
+      },
+    });
+
     const inputElement = document.querySelector(".SatelitteInput");
     if (inputElement) {
       inputElement.checked = true;
@@ -457,6 +501,7 @@ function App() {
 
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+
     setMapStyleSetter(1);
     setShowTransport(true);
     setServicesAction(false);
@@ -740,6 +785,7 @@ function App() {
                 setSqml={setSqml}
                 draw={draw}
                 map={map}
+                setShowCadastre={setShowCadastre}
                 removeCustomMarker={removeCustomMarker}
                 setSelectedDistricts={setSelectedDistricts}
                 setIsAllDistrictsVisible={setIsAllDistrictsVisible}
@@ -747,6 +793,7 @@ function App() {
                 setIsCentralisedDistrictsVisible={
                   setIsCentralisedDistrictsVisible
                 }
+                selectedFeatures={selectedFeatures}
                 setDecentralisedToggle={setDecentralisedToggle}
                 setIsDecentralisedDistrictsVisible={
                   setIsDecentralisedDistrictsVisible
