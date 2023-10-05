@@ -82,8 +82,8 @@ const defaultDrawStyles = [
       "line-join": "round",
     },
     paint: {
-      "line-color": "#fbb03b",
-      "line-dasharray": [0.2, 2],
+      "line-color": "#4cc0ad",
+      "line-dasharray": [2, 2],
       "line-width": 2,
     },
   },
@@ -111,8 +111,8 @@ const defaultDrawStyles = [
       ["!=", "mode", "static"],
     ],
     paint: {
-      "circle-radius": 3,
-      "circle-color": "#fbb03b",
+      "circle-radius": 8,
+      "circle-color": "#4cc0ad",
     },
   },
   {
