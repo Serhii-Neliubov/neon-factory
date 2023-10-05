@@ -294,6 +294,7 @@ function App() {
 
       if (feature.geometry.type === "LineString") {
         // Если рисуется линия
+        // eslint-disable-next-line no-undef
         const distance = turf
           .length(feature)
           .toLocaleString(undefined, { minimumFractionDigits: 2 });
@@ -355,9 +356,28 @@ function App() {
     });
 
     map.on("draw.update", function (e) {
-      if (newDrawFeature.current) {
-        // Вызываем функцию обновления размера только если была создана новая фигура или произошло обновление
-        updateArea(e);
+      const updatedFeature = e.features[0];
+
+      if (updatedFeature.geometry.type === "LineString") {
+        // eslint-disable-next-line no-undef
+        const distance = turf
+          .length(updatedFeature)
+          .toFixed(3)
+          .toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+        // Получаем координаты второй точки линии
+        const secondPointCoord = updatedFeature.geometry.coordinates[1];
+
+        // Определяем позицию меню
+        const menuPosition = new mapboxgl.LngLat(
+          secondPointCoord[0],
+          secondPointCoord[1]
+        );
+
+        // Обновляем текст в меню и позиционируем его
+        document.getElementById("distance-value").textContent = `${distance} m`;
+        marker.style.left = `${map.project(menuPosition).x}px`;
+        marker.style.top = `${map.project(menuPosition).y}px`;
       }
     });
 
