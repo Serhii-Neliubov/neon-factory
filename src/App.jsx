@@ -178,15 +178,6 @@ function App() {
       // Скрываем маркер при удалении линии
       document.getElementById("distance-marker").style.display = "none";
     });
-    document
-      .getElementById("distance-close")
-      .addEventListener("click", function () {
-        hideDistanceMenu();
-      });
-
-    function hideDistanceMenu() {
-      marker.style.display = "none";
-    }
 
     setDraw(draw);
     map.addControl(new mapboxgl.NavigationControl());
@@ -295,42 +286,71 @@ function App() {
       // Выводим метры полигона в какой-либо элемент (например, модальное окно)
       setSqml(sqm);
     }
-    let drawingCompleted = false;
-    map.on("draw.create", function (e) {
-      const line = e.features[0];
 
-      if (!drawingCompleted) {
-        // Выполняем код только если рисование не завершено
-        // eslint-disable-next-line no-undef
+    let drawingCompleted = false;
+
+    map.on("draw.create", function (e) {
+      const feature = e.features[0];
+
+      if (feature.geometry.type === "LineString") {
+        // Если рисуется линия
         const distance = turf
-          .length(line)
+          .length(feature)
           .toLocaleString(undefined, { minimumFractionDigits: 2 });
 
-        // Получаем координаты последней точки линии
         const lastCoord =
-          line.geometry.coordinates[line.geometry.coordinates.length - 1];
+          feature.geometry.coordinates[feature.geometry.coordinates.length - 1];
 
-        // Определяем позицию маркера
         const markerPosition = new mapboxgl.LngLat(lastCoord[0], lastCoord[1]);
 
-        // Обновляем текст в маркере
         document.getElementById("distance-value").textContent = `${distance} m`;
 
-        // Позиционируем маркер и делаем его видимым
         marker.style.left = `${map.project(markerPosition).x}px`;
         marker.style.top = `${map.project(markerPosition).y}px`;
         marker.style.display = "block";
+      } else if (feature.geometry.type === "Polygon") {
+        // Если рисуется полигон, устанавливаем флаг drawingCompleted в false
+        drawingCompleted = false;
       }
 
-      // Устанавливаем флаг, что рисование завершено
-      drawingCompleted = true;
       newDrawFeature.current = true;
-      updateArea(e); // Вызываем функцию обновления размера при создании новой фигуры
+      updateArea(e);
+
+      // Закрываем полигон при двойном клике
+      map.once("dblclick", function (dblClickEvt) {
+        if (drawingCompleted) {
+          const featuresAtClick = map.queryRenderedFeatures(dblClickEvt.point);
+          if (featuresAtClick.length > 0) {
+            const selectedFeature = featuresAtClick[0];
+            if (selectedFeature.geometry.type === "Polygon") {
+              map.setFeatureProperty(selectedFeature.id, "active", "false");
+            }
+          }
+        }
+      });
     });
+
+    map.on("draw.create", function (e) {
+      const feature = e.features[0];
+
+      if (feature.geometry.type === "Polygon") {
+        // Если рисование полигона завершено, устанавливаем флаг drawingCompleted в true
+        drawingCompleted = true;
+      }
+    });
+
+    document
+      .getElementById("distance-close")
+      .addEventListener("click", function () {
+        hideDistanceMenu();
+      });
+
+    function hideDistanceMenu() {
+      marker.style.display = "none";
+    }
 
     map.on("draw.delete", function () {
       newDrawFeature.current = true;
-
       setSqml(0); // Сбрасываем размер при удалении фигуры
     });
 
