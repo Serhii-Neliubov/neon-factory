@@ -182,83 +182,68 @@ function App() {
 
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
+
     map.on("click", "0", function (e) {
       const clickedPolygon = e.features[0]; // Получаем информацию о кликнутом полигоне
       // Вызываем функцию для отображения метров полигона
 
       showPolygonArea(clickedPolygon);
     });
+
     map.on("load", function () {
+      const selectedFeatures = [];
+      console.log(selectedFeatures);
       map.on("mousemove", "custom-tileset-layer", function (e) {
-        // Получите фичи под указателем мыши
+        // ... Код обработки наведения мыши
+      });
+      map.on("click", "custom-tileset-layer", function (e) {
         var features = map.queryRenderedFeatures(e.point, {
           layers: ["custom-tileset-layer"],
         });
 
         if (features.length > 0) {
-          var feature = features[0]; // Получите первую фичу (дом)
+          var feature = features[0];
 
-          // Установите цвет обводки только для выбранной фичи (дома)
-          map.setPaintProperty(
-            "custom-tileset-layer",
-            "line-color",
-            "rgba(255, 255, 255, 0)"
-          ); // Сброс цвета для всех фич
-          map.setPaintProperty("custom-tileset-layer", "line-color", [
-            "match",
-            ["id"],
-            feature.id,
-            "blue",
-            "rgba(255, 255, 255, 0)",
-          ]); // Установите цвет для выбранной фичи
+          // Проверяем, есть ли этот полигон уже в массиве
+          var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
+
+          if (index === -1) {
+            // Если полигон не найден в массиве, добавляем его и окрашиваем в синий цвет
+            selectedFeatures.push(feature.properties.CaPaKey);
+          } else {
+            // Если полигон уже в массиве, удаляем его
+            selectedFeatures.splice(index, 1);
+          }
         }
       });
+
+      map.on("idle", function () {
+        // Обновляем стиль для всех фич в слое на основе массива selectedFeatures
+        map.setPaintProperty("custom-tileset-layer", "fill-color", [
+          "match",
+          ["to-string", ["get", "CaPaKey"]],
+          selectedFeatures.map(String),
+          "blue", // Установите цвет заливки для выбранных фич (например, синий)
+          "rgba(255, 255, 255, 0)", // Цвет заливки для остальных фич
+        ]);
+      });
+
       // Add a Tileset source and layer
       map.addLayer({
-        id: "custom-tileset-layer", // Layer ID
-        type: "line", // Измените тип на "line"
+        id: "custom-tileset-layer",
+        type: "fill",
         source: {
           type: "vector",
           url: "mapbox://neon-factory.12ssh55s",
         },
         "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
         paint: {
-          "line-color": "rgba(255, 255, 255, 0)", // Цвет обводки
-          "line-width": 2, // Ширина обводки
+          "fill-color": "rgba(255, 255, 255, 0)",
+          "fill-opacity": 0.3,
         },
       });
-
-      // Handle hover interactions
-
-      // Сбросьте стиль при уходе мыши с слоя
-      map.on("mouseleave", "custom-tileset-layer", function () {
-        map.setPaintProperty(
-          "custom-tileset-layer",
-          "line-color",
-          "rgba(255, 255, 255, 0)"
-        ); // Возвращаем цвет обводки к исходному
-      });
     });
-    map.on("click", function (e) {
-      if (!newDrawFeature.current) {
-        var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
 
-        //if another drawFeature is not found - reset drawFeatureID
-        drawFeatureID.current = drawFeatureAtPoint.length
-          ? drawFeatureAtPoint[0]
-          : "";
-        if (drawFeatureAtPoint.length) {
-          // Если была найдена фигура, покажите её размер
-          var clickedFeature = draw.get(drawFeatureAtPoint[0]);
-          showPolygonArea(clickedFeature);
-        } else {
-          // Если фигура не была найдена, сбросьте отображение размера
-          setSqml(0);
-        }
-      }
-
-      newDrawFeature.current = false;
-    });
     colorPicker.current.addEventListener("change", function (event) {
       changeColor(event.target.value, mapboxgl, draw);
     });
