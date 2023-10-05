@@ -111,7 +111,7 @@ const defaultDrawStyles = [
       ["!=", "mode", "static"],
     ],
     paint: {
-      "circle-radius": 8,
+      "circle-radius": 5,
       "circle-color": "#4cc0ad",
     },
   },
