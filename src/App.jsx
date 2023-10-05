@@ -61,7 +61,6 @@ function App() {
   const palette = document.querySelector(".palette");
   const menuStyle = document.querySelector(".menuMapStyle");
   const rightTopMenu = document.querySelector(".mapboxgl-ctrl-top-right");
-
   const sqmBox = document.querySelector(".calculation-box");
   const allDistricts = [
     "SW",
@@ -173,6 +172,21 @@ function App() {
       },
       styles: defaultDrawStyles,
     });
+    const marker = document.getElementById("distance-marker");
+
+    map.on("draw.delete", function () {
+      // Скрываем маркер при удалении линии
+      document.getElementById("distance-marker").style.display = "none";
+    });
+    document
+      .getElementById("distance-close")
+      .addEventListener("click", function () {
+        hideDistanceMenu();
+      });
+
+    function hideDistanceMenu() {
+      marker.style.display = "none";
+    }
 
     setDraw(draw);
     map.addControl(new mapboxgl.NavigationControl());
@@ -180,6 +194,7 @@ function App() {
     map.on("load", function () {
       map.addControl(draw);
       const selectedFeatures = [];
+      console.log(selectedFeatures);
       map.on("click", "custom-tileset-layer", function (e) {
         var features = map.queryRenderedFeatures(e.point, {
           layers: ["custom-tileset-layer"],
@@ -187,16 +202,22 @@ function App() {
 
         if (features.length > 0) {
           var feature = features[0];
-
-          // Проверяем, есть ли этот полигон уже в массиве
           var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
 
           if (index === -1) {
-            // Если полигон не найден в массиве, добавляем его и окрашиваем в синий цвет
             selectedFeatures.push(feature.properties.CaPaKey);
+            // Добавляем выбранный полигон в массив и изменяем его стиль
+            map.setFeatureState(
+              { source: "your-source-id", id: feature.id },
+              { selected: true }
+            );
           } else {
-            // Если полигон уже в массиве, удаляем его
             selectedFeatures.splice(index, 1);
+            // Удаляем выбранный полигон из массива и восстанавливаем его стиль
+            map.setFeatureState(
+              { source: "your-source-id", id: feature.id },
+              { selected: false }
+            );
           }
         }
       });
@@ -233,6 +254,7 @@ function App() {
           "fill-opacity": 0.3,
         },
       });
+
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
     map.on("click", "0", function (e) {
@@ -273,14 +295,42 @@ function App() {
       // Выводим метры полигона в какой-либо элемент (например, модальное окно)
       setSqml(sqm);
     }
-
+    let drawingCompleted = false;
     map.on("draw.create", function (e) {
+      const line = e.features[0];
+
+      if (!drawingCompleted) {
+        // Выполняем код только если рисование не завершено
+        // eslint-disable-next-line no-undef
+        const distance = turf
+          .length(line)
+          .toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+        // Получаем координаты последней точки линии
+        const lastCoord =
+          line.geometry.coordinates[line.geometry.coordinates.length - 1];
+
+        // Определяем позицию маркера
+        const markerPosition = new mapboxgl.LngLat(lastCoord[0], lastCoord[1]);
+
+        // Обновляем текст в маркере
+        document.getElementById("distance-value").textContent = `${distance} m`;
+
+        // Позиционируем маркер и делаем его видимым
+        marker.style.left = `${map.project(markerPosition).x}px`;
+        marker.style.top = `${map.project(markerPosition).y}px`;
+        marker.style.display = "block";
+      }
+
+      // Устанавливаем флаг, что рисование завершено
+      drawingCompleted = true;
       newDrawFeature.current = true;
       updateArea(e); // Вызываем функцию обновления размера при создании новой фигуры
     });
 
     map.on("draw.delete", function () {
       newDrawFeature.current = true;
+
       setSqml(0); // Сбрасываем размер при удалении фигуры
     });
 
@@ -765,6 +815,7 @@ function App() {
                 setIsCentralisedDistrictsVisible={
                   setIsCentralisedDistrictsVisible
                 }
+                setShowCadastre={setShowCadastre}
                 setDecentralisedToggle={setDecentralisedToggle}
                 setIsDecentralisedDistrictsVisible={
                   setIsDecentralisedDistrictsVisible
@@ -804,6 +855,15 @@ function App() {
         ) : (
           ""
         )} */}
+        <div id="distance-marker" className="distance-marker">
+          <div className="distance-close" id="distance-close">
+            ×
+          </div>
+          <div id="distance-value" className="distance-value">
+            0 m
+          </div>
+        </div>
+
         <RightTopMenuText />
         <div className="calculation-box">
           <div id="calculated-area">{Sqm}.SQM</div>

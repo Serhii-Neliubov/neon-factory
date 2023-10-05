@@ -19,6 +19,7 @@ const ResetMap = ({
   setMapStyleButtonOpen,
   setIsControlsActive,
   setOpenTransport,
+  setShowCadastre,
 }) => {
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
@@ -31,6 +32,7 @@ const ResetMap = ({
     setIsAllDistrictsVisible(true);
     removeCustomMarker();
     setSqml(0);
+    setShowCadastre(false);
     setIsControlsActive(false);
     setOpenBrussels(false);
     setMapStyleButtonOpen(false);
