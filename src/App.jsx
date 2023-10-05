@@ -288,23 +288,33 @@ function App() {
     }
 
     let drawingCompleted = false;
-
     map.on("draw.create", function (e) {
       const feature = e.features[0];
 
       if (feature.geometry.type === "LineString") {
         // Если рисуется линия
         // eslint-disable-next-line no-undef
-        const distance = turf
-          .length(feature)
-          .toLocaleString(undefined, { minimumFractionDigits: 2 });
+        const distance = turf.length(feature);
+
+        let displayedDistance; // Исходное значение для отображения
+
+        if (distance < 1000) {
+          // Если расстояние меньше 1000 метров, умножаем его на 1000 и отображаем как целое число
+          displayedDistance = Math.round(distance * 1000).toString();
+        } else {
+          // Иначе отображаем значение в метрах с двумя знаками после запятой
+          displayedDistance =
+            distance.toLocaleString(undefined, { minimumFractionDigits: 2 }) +
+            " m";
+        }
 
         const lastCoord =
           feature.geometry.coordinates[feature.geometry.coordinates.length - 1];
 
         const markerPosition = new mapboxgl.LngLat(lastCoord[0], lastCoord[1]);
 
-        document.getElementById("distance-value").textContent = `${distance} m`;
+        document.getElementById("distance-value").textContent =
+          displayedDistance + " m";
 
         marker.style.left = `${map.project(markerPosition).x}px`;
         marker.style.top = `${map.project(markerPosition).y}px`;
