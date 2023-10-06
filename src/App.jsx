@@ -91,6 +91,20 @@ function App() {
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
   );
 
+  const customTilesetLayer = {
+    id: "custom-tileset-layer",
+    type: "fill",
+    source: {
+      type: "vector",
+      url: "mapbox://neon-factory.12ssh55s",
+    },
+    "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+    paint: {
+      "fill-color": "rgba(255, 255, 255, 0)",
+      "fill-opacity": 0.3,
+    },
+  };
+
   useEffect(() => {
     mapboxgl.accessToken =
       "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -185,7 +199,6 @@ function App() {
     map.on("load", function () {
       map.addControl(draw);
       const selectedFeatures = [];
-      console.log(selectedFeatures);
       map.on("click", "custom-tileset-layer", function (e) {
         var features = map.queryRenderedFeatures(e.point, {
           layers: ["custom-tileset-layer"],
@@ -230,7 +243,10 @@ function App() {
           fillColorExpression
         );
       });
-
+      map.on("style.load", function () {
+        // Этот код будет выполнен после загрузки нового стиля карты
+        map.addLayer(customTilesetLayer);
+      });
       // Add a Tileset source and layer
       map.addLayer({
         id: "custom-tileset-layer",
