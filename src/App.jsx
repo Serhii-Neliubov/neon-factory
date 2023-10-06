@@ -231,8 +231,8 @@ function App() {
         var fillColorExpression = [
           "match",
           ["to-string", ["get", "CaPaKey"]],
-          selectedFeatures.map(String),
-          "rgb(76, 192, 173)", // Color for selected features
+          "ValueToMatch", // Condition
+          "rgb(76, 192, 173)", // Color for the matched condition
           "rgba(255, 255, 255, 0)", // Default color for other features
         ];
 
@@ -243,6 +243,7 @@ function App() {
           fillColorExpression
         );
       });
+
       map.on("style.load", function () {
         // Этот код будет выполнен после загрузки нового стиля карты
         map.addLayer(customTilesetLayer);
@@ -378,6 +379,7 @@ function App() {
 
     map.on("draw.delete", function () {
       newDrawFeature.current = true;
+
       setSqml(0); // Сбрасываем размер при удалении фигуры
     });
 
