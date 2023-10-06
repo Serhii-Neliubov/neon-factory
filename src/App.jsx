@@ -86,6 +86,7 @@ function App() {
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
   const [openCadastre, setOpenCadastre] = useState(false);
   const [showCadastre, setShowCadastre] = useState(false);
+  let selectedFeatures = [];
 
   const drawFeatureID = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
@@ -104,6 +105,53 @@ function App() {
       "fill-opacity": 0.3,
     },
   };
+
+  function resetMapButtonHandler() {
+    setCentralisedToggle(false);
+    setServicesAction(false);
+    setIsCentralisedDistrictsVisible(true);
+    setDecentralisedToggle(false);
+    setIsDecentralisedDistrictsVisible(true);
+    setShowTransport(true);
+    setAllDistrictsToggle(false);
+    setIsAllDistrictsVisible(true);
+    removeCustomMarker();
+    setSqml(0);
+    setShowCadastre(false);
+    setIsControlsActive(false);
+    setOpenBrussels(false);
+    setMapStyleButtonOpen(false);
+    setOpenTransport(false);
+    draw.deleteAll();
+    map.flyTo({
+      center: [4.387564, 50.845193],
+      zoom: 10.8,
+      bearing: 0,
+      pitch: 0,
+    });
+
+    setSelectedDistricts([]);
+    selectedFeatures = [];
+
+    map.on("style.load", function () {
+      // Этот код будет выполнен после загрузки нового стиля карты
+      map.addLayer(customTilesetLayer);
+    });
+
+    if (map) {
+      map.loadImage("pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+      });
+
+      // Остальной код обработки карты также может быть здесь
+    }
+    // Сбрасываем видимость надписей в боковой панели
+    var sidebarLabels = document.querySelectorAll(".sidebar-label");
+    sidebarLabels.forEach(function (label) {
+      label.classList.remove("hidden");
+    });
+  }
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -198,7 +246,6 @@ function App() {
 
     map.on("load", function () {
       map.addControl(draw);
-      const selectedFeatures = [];
       map.on("click", "custom-tileset-layer", function (e) {
         var features = map.queryRenderedFeatures(e.point, {
           layers: ["custom-tileset-layer"],
@@ -881,6 +928,7 @@ function App() {
                 setIsCentralisedDistrictsVisible={
                   setIsCentralisedDistrictsVisible
                 }
+                resetMapButtonHandler={resetMapButtonHandler}
                 setShowCadastre={setShowCadastre}
                 setDecentralisedToggle={setDecentralisedToggle}
                 setIsDecentralisedDistrictsVisible={
