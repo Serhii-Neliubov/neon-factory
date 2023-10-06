@@ -132,6 +132,15 @@ function App() {
 
     setSelectedDistricts([]);
     selectedFeatures = [];
+    if (mapStyleSetter == 1) {
+      map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+    } else if (mapStyleSetter == 2) {
+      map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+    } else if (mapStyleSetter == 3) {
+      map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
+    } else {
+      map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
+    }
 
     map.on("style.load", function () {
       // Этот код будет выполнен после загрузки нового стиля карты
