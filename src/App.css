@@ -16,16 +16,44 @@
 }
 .distance-close {
   position: absolute;
-  top: 5px;
+  top: 0px;
   right: 5px;
   cursor: pointer;
 }
+.deleteCustomMarkerContainer {
+  position: relative;
+}
+.delete-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 80%);
+}
+/* Изначально скрываем кнопку с классом "delete-button" */
+.delete-button {
+  display: none;
+}
+
+/* Показываем кнопку с классом "delete-button" при наведении на "deleteCustomMarkerContainer" */
+.deleteCustomMarkerContainer:hover .delete-button {
+  display: block;
+}
+
+.distance-close {
+  display: none; /* Изначально скрываем элемент с классом "distance-close" */
+}
+
+.distance-marker:hover .distance-close {
+  display: block; /* Показываем элемент с классом "distance-close" при наведении на "distance-marker" */
+}
 .distance-marker {
+  margin-left: 10px;
+  margin-top: 10px;
   position: absolute;
   display: none; /* Начально скрываем маркер */
   background-color: #fff;
   opacity: 0.8;
-  padding: 5px 20px 5px 5px;
+  padding: 5px 15px 5px 15px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   font-size: 14px;
@@ -36,6 +64,10 @@
   position: relative;
   z-index: 10;
 }
+[data-mid] {
+  cursor: pointer;
+}
+
 .distance-value {
   font-weight: bold;
 }

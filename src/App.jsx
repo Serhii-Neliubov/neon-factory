@@ -179,6 +179,7 @@ function App() {
     setMap(map);
     function createMarkerElement() {
       let container = document.createElement("div");
+      container.className = "deleteCustomMarkerContainer";
 
       // Создайте элемент маркера
       let marker = document.createElement("div");
@@ -235,31 +236,6 @@ function App() {
       }
     });
 
-    var createCircleButton = document.getElementById("createCircleButton");
-    createCircleButton.addEventListener("click", function () {
-      // Включите режим рисования круга
-      draw.changeMode("draw_circle");
-
-      draw.on("draw.create", function (event) {
-        // Получите ID созданного круга
-        var circleId = event.features[0].id;
-
-        // Переключитесь на режим редактирования круга при двойном клике
-        var circleElement = document.querySelector(`[data-mid="${circleId}"]`);
-        circleElement.addEventListener("dblclick", function () {
-          draw.changeMode("direct_circle", { featureId: circleId });
-        });
-      });
-      var selectedFeatures = draw.getSelected();
-      // Если есть выбранный слой и это круг, включите режим редактирования
-      if (
-        selectedFeatures.length > 0 &&
-        selectedFeatures[0].type === "Feature"
-      ) {
-        draw.changeMode("drag_circle", { featureId: selectedFeatures[0].id });
-      }
-    });
-
     var draw = new MapboxDraw({
       // this is used to allow for custom properties for styling
       // it appends the word "user_" to the property
@@ -277,6 +253,7 @@ function App() {
       },
       styles: defaultDrawStyles,
     });
+
     const marker = document.getElementById("distance-marker");
     map.on("draw.delete", function () {
       // Скрываем маркер при удалении линии
@@ -570,6 +547,36 @@ function App() {
   //   setIsModalActive(!isModalActive);
   //   defaultStyleHandler();
   // }
+  function createCircleButton() {
+    // Включите режим рисования круга
+    draw.changeMode("drag_circle");
+
+    draw.on("draw.create", function (event) {
+      // Получите ID созданного круга
+      var circleId = event.features[0].id;
+
+      // Получите информацию о созданном круге
+      var circle = draw.get(circleId);
+
+      // Создайте элемент для отображения радиуса
+      var radiusDisplay = document.createElement("div");
+      radiusDisplay.textContent = "Радиус: " + circle.properties.radius + " м"; // Предполагается, что у круга есть свойство "radius"
+
+      // Разместите элемент рядом с кругом
+      var circleElement = document.querySelector(`[data-mid="${circleId}"]`);
+      circleElement.parentNode.appendChild(radiusDisplay);
+      // Переключитесь на режим редактирования круга при двойном клике
+      circleElement.addEventListener("dblclick", function () {
+        draw.changeMode("direct_circle", { featureId: circleId });
+      });
+    });
+
+    var selectedFeatures = draw.getSelected();
+    // Если есть выбранный слой и это круг, включите режим редактирования
+    if (selectedFeatures.length > 0 && selectedFeatures[0].type === "Feature") {
+      draw.changeMode("drag_circle", { featureId: selectedFeatures[0].id });
+    }
+  }
 
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
@@ -1021,7 +1028,9 @@ function App() {
         ) : (
           ""
         )} */}
-        <button id="createCircleButton">Создать круг</button>
+        <button onClick={createCircleButton} id="createCircleButton">
+          Create a circle
+        </button>
         <div id="distance-marker" className="distance-marker">
           <div className="distance-close" id="distance-close">
             ×
