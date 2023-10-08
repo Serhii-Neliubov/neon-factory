@@ -35,6 +35,7 @@ import DarkStyle from "./components/MapStyleButtons/DarkStyle";
 import MonochromeStyle from "./components/MapStyleButtons/MonochromeStyle";
 import SatelliteStyle from "./components/MapStyleButtons/SatelliteStyle";
 import { Scrollbar } from "react-scrollbars-custom";
+import MapboxCircle from "mapbox-gl-circle";
 
 function App() {
   const [map, setMap] = useState(null);
@@ -320,6 +321,24 @@ function App() {
       // Add a Tileset source and layer
 
       map.setLayoutProperty("poi-label", "visibility", "none");
+    });
+    var myCircle = new MapboxCircle({ lat: 50.845193, lng: 4.387564 }, 25000, {
+      editable: true,
+      minRadius: 1500,
+      fillColor: "#29AB87",
+    }).addTo(map);
+
+    myCircle.on("centerchanged", function (circleObj) {
+      console.log("New center:", circleObj.getCenter());
+    });
+    myCircle.once("radiuschanged", function (circleObj) {
+      console.log("New radius (once!):", circleObj.getRadius());
+    });
+    myCircle.on("click", function (mapMouseEvent) {
+      console.log("Click:", mapMouseEvent.point);
+    });
+    myCircle.on("contextmenu", function (mapMouseEvent) {
+      console.log("Right-click:", mapMouseEvent.lngLat);
     });
     map.on("click", "0", function (e) {
       const clickedPolygon = e.features[0]; // Получаем информацию о кликнутом полигоне
