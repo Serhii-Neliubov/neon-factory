@@ -25,12 +25,6 @@ import {
   toggleButton,
   changeColor,
 } from "./utils/MapFunctions";
-import {
-  CircleMode,
-  DragCircleMode,
-  DirectMode,
-  SimpleSelectMode,
-} from "mapbox-gl-draw-circle";
 import TransportButton from "./components/ToggleMenu/TransportButton";
 import CadastreButton from "./components/ToggleMenu/CadastreButton";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
@@ -246,10 +240,6 @@ function App() {
       },
       modes: {
         ...MapboxDraw.modes,
-        draw_circle: CircleMode,
-        drag_circle: DragCircleMode,
-        direct_select: DirectMode,
-        simple_select: SimpleSelectMode,
       },
       styles: defaultDrawStyles,
     });
