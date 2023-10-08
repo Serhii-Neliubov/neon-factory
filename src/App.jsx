@@ -537,12 +537,16 @@ function App() {
       toggleDistrictsVisibility(selectedDistricts, map);
       if (mapStyleSetter == 1) {
         map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+        setShowCadastre(false);
       } else if (mapStyleSetter == 2) {
         map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+        setShowCadastre(false);
       } else if (mapStyleSetter == 3) {
         map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
+        setShowCadastre(false);
       } else {
         map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
+        setShowCadastre(false);
       }
       setIsAllDistrictsSelected(true);
     } else {
@@ -607,6 +611,7 @@ function App() {
 
   function satelitteStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+    setShowCadastre(false);
 
     const inputElement = document.querySelector(".SatelitteInput");
     if (inputElement) {
@@ -631,6 +636,8 @@ function App() {
 
   function monochromeStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
+    setShowCadastre(false);
+
     const inputElement = document.querySelector(".MonochromeInput");
     if (inputElement) {
       inputElement.checked = true;
@@ -656,6 +663,7 @@ function App() {
 
   function darkStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
+    setShowCadastre(false);
     const inputElement = document.querySelector(".DarkInput");
     setMapStyleSetter(4);
     if (inputElement) {
@@ -681,6 +689,7 @@ function App() {
 
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+    setShowCadastre(false);
     setMapStyleSetter(1);
     setShowTransport(true);
     setServicesAction(false);
