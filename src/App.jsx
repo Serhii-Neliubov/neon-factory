@@ -93,7 +93,7 @@ function App() {
   const [openCadastre, setOpenCadastre] = useState(false);
   const [showCadastre, setShowCadastre] = useState(false);
 
-  let selectedFeatures = [];
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   const drawFeatureID = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
@@ -116,7 +116,7 @@ function App() {
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
     setServicesAction(false);
-    selectedFeatures = [];
+    setSelectedFeatures([]);
     setIsCentralisedDistrictsVisible(true);
     setDecentralisedToggle(false);
     setIsDecentralisedDistrictsVisible(true);
@@ -139,7 +139,6 @@ function App() {
     });
 
     setSelectedDistricts([]);
-    selectedFeatures = [];
     if (mapStyleSetter == 1) {
       map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     } else if (mapStyleSetter == 2) {
@@ -150,17 +149,11 @@ function App() {
       map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
     }
 
-    map.on("style.load", function () {
-      // Этот код будет выполнен после загрузки нового стиля карты
-      map.addLayer(customTilesetLayer);
-    });
-
     if (map) {
       map.loadImage("pin.png", function (error, image) {
         if (error) throw error;
         map.addImage("custom-pin", image);
       });
-
       // Остальной код обработки карты также может быть здесь
     }
     // Сбрасываем видимость надписей в боковой панели
@@ -306,6 +299,7 @@ function App() {
 
           if (index === -1) {
             selectedFeatures.push(feature.properties.CaPaKey);
+            console.log(selectedFeatures);
             // Добавляем выбранный полигон в массив и изменяем его стиль
             map.setFeatureState(
               { source: "your-source-id", id: feature.id },
@@ -324,6 +318,19 @@ function App() {
 
       map.on("idle", function () {
         // Define the style expression to dynamically set fill color based on "CaPaKey"
+        map.addLayer({
+          id: "custom-tileset-layer",
+          type: "fill",
+          source: {
+            type: "vector",
+            url: "mapbox://neon-factory.12ssh55s",
+          },
+          "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+          paint: {
+            "fill-color": "rgba(255, 255, 255, 0)",
+            "fill-opacity": 0.3,
+          },
+        });
         var fillColorExpression = [
           "match",
           ["to-string", ["get", "CaPaKey"]],
@@ -344,19 +351,6 @@ function App() {
         map.addLayer(customTilesetLayer);
       });
       // Add a Tileset source and layer
-      map.addLayer({
-        id: "custom-tileset-layer",
-        type: "fill",
-        source: {
-          type: "vector",
-          url: "mapbox://neon-factory.12ssh55s",
-        },
-        "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
-        paint: {
-          "fill-color": "rgba(255, 255, 255, 0)",
-          "fill-opacity": 0.3,
-        },
-      });
 
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
