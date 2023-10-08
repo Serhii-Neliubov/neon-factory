@@ -25,6 +25,12 @@ import {
   toggleButton,
   changeColor,
 } from "./utils/MapFunctions";
+import {
+  CircleMode,
+  DragCircleMode,
+  DirectMode,
+  SimpleSelectMode,
+} from "mapbox-gl-draw-circle";
 import TransportButton from "./components/ToggleMenu/TransportButton";
 import CadastreButton from "./components/ToggleMenu/CadastreButton";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
@@ -86,6 +92,7 @@ function App() {
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
   const [openCadastre, setOpenCadastre] = useState(false);
   const [showCadastre, setShowCadastre] = useState(false);
+
   let selectedFeatures = [];
 
   const drawFeatureID = useRef(
@@ -109,6 +116,7 @@ function App() {
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
     setServicesAction(false);
+    selectedFeatures = [];
     setIsCentralisedDistrictsVisible(true);
     setDecentralisedToggle(false);
     setIsDecentralisedDistrictsVisible(true);
@@ -233,6 +241,32 @@ function App() {
         draw.add(feat);
       }
     });
+
+    var createCircleButton = document.getElementById("createCircleButton");
+    createCircleButton.addEventListener("click", function () {
+      // Включите режим рисования круга
+      draw.changeMode("draw_circle");
+
+      draw.on("draw.create", function (event) {
+        // Получите ID созданного круга
+        var circleId = event.features[0].id;
+
+        // Переключитесь на режим редактирования круга при двойном клике
+        var circleElement = document.querySelector(`[data-mid="${circleId}"]`);
+        circleElement.addEventListener("dblclick", function () {
+          draw.changeMode("direct_circle", { featureId: circleId });
+        });
+      });
+      var selectedFeatures = draw.getSelected();
+      // Если есть выбранный слой и это круг, включите режим редактирования
+      if (
+        selectedFeatures.length > 0 &&
+        selectedFeatures[0].type === "Feature"
+      ) {
+        draw.changeMode("drag_circle", { featureId: selectedFeatures[0].id });
+      }
+    });
+
     var draw = new MapboxDraw({
       // this is used to allow for custom properties for styling
       // it appends the word "user_" to the property
@@ -241,10 +275,16 @@ function App() {
         combine_features: false,
         uncombine_features: false,
       },
+      modes: {
+        ...MapboxDraw.modes,
+        draw_circle: CircleMode,
+        drag_circle: DragCircleMode,
+        direct_select: DirectMode,
+        simple_select: SimpleSelectMode,
+      },
       styles: defaultDrawStyles,
     });
     const marker = document.getElementById("distance-marker");
-
     map.on("draw.delete", function () {
       // Скрываем маркер при удалении линии
       document.getElementById("distance-marker").style.display = "none";
@@ -978,6 +1018,7 @@ function App() {
         ) : (
           ""
         )} */}
+        <button id="createCircleButton">Создать круг</button>
         <div id="distance-marker" className="distance-marker">
           <div className="distance-close" id="distance-close">
             ×

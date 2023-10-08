@@ -14,6 +14,7 @@ const defaultDrawStyles = [
       "fill-opacity": 0.1,
     },
   },
+
   {
     id: "gl-draw-polygon-fill-active",
     type: "fill",
