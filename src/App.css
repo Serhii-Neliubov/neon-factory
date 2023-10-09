@@ -27,6 +27,9 @@
   position: absolute;
   top: 50%;
   left: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
   transform: translate(-50%, 80%);
 }
 /* Изначально скрываем кнопку с классом "delete-button" */
