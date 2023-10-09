@@ -94,20 +94,6 @@ function App() {
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
   );
 
-  const customTilesetLayer = {
-    id: "custom-tileset-layer",
-    type: "fill",
-    source: {
-      type: "vector",
-      url: "mapbox://neon-factory.12ssh55s",
-    },
-    "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
-    paint: {
-      "fill-color": "rgba(255, 255, 255, 0)",
-      "fill-opacity": 0.3,
-    },
-  };
-
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
     setServicesAction(false);
@@ -186,7 +172,7 @@ function App() {
 
       // Создайте кнопку удаления
       let deleteButton = document.createElement("button");
-      deleteButton.innerText = "Delete";
+      deleteButton.innerText = "×";
       deleteButton.className = "delete-button";
 
       // Добавьте обработчик события на кнопку удаления
@@ -256,72 +242,9 @@ function App() {
 
     map.on("load", function () {
       map.addControl(draw);
-      map.on("click", "custom-tileset-layer", function (e) {
-        var features = map.queryRenderedFeatures(e.point, {
-          layers: ["custom-tileset-layer"],
-        });
-
-        if (features.length > 0) {
-          var feature = features[0];
-          var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
-
-          if (index === -1) {
-            selectedFeatures.push(feature.properties.CaPaKey);
-            console.log(selectedFeatures);
-            // Добавляем выбранный полигон в массив и изменяем его стиль
-            map.setFeatureState(
-              { source: "your-source-id", id: feature.id },
-              { selected: true }
-            );
-          } else {
-            selectedFeatures.splice(index, 1);
-            // Удаляем выбранный полигон из массива и восстанавливаем его стиль
-            map.setFeatureState(
-              { source: "your-source-id", id: feature.id },
-              { selected: false }
-            );
-          }
-        }
-      });
-
-      map.on("idle", function () {
-        // Define the style expression to dynamically set fill color based on "CaPaKey"
-        map.addLayer({
-          id: "custom-tileset-layer",
-          type: "fill",
-          source: {
-            type: "vector",
-            url: "mapbox://neon-factory.12ssh55s",
-          },
-          "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
-          paint: {
-            "fill-color": "rgba(255, 255, 255, 0)",
-            "fill-opacity": 0.3,
-          },
-        });
-        var fillColorExpression = [
-          "match",
-          ["to-string", ["get", "CaPaKey"]],
-          selectedFeatures.map(String),
-          "rgb(76, 192, 173)", // Color for selected features
-          "rgba(255, 255, 255, 0)", // Default color for other features
-        ];
-
-        // Update the fill-color property of the "custom-tileset-layer"
-        map.setPaintProperty(
-          "custom-tileset-layer",
-          "fill-color",
-          fillColorExpression
-        );
-      });
-      map.on("style.load", function () {
-        // Этот код будет выполнен после загрузки нового стиля карты
-        map.addLayer(customTilesetLayer);
-      });
-      // Add a Tileset source and layer
-
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
+
     var myCircle = new MapboxCircle({ lat: 50.845193, lng: 4.387564 }, 25000, {
       editable: true,
       minRadius: 1500,
@@ -500,7 +423,77 @@ function App() {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
   }, []);
+  useEffect(() => {
+    if (map) {
+      if (showCadastre) {
+        map.on("click", "custom-tileset-layer", function (e) {
+          var features = map.queryRenderedFeatures(e.point, {
+            layers: ["custom-tileset-layer"],
+          });
 
+          if (features.length > 0) {
+            var feature = features[0];
+            var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
+            if (index === -1) {
+              setSelectedFeatures([
+                ...selectedFeatures,
+                feature.properties.CaPaKey,
+              ]);
+              map.setFeatureState(
+                { source: "your-source-id", id: feature.id },
+                { selected: true }
+              );
+            } else {
+              const updatedSelectedFeatures = [...selectedFeatures];
+              updatedSelectedFeatures.splice(index, 1);
+              setSelectedFeatures(updatedSelectedFeatures);
+              // Удаляем выбранный полигон из массива и восстанавливаем его стиль
+              map.setFeatureState(
+                { source: "your-source-id", id: feature.id },
+                { selected: false }
+              );
+            }
+          }
+        });
+      }
+
+      const customTilesetLayer = {
+        id: "custom-tileset-layer",
+        type: "fill",
+        source: {
+          type: "vector",
+          url: "mapbox://neon-factory.12ssh55s",
+        },
+        "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+        paint: {
+          "fill-color": "rgba(255, 255, 255, 0)",
+          "fill-opacity": 0.3,
+        },
+      };
+      if (showCadastre) {
+        map.on("idle", function () {
+          // Define the style expression to dynamically set fill color based on "CaPaKey"
+          const fillColorExpression = [
+            "match",
+            ["to-string", ["get", "CaPaKey"]],
+            selectedFeatures.map(String),
+            "rgb(76, 192, 173)", // Color for selected features
+            "rgba(255, 255, 255, 0)", // Default color for other features
+          ];
+          // Update the fill-color property of the "custom-tileset-layer"
+          map.setPaintProperty(
+            "custom-tileset-layer",
+            "fill-color",
+            fillColorExpression
+          );
+        });
+      }
+
+      map.on("style.load", function () {
+        map.addLayer(customTilesetLayer);
+      });
+    }
+  }, [map, selectedFeatures, showCadastre]);
   useEffect(() => {
     if (map) {
       map.loadImage("pin.png", function (error, image) {
@@ -556,36 +549,7 @@ function App() {
   //   setIsModalActive(!isModalActive);
   //   defaultStyleHandler();
   // }
-  function createCircleButton() {
-    // Включите режим рисования круга
-    draw.changeMode("drag_circle");
-
-    draw.on("draw.create", function (event) {
-      // Получите ID созданного круга
-      var circleId = event.features[0].id;
-
-      // Получите информацию о созданном круге
-      var circle = draw.get(circleId);
-
-      // Создайте элемент для отображения радиуса
-      var radiusDisplay = document.createElement("div");
-      radiusDisplay.textContent = "Радиус: " + circle.properties.radius + " м"; // Предполагается, что у круга есть свойство "radius"
-
-      // Разместите элемент рядом с кругом
-      var circleElement = document.querySelector(`[data-mid="${circleId}"]`);
-      circleElement.parentNode.appendChild(radiusDisplay);
-      // Переключитесь на режим редактирования круга при двойном клике
-      circleElement.addEventListener("dblclick", function () {
-        draw.changeMode("direct_circle", { featureId: circleId });
-      });
-    });
-
-    var selectedFeatures = draw.getSelected();
-    // Если есть выбранный слой и это круг, включите режим редактирования
-    if (selectedFeatures.length > 0 && selectedFeatures[0].type === "Feature") {
-      draw.changeMode("drag_circle", { featureId: selectedFeatures[0].id });
-    }
-  }
+  function createCircleButton() {}
 
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
