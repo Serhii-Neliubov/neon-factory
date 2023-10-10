@@ -230,7 +230,25 @@ function App() {
       },
       styles: defaultDrawStyles,
     });
-
+    const customTilesetLayer = {
+      id: "custom-tileset-layer",
+      type: "fill",
+      source: {
+        type: "vector",
+        url: "mapbox://neon-factory.12ssh55s",
+      },
+      "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+      paint: {
+        "fill-color": "rgba(255, 255, 255, 0)",
+        "fill-opacity": 0.3,
+      },
+    };
+    map.on("style.load", function () {
+      map.addLayer(customTilesetLayer);
+    });
+    map.on("move", function () {
+      map.addLayer(customTilesetLayer);
+    });
     const marker = document.getElementById("distance-marker");
     map.on("draw.delete", function () {
       // Скрываем маркер при удалении линии
@@ -438,19 +456,6 @@ function App() {
         });
       }
 
-      const customTilesetLayer = {
-        id: "custom-tileset-layer",
-        type: "fill",
-        source: {
-          type: "vector",
-          url: "mapbox://neon-factory.12ssh55s",
-        },
-        "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
-        paint: {
-          "fill-color": "rgba(255, 255, 255, 0)",
-          "fill-opacity": 0.3,
-        },
-      };
       if (showCadastre) {
         map.on("idle", function () {
           // Define the style expression to dynamically set fill color based on "CaPaKey"
@@ -469,10 +474,6 @@ function App() {
           );
         });
       }
-
-      map.on("style.load", function () {
-        map.addLayer(customTilesetLayer);
-      });
     }
   }, [map, selectedFeatures, showCadastre]);
   useEffect(() => {
