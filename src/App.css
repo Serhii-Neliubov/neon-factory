@@ -23,10 +23,26 @@
 .deleteCustomMarkerContainer {
   position: relative;
 }
-#delete-circle-button,
-#radius-display {
-  position: relative;
+#createCircleButton {
+  height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 10;
+}
+#delete-circle-button {
+  position: absolute;
+  z-index: 10;
+  top: 20px;
+  left: 0;
+}
+#radius-display {
+  position: absolute;
+  z-index: 10;
+  top: 40px;
+  left: 0;
+  background-color: white;
+  border: 1px solid black;
 }
 .delete-button {
   position: absolute;
@@ -67,10 +83,6 @@
   font-size: 14px;
   z-index: 1;
   color: #000;
-}
-#createCircleButton {
-  position: relative;
-  z-index: 10;
 }
 [data-mid] {
   cursor: pointer;
