@@ -1,6 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { controlActiveFalse } from "../redux/slices/ControlActiveSlice";
+import { openBrusselsFalse } from "../redux/slices/openBrusselsSlice";
+import { openTransportFalse } from "../redux/slices/openTransportSlice";
+import { showCadastreFalse } from "../redux/slices/showCadastreSlice";
+import { openCadastreFalse } from "../redux/slices/openCadastreSlice";
 const ResetMap = ({
   map,
   setSelectedDistricts,
@@ -16,10 +20,7 @@ const ResetMap = ({
   setServicesAction,
   setShowTransport,
   mapStyleSetter,
-  setOpenBrussels,
   setMapStyleButtonOpen,
-  setOpenTransport,
-  setShowCadastre,
   setSelectedFeatures,
 }) => {
   const dispatch = useDispatch();
@@ -36,13 +37,14 @@ const ResetMap = ({
     setIsAllDistrictsVisible(true);
     removeCustomMarker();
     setSqml(0);
-    setShowCadastre(false);
 
     dispatch(controlActiveFalse());
+    dispatch(openBrusselsFalse());
+    dispatch(openTransportFalse());
+    dispatch(showCadastreFalse());
+    dispatch(openCadastreFalse());
 
-    setOpenBrussels(false);
     setMapStyleButtonOpen(false);
-    setOpenTransport(false);
     draw.deleteAll();
     map.flyTo({
       center: [4.387564, 50.845193],
