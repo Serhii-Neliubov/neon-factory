@@ -408,12 +408,28 @@ function App() {
     if (map) {
       if (showCadastre) {
         map.on("click", "custom-tileset-layer", function (e) {
-          var features = map.queryRenderedFeatures(e.point, {
-            layers: ["custom-tileset-layer"],
+          var feature = e.features[0];
+          var featureId = feature.id;
+          var currentState = map.getFeatureState({
+            source: "your-source-id",
+            id: featureId,
           });
 
-          if (features.length > 0) {
-            var feature = features[0];
+          if (currentState.selected) {
+            // Если полигон уже выбран, меняем цвет линии на красный или убираем линию
+            if (currentState.lineRed) {
+              map.setFeatureState(
+                { source: "your-source-id", id: featureId },
+                { lineRed: false }
+              );
+            } else {
+              map.setFeatureState(
+                { source: "your-source-id", id: featureId },
+                { lineRed: true }
+              );
+            }
+          } else {
+            // Остальная логика выбора полигона
             var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
             if (index === -1) {
               setSelectedFeatures([
@@ -421,7 +437,7 @@ function App() {
                 feature.properties.CaPaKey,
               ]);
               map.setFeatureState(
-                { source: "your-source-id", id: feature.id },
+                { source: "your-source-id", id: featureId },
                 { selected: true }
               );
             } else {
@@ -430,11 +446,33 @@ function App() {
               setSelectedFeatures(updatedSelectedFeatures);
               // Удаляем выбранный полигон из массива и восстанавливаем его стиль
               map.setFeatureState(
-                { source: "your-source-id", id: feature.id },
+                { source: "your-source-id", id: featureId },
                 { selected: false }
               );
             }
           }
+        });
+
+        map.on("mouseenter", "custom-tileset-layer", function (e) {
+          map.getCanvas().style.cursor = "pointer"; // Изменяем курсор на указатель
+          const featureId = e.features[0].id;
+          map.setFeatureState(
+            { source: "your-source-id", id: featureId },
+            { hover: true }
+          );
+        });
+
+        map.on("mouseleave", "custom-tileset-layer", function () {
+          map.getCanvas().style.cursor = ""; // Возвращаем стандартный курсор
+          // Убираем эффект ховера со всех полигонов
+          map
+            .queryRenderedFeatures({ layers: ["custom-tileset-layer"] })
+            .forEach(function (feature) {
+              map.setFeatureState(
+                { source: "your-source-id", id: feature.id },
+                { hover: false }
+              );
+            });
         });
       }
 
@@ -447,7 +485,18 @@ function App() {
         },
         "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
         paint: {
-          "fill-color": "rgba(255, 255, 255, 0)",
+          "fill-color": [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            "rgba(255, 255, 255, 0.5)", // Цвет при ховере
+            "rgba(255, 255, 255, 0)", // Дефолтный цвет
+          ],
+          "fill-outline-color": [
+            "case",
+            ["boolean", ["feature-state", "lineRed"], false],
+            "red", // Цвет линии при повторном клике
+            "black", // Дефолтный цвет линии
+          ],
           "fill-opacity": 0.3,
         },
       };
