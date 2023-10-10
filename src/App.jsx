@@ -36,11 +36,26 @@ import MonochromeStyle from "./components/MapStyleButtons/MonochromeStyle";
 import SatelliteStyle from "./components/MapStyleButtons/SatelliteStyle";
 import { Scrollbar } from "react-scrollbars-custom";
 import MapboxCircle from "mapbox-gl-circle";
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { changeValue } from "./redux/slices/mapSlice";
+import { openBrusselsChanging } from "./redux/slices/openBrusselsSlice";
+import { activeSidebarChanging } from "./redux/slices/activeSidebarSlice";
+import { openTransportChanging } from "./redux/slices/openTransportSlice";
+import { openCadastreChanging } from "./redux/slices/openCadastreSlice";
+import { showCadastreFalse } from "./redux/slices/showCadastreSlice";
 
 function App() {
-  const [map, setMap] = useState(null);
-  const [activeSidebar, setActiveSidebar] = useState(true);
-  // const [isModalActive, setIsModalActive] = useState(false);
+  const dispatch = useDispatch();
+
+  const map = useSelector((state) => state.map.value);
+
+  const openBrussels = useSelector((state) => state.openBrussels.value);
+  const activeSidebar = useSelector((state) => state.activeSidebar.value);
+  const openTransport = useSelector((state) => state.openTransport.value);
+  const openCadastre = useSelector((state) => state.openCadastre.value);
+  const showCadastre = useSelector((state) => state.showCadastre.value);
+
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
   const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] =
@@ -76,16 +91,13 @@ function App() {
   ];
   const centralisedDistricts = ["Louise", "North", "South", "CD", "EU"];
   const decentralisedDistricts = ["NE", "NW", "SW", "SE"];
-  let [openBrussels, setOpenBrussels] = useState(false);
-  let [openTransport, setOpenTransport] = useState(false);
   const [Sqm, setSqml] = useState(0);
   const [showTransport, setShowTransport] = useState(true);
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
-  const [openCadastre, setOpenCadastre] = useState(false);
-  const [showCadastre, setShowCadastre] = useState(false);
+  // const [showCadastre, setShowCadastre] = useState(false);
 
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
@@ -106,7 +118,7 @@ function App() {
     };
 
     let map = new mapboxgl.Map(mapSettings);
-    setMap(map);
+    dispatch(changeValue(map));
     function createMarkerElement() {
       let container = document.createElement("div");
       container.className = "deleteCustomMarkerContainer";
@@ -447,16 +459,16 @@ function App() {
       toggleDistrictsVisibility(selectedDistricts, map);
       if (mapStyleSetter == 1) {
         map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
-        setShowCadastre(false);
+        dispatch(showCadastreFalse());
       } else if (mapStyleSetter == 2) {
         map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
-        setShowCadastre(false);
+        dispatch(showCadastreFalse());
       } else if (mapStyleSetter == 3) {
         map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
-        setShowCadastre(false);
+        dispatch(showCadastreFalse());
       } else {
         map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
-        setShowCadastre(false);
+        dispatch(showCadastreFalse());
       }
       setIsAllDistrictsSelected(true);
     } else {
@@ -597,7 +609,7 @@ function App() {
 
   function satelitteStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
-    setShowCadastre(false);
+    dispatch(showCadastreFalse());
 
     const inputElement = document.querySelector(".SatelitteInput");
     if (inputElement) {
@@ -622,7 +634,7 @@ function App() {
 
   function monochromeStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
-    setShowCadastre(false);
+    dispatch(showCadastreFalse());
 
     const inputElement = document.querySelector(".MonochromeInput");
     if (inputElement) {
@@ -649,7 +661,7 @@ function App() {
 
   function darkStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
-    setShowCadastre(false);
+    dispatch(showCadastreFalse());
     const inputElement = document.querySelector(".DarkInput");
     setMapStyleSetter(4);
     if (inputElement) {
@@ -675,7 +687,7 @@ function App() {
 
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
-    setShowCadastre(false);
+    dispatch(showCadastreFalse());
     setMapStyleSetter(1);
     setShowTransport(true);
     setServicesAction(false);
@@ -795,7 +807,7 @@ function App() {
 
   return (
     <div id="mapContainer">
-      <button onClick={() => setActiveSidebar((prev) => !prev)} />
+      <button onClick={() => dispatch(activeSidebarChanging())} />
       {activeSidebar && (
         <div className="sidebar">
           <div className="logo">
@@ -856,7 +868,7 @@ function App() {
                 </div>
               ) : null}
               <button
-                onClick={() => setOpenBrussels(!openBrussels)}
+                onClick={() => dispatch(openBrusselsChanging())}
                 className={`BrusselsButton BrusselsButton_bg ${
                   openBrussels ? "BrusselsButton_open" : ""
                 }`}
@@ -896,7 +908,7 @@ function App() {
               <button className="AreasButton">Gent (soon)</button>
               <button className="AreasButton">luxembourg (soon)</button>
               <button
-                onClick={() => setOpenTransport(!openTransport)}
+                onClick={() => dispatch(openTransportChanging())}
                 className={`TransportButton TransportButton_bg ${
                   openTransport ? "TransportButton_open" : ""
                 }`}
@@ -924,7 +936,7 @@ function App() {
                 ""
               )}
               <button
-                onClick={() => setOpenCadastre(!openCadastre)}
+                onClick={() => dispatch(openCadastreChanging())}
                 className={`CadastreButton TransportButton_bg ${
                   openCadastre ? "CadastreButton_open" : ""
                 }`}
@@ -933,11 +945,7 @@ function App() {
               </button>
               {openCadastre ? (
                 <div className="toggleIcons">
-                  <CadastreButton
-                    setShowCadastre={setShowCadastre}
-                    showCadastre={showCadastre}
-                    map={map}
-                  >
+                  <CadastreButton showCadastre={showCadastre} map={map}>
                     Cadastre
                   </CadastreButton>
                 </div>
@@ -962,15 +970,12 @@ function App() {
                 setIsCentralisedDistrictsVisible={
                   setIsCentralisedDistrictsVisible
                 }
-                setShowCadastre={setShowCadastre}
                 setDecentralisedToggle={setDecentralisedToggle}
                 setIsDecentralisedDistrictsVisible={
                   setIsDecentralisedDistrictsVisible
                 }
                 setAllDistrictsToggle={setAllDistrictsToggle}
-                setOpenBrussels={setOpenBrussels}
                 setMapStyleButtonOpen={setMapStyleButtonOpen}
-                setOpenTransport={setOpenTransport}
               ></ResetMap>
 
               <PrintScreen

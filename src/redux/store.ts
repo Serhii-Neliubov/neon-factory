@@ -1,9 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { controlActiveSlice } from "./slices/ControlActiveSlice";
+import mapSlice from "./slices/mapSlice";
+import openBrusselsSlice from "./slices/openBrusselsSlice";
+import activeSidebarSlice from "./slices/activeSidebarSlice";
+import openTransportSlice from "./slices/openTransportSlice";
+import openCadastreSlice from "./slices/openCadastreSlice";
+import showCadastreSlice from "./slices/showCadastreSlice";
 
 export const store = configureStore({
   reducer: {
     activeControl: controlActiveSlice.reducer,
+    activeSidebar: activeSidebarSlice,
+    map: mapSlice,
+    openBrussels: openBrusselsSlice,
+    openTransport: openTransportSlice,
+    openCadastre: openCadastreSlice,
+    showCadastre: showCadastreSlice,
   },
 });
 
