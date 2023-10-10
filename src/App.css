@@ -23,6 +23,11 @@
 .deleteCustomMarkerContainer {
   position: relative;
 }
+#delete-circle-button,
+#radius-display {
+  position: relative;
+  z-index: 10;
+}
 .delete-button {
   position: absolute;
   top: 50%;
