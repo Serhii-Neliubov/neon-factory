@@ -539,9 +539,10 @@ function App() {
 
   function createCircleButton() {
     if (map) {
+      const center = map.getCenter(); // Получаем центральные координаты карты
       const uniqueId = generateUniqueId();
       const myCircle = new MapboxCircle(
-        { lat: 50.845193, lng: 4.387564 },
+        center, // Используем центральные координаты
         3275,
         {
           editable: true,
@@ -578,6 +579,7 @@ function App() {
       });
     }
   }
+
   function deleteCircleButton() {
     if (selectedCircle) {
       // Если есть выбранный круг, удаляем его
