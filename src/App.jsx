@@ -240,7 +240,7 @@ function App() {
       "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
       paint: {
         "fill-color": "rgba(255, 255, 255, 0)",
-        "fill-opacity": 0.3,
+        "fill-opacity": 1,
       },
     };
     map.on("style.load", function () {
@@ -463,13 +463,13 @@ function App() {
             "match",
             ["to-string", ["get", "CaPaKey"]],
             selectedFeatures.map(String),
-            "rgb(76, 192, 173)", // Color for selected features
+            "rgb(255, 0, 0)", // Color for selected features
             "rgba(255, 255, 255, 0)", // Default color for other features
           ];
           // Update the fill-color property of the "custom-tileset-layer"
           map.setPaintProperty(
             "custom-tileset-layer",
-            "fill-color",
+            "fill-outline-color",
             fillColorExpression
           );
         });
