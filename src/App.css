@@ -36,10 +36,16 @@
   top: 20px;
   left: 0;
 }
-#radius-display {
+#delete-circles-button {
   position: absolute;
   z-index: 10;
   top: 40px;
+  left: 0;
+}
+#radius-display {
+  position: absolute;
+  z-index: 10;
+  top: 60px;
   left: 0;
   background-color: white;
   border: 1px solid black;

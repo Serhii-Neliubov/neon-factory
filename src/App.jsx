@@ -533,8 +533,9 @@ function App() {
   function generateUniqueId() {
     return "_" + Math.random().toString(36).substr(2, 9);
   }
-
+  let selectedCircle = null;
   const circles = [];
+  const radiusDisplay = document.getElementById("radius-display");
 
   function createCircleButton() {
     if (map) {
@@ -552,7 +553,6 @@ function App() {
 
       circles.push(myCircle);
 
-      const radiusDisplay = document.getElementById("radius-display");
       let radius = 3275;
       radiusDisplay.textContent = `Radius: ${radius} meters`;
 
@@ -567,7 +567,8 @@ function App() {
 
       myCircle.on("click", function (mapMouseEvent) {
         console.log("Click:", mapMouseEvent.point);
-        // Обновляем радиус при клике на круг
+        // Сохраняем выбранный круг
+        selectedCircle = myCircle;
         radius = myCircle.getRadius();
         radiusDisplay.textContent = `Radius: ${radius} meters`;
       });
@@ -575,21 +576,35 @@ function App() {
       myCircle.on("contextmenu", function (mapMouseEvent) {
         console.log("Right-click:", mapMouseEvent.lngLat);
       });
-
-      const deleteCircleButton = document.getElementById(
-        "delete-circle-button"
-      );
-
-      deleteCircleButton.addEventListener("click", function () {
-        if (circles.length > 0) {
-          const lastCircle = circles.pop();
-          lastCircle.remove();
-          radiusDisplay.textContent = "";
-        }
-      });
     }
   }
+  function deleteCircleButton() {
+    if (selectedCircle) {
+      // Если есть выбранный круг, удаляем его
+      const index = circles.indexOf(selectedCircle);
+      if (index !== -1) {
+        circles.splice(index, 1);
+        selectedCircle.remove();
+      }
+      selectedCircle = null; // Сбрасываем выбранный круг после удаления
+      radiusDisplay.textContent = "";
+    }
+  }
+  function deleteAllCirclesButton() {
+    // Удаляем все круги из массива circles и с карты
+    circles.forEach(function (circle) {
+      circle.remove();
+    });
 
+    // Очищаем массив circles
+    circles.length = 0;
+
+    // Сбрасываем выбранный круг
+    selectedCircle = null;
+
+    // Очищаем отображение радиуса
+    radiusDisplay.textContent = "";
+  }
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
       setDecentralisedToggle(false);
@@ -1041,7 +1056,12 @@ function App() {
           ""
         )} */}
         <div id="radius-display"></div>
-        <button id="delete-circle-button">Delete circles</button>
+        <button id="delete-circle-button" onClick={deleteCircleButton}>
+          Delete circle
+        </button>
+        <button id="delete-circles-button" onClick={deleteAllCirclesButton}>
+          Delete all circles
+        </button>
         <button onClick={createCircleButton} id="createCircleButton">
           Create a circle
         </button>
