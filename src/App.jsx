@@ -533,33 +533,45 @@ function App() {
   function generateUniqueId() {
     return "_" + Math.random().toString(36).substr(2, 9);
   }
+
   const circles = [];
-  console.log(circles);
+
   function createCircleButton() {
     if (map) {
       const uniqueId = generateUniqueId();
-      var myCircle = new MapboxCircle({ lat: 50.845193, lng: 4.387564 }, 3275, {
-        editable: true,
-        minRadius: 10,
-        fillColor: "#29AB87",
-        id: uniqueId, // Добавьте уникальный идентификатор круга
-      }).addTo(map);
+      const myCircle = new MapboxCircle(
+        { lat: 50.845193, lng: 4.387564 },
+        3275,
+        {
+          editable: true,
+          minRadius: 10,
+          fillColor: "#29AB87",
+          id: uniqueId,
+        }
+      ).addTo(map);
 
       circles.push(myCircle);
 
       const radiusDisplay = document.getElementById("radius-display");
       let radius = 3275;
       radiusDisplay.textContent = `Radius: ${radius} meters`;
+
       myCircle.on("centerchanged", function (circleObj) {
         console.log("New center:", circleObj.getCenter());
       });
+
       myCircle.on("radiuschanged", function (circleObj) {
         radius = circleObj.getRadius();
-        radiusDisplay.textContent = `Radius: ${radius} meters`; // Обновляем текст с радиусом
+        radiusDisplay.textContent = `Radius: ${radius} meters`;
       });
+
       myCircle.on("click", function (mapMouseEvent) {
         console.log("Click:", mapMouseEvent.point);
+        // Обновляем радиус при клике на круг
+        radius = myCircle.getRadius();
+        radiusDisplay.textContent = `Radius: ${radius} meters`;
       });
+
       myCircle.on("contextmenu", function (mapMouseEvent) {
         console.log("Right-click:", mapMouseEvent.lngLat);
       });
@@ -567,13 +579,12 @@ function App() {
       const deleteCircleButton = document.getElementById(
         "delete-circle-button"
       );
-      // Добавляем обработчик события клика на кнопку
+
       deleteCircleButton.addEventListener("click", function () {
         if (circles.length > 0) {
-          // Удаляем последний созданный круг из массива
-          const myCircle = circles.pop();
-          myCircle.remove(); // Удаляем текущий круг
-          radiusDisplay.textContent = ""; // Очищаем текст с радиусом
+          const lastCircle = circles.pop();
+          lastCircle.remove();
+          radiusDisplay.textContent = "";
         }
       });
     }
@@ -1029,6 +1040,8 @@ function App() {
         ) : (
           ""
         )} */}
+        <div id="radius-display"></div>
+        <button id="delete-circle-button">Delete circles</button>
         <button onClick={createCircleButton} id="createCircleButton">
           Create a circle
         </button>
@@ -1053,8 +1066,6 @@ function App() {
           onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
         />
         <img alt="Logo" className="logo-map" src="logo.png" />
-        <div id="radius-display"></div>
-        <button id="delete-circle-button">Удалить круг</button>
       </div>
     </div>
   );
