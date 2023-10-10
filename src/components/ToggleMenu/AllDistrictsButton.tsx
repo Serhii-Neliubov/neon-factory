@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { changeDistrictValue } from "../../redux/slices/isAllDistrictsVisibleSlice";
 
 const AllDistrictsButton = ({
   children,
-  setIsAllDistrictsVisible,
   allDistrictsButtonHandler,
-  isAllDistrictsVisible,
   setAllDistrictsToggle,
   allDistrictsToggle,
 }) => {
+  const dispatch = useDispatch();
   const handleClick = () => {
     setAllDistrictsToggle((prevToggle) => !prevToggle);
-    setIsAllDistrictsVisible(!isAllDistrictsVisible);
+    dispatch(changeDistrictValue());
     allDistrictsButtonHandler();
   };
 

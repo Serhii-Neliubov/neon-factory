@@ -10,32 +10,32 @@ import { changeSqmValue } from "../redux/slices/sqmSlice";
 import { selectedDistrictsChanging } from "../redux/slices/selectedDistrictsSlice";
 import { centralisedDistrictTrue } from "../redux/slices/centralisedDistrictSliceActive";
 import { showTransportTrue } from "../redux/slices/showTransportSlice";
+import { servicesActionFalse } from "../redux/slices/servicesActionSlice";
+import { changeDistrictTrue } from "../redux/slices/isAllDistrictsVisibleSlice";
+import { selectedFeaturesChanging } from "../redux/slices/selectedFeaturesSlice";
 const ResetMap = ({
   map,
   removeCustomMarker,
   draw,
-  setIsAllDistrictsVisible,
   setCentralisedToggle,
   setDecentralisedToggle,
   setIsDecentralisedDistrictsVisible,
   setAllDistrictsToggle,
-  setServicesAction,
   mapStyleSetter,
-  setSelectedFeatures,
 }) => {
   const dispatch = useDispatch();
 
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
-    setServicesAction(false);
-    setSelectedFeatures([]);
     setDecentralisedToggle(false);
     setIsDecentralisedDistrictsVisible(true);
     setAllDistrictsToggle(false);
-    setIsAllDistrictsVisible(true);
     removeCustomMarker();
 
+    dispatch(selectedFeaturesChanging([]));
     dispatch(showTransportTrue());
+    dispatch(changeDistrictTrue());
+    dispatch(servicesActionFalse());
     dispatch(changeSqmValue(0));
     dispatch(centralisedDistrictTrue());
     dispatch(selectedDistrictsChanging([]));

@@ -4,7 +4,6 @@ import CentralisedDistrictsButton from "./CentralisedDistrictsButton";
 import DecentralisedDistrictsButton from "./DecentralisedDistrictsButton";
 
 const ToggleMenu = ({
-  map,
   toggleButton,
   centralisedDistrictsButtonHandler,
   centralisedToggle,
@@ -12,6 +11,7 @@ const ToggleMenu = ({
   decentralisedDistrictsButtonHandler,
   decentralisedToggle,
   setDecentralisedToggle,
+  map,
 }) => {
   const buttons = [
     {
@@ -90,8 +90,8 @@ const ToggleMenu = ({
     <>
       {buttons.map((button) => (
         <ToggleButton
-          toggleButton={toggleButton}
           map={map}
+          toggleButton={toggleButton}
           data={button.data}
           id={button.id}
           key={button.id}

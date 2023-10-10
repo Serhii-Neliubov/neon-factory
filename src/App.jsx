@@ -19,12 +19,7 @@ import MapIconsToggle from "./components/ToggleMenu/MapIconsToggle";
 // Utils
 import defaultDrawStyles from "./utils/DefaultDrawStyles";
 //Map functions
-import {
-  removeCustomMarker,
-  toggleDistrictsVisibility,
-  toggleButton,
-  changeColor,
-} from "./utils/MapFunctions";
+import { removeCustomMarker, changeColor } from "./utils/MapFunctions";
 import TransportButton from "./components/ToggleMenu/TransportButton";
 import CadastreButton from "./components/ToggleMenu/CadastreButton";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
@@ -38,7 +33,6 @@ import { Scrollbar } from "react-scrollbars-custom";
 import MapboxCircle from "mapbox-gl-circle";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { changeMapValue } from "./redux/slices/mapSlice";
 import { openBrusselsChanging } from "./redux/slices/openBrusselsSlice";
 import { activeSidebarChanging } from "./redux/slices/activeSidebarSlice";
 import { openTransportChanging } from "./redux/slices/openTransportSlice";
@@ -53,11 +47,12 @@ import {
   centralisedDistrictTrue,
 } from "./redux/slices/centralisedDistrictSliceActive";
 import { showTransportTrue } from "./redux/slices/showTransportSlice";
+import { servicesActionFalse } from "./redux/slices/servicesActionSlice";
 
 function App() {
   const dispatch = useDispatch();
 
-  const map = useSelector((state) => state.map.value);
+  const [map, setMap] = useState(null);
   const draw = useSelector((state) => state.draw.value);
 
   const openBrussels = useSelector((state) => state.openBrussels.value);
@@ -73,12 +68,14 @@ function App() {
   const isCentralisedDistrictsVisible = useSelector(
     (state) => state.centralisedDistrict.value
   );
+  const isAllDistrictsVisible = useSelector(
+    (state) => state.allDistrictVisible.value
+  );
+  const selectedFeatures = useSelector((state) => state.selectedFeatures.value);
 
-  const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
-  const [servicesAction, setServicesAction] = useState(false);
 
   const submenuTag = useRef();
   const mapTag = useRef();
@@ -105,6 +102,7 @@ function App() {
     "North",
     "South",
   ];
+
   const centralisedDistricts = ["Louise", "North", "South", "CD", "EU"];
   const decentralisedDistricts = ["NE", "NW", "SW", "SE"];
 
@@ -113,7 +111,6 @@ function App() {
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
 
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   const MAPBOX_ACCESS_TOKEN =
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
@@ -130,7 +127,7 @@ function App() {
     };
 
     let map = new mapboxgl.Map(mapSettings);
-    dispatch(changeMapValue(map));
+    setMap(map);
 
     function createMarkerElement() {
       let container = document.createElement("div");
@@ -218,9 +215,6 @@ function App() {
       },
     };
     map.on("style.load", function () {
-      map.addLayer(customTilesetLayer);
-    });
-    map.on("move", function () {
       map.addLayer(customTilesetLayer);
     });
     const marker = document.getElementById("distance-marker");
@@ -397,6 +391,7 @@ function App() {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
   }, [dispatch]);
+
   useEffect(() => {
     if (map) {
       if (showCadastre) {
@@ -409,10 +404,11 @@ function App() {
             var feature = features[0];
             var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
             if (index === -1) {
-              setSelectedFeatures([
+              const newSelectedFeatures = [
                 ...selectedFeatures,
                 feature.properties.CaPaKey,
-              ]);
+              ];
+              dispatch(selectedDistrictsChanging(newSelectedFeatures));
               map.setFeatureState(
                 { source: "your-source-id", id: feature.id },
                 { selected: true }
@@ -420,7 +416,7 @@ function App() {
             } else {
               const updatedSelectedFeatures = [...selectedFeatures];
               updatedSelectedFeatures.splice(index, 1);
-              setSelectedFeatures(updatedSelectedFeatures);
+              dispatch(selectedDistrictsChanging(updatedSelectedFeatures));
               // Удаляем выбранный полигон из массива и восстанавливаем его стиль
               map.setFeatureState(
                 { source: "your-source-id", id: feature.id },
@@ -450,7 +446,8 @@ function App() {
         });
       }
     }
-  }, [map, selectedFeatures, showCadastre]);
+  }, [map, selectedFeatures, showCadastre, dispatch]);
+
   useEffect(() => {
     if (map) {
       map.loadImage("pin.png", function (error, image) {
@@ -585,6 +582,42 @@ function App() {
     // Очищаем отображение радиуса
     radiusDisplay.textContent = "";
   }
+
+  function toggleDistrictsVisibility(selectedDistricts, map) {
+    var districtsToShow = [];
+
+    if (selectedDistricts.length === 0) {
+      districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
+    } else {
+      selectedDistricts.forEach(function (district) {
+        districtsToShow.push(["==", ["get", "sidebar_label"], district]);
+      });
+    }
+
+    map.setFilter("districts-brussels-0-2", ["any"].concat(districtsToShow));
+
+    // Обновите карту
+    map.triggerRepaint();
+  }
+
+  function toggleButton(data, selectedDistricts, map) {
+    let updatedDistricts;
+
+    if (selectedDistricts.includes(data)) {
+      // Если район уже выбран, создайте новый массив без этого района
+      updatedDistricts = selectedDistricts.filter(
+        (district) => district !== data
+      );
+    } else {
+      // Если район не выбран, создайте новый массив с добавленным районом
+      updatedDistricts = [...selectedDistricts, data];
+    }
+
+    // Обновите состояние в Redux store
+    dispatch(selectedDistrictsChanging(updatedDistricts));
+    toggleDistrictsVisibility(updatedDistricts, map);
+  }
+
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
       setDecentralisedToggle(false);
@@ -639,12 +672,13 @@ function App() {
         map.addImage("custom-pin", image);
       });
     }
-    dispatch(selectedDistrictsChanging([]));
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
+
+    dispatch(selectedDistrictsChanging([]));
     dispatch(showTransportTrue());
-    setServicesAction(false);
+    dispatch(servicesActionFalse());
     // setIsModalActive(true);
   }
 
@@ -672,7 +706,7 @@ function App() {
     setAllDistrictsToggle(false);
     dispatch(showTransportTrue());
     // setIsModalActive(true);
-    setServicesAction(false);
+    dispatch(servicesActionFalse());
   }
 
   function darkStyleHandler() {
@@ -698,7 +732,7 @@ function App() {
     setAllDistrictsToggle(false);
     // setIsModalActive(true);
     dispatch(showTransportTrue());
-    setServicesAction(false);
+    dispatch(servicesActionFalse());
   }
 
   function defaultStyleHandler() {
@@ -706,7 +740,7 @@ function App() {
     dispatch(showCadastreFalse());
     setMapStyleSetter(1);
     dispatch(showTransportTrue());
-    setServicesAction(false);
+    dispatch(servicesActionFalse());
 
     const inputElement = document.querySelector(".DefaultInput");
     if (inputElement) {
@@ -909,9 +943,7 @@ function App() {
                     setDecentralisedToggle={setDecentralisedToggle}
                   />
                   <AllDistrictsButton
-                    setIsAllDistrictsVisible={setIsAllDistrictsVisible}
                     allDistrictsButtonHandler={allDistrictsButtonHandler}
-                    isAllDistrictsVisible={isAllDistrictsVisible}
                     allDistrictsToggle={allDistrictsToggle}
                     setAllDistrictsToggle={setAllDistrictsToggle}
                   >
@@ -933,13 +965,7 @@ function App() {
               {openTransport ? (
                 <div className="toggleIcons">
                   <TransportButton>Transport</TransportButton>
-                  <MapIconsToggle
-                    servicesAction={servicesAction}
-                    setServicesAction={setServicesAction}
-                    map={map}
-                  >
-                    SHOPS, RESTAURANTS & SERVICES
-                  </MapIconsToggle>
+                  <MapIconsToggle>SHOPS, RESTAURANTS & SERVICES</MapIconsToggle>
                 </div>
               ) : (
                 ""
@@ -965,13 +991,10 @@ function App() {
 
             <div className="down-sidebar__buttons">
               <ResetMap
-                setSelectedFeatures={setSelectedFeatures}
                 mapStyleSetter={mapStyleSetter}
-                setServicesAction={setServicesAction}
                 draw={draw}
                 map={map}
                 removeCustomMarker={removeCustomMarker}
-                setIsAllDistrictsVisible={setIsAllDistrictsVisible}
                 setCentralisedToggle={setCentralisedToggle}
                 setDecentralisedToggle={setDecentralisedToggle}
                 setIsDecentralisedDistrictsVisible={

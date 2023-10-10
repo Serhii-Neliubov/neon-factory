@@ -5,7 +5,7 @@ export interface centralisedDistrictState {
 }
 
 const initialState: centralisedDistrictState = {
-  value: false,
+  value: true,
 };
 
 export const centralisedDistrictSlice = createSlice({

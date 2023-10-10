@@ -19,37 +19,6 @@ export function removeCustomMarker() {
   }
 }
 
-export function toggleDistrictsVisibility(selectedDistricts, map) {
-  var districtsToShow = [];
-
-  if (selectedDistricts.length === 0) {
-    // districtsToShow.push(["!=", ["get", "sidebar_label"], ""]);
-  } else {
-    selectedDistricts.forEach(function (district) {
-      districtsToShow.push(["==", ["get", "sidebar_label"], district]);
-    });
-  }
-
-  map.setFilter("districts-brussels-0-2", ["any"].concat(districtsToShow));
-
-  // Обновите карту
-  map.triggerRepaint();
-}
-
-export function toggleButton(data, selectedDistricts, map) {
-  const districtIndex = selectedDistricts.indexOf(data);
-
-  if (districtIndex === -1) {
-    // Если район не выбран, добавьте его в список
-    selectedDistricts.push(data);
-  } else {
-    // Если район уже выбран, удалите его из списка
-    selectedDistricts.splice(districtIndex, 1);
-  }
-  // Переключите видимость всех районов
-  toggleDistrictsVisibility(selectedDistricts, map);
-}
-
 export function changeColor(selectedColor, mapboxgl, draw) {
   if (mapboxgl.accessToken !== "" && typeof draw === "object") {
     // Установите выбранный цвет для выбранной фигуры

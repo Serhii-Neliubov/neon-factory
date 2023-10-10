@@ -1,33 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { selectedDistrictsChanging } from "../../redux/slices/selectedDistrictsSlice";
 
 const ToggleButton = ({
   data,
   id,
   children,
   toggleButton,
-  map,
   center,
   zoom,
+  map,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
+  const dispatch = useDispatch();
   const [toggleClass, setToggleClass] = useState<string>("");
   const selectedDistricts = useSelector(
     (state: RootState) => state.selectedDistricts.value
   );
-
   const handleClick = () => {
-    toggleButton(data, selectedDistricts, map);
     const isDataSelected = selectedDistricts.includes(data);
-    setToggle(isDataSelected);
+    let updatedDistricts;
+
+    if (isDataSelected) {
+      updatedDistricts = selectedDistricts.filter(
+        (district) => district !== data
+      );
+    } else {
+      updatedDistricts = [...selectedDistricts, data];
+    }
+
+    dispatch(selectedDistrictsChanging(updatedDistricts));
+
     if (!toggle) {
       map.flyTo({
         center,
-        zoom, // Fly to the selected target
-        duration: 3000, // Animate over 12 seconds
-        essential: true, // This animation is considered essential with
-        //respect to prefers-reduced-motion
+        zoom,
+        duration: 3000,
+        essential: true,
       });
     }
   };
