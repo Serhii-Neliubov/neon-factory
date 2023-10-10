@@ -6,7 +6,6 @@ import DecentralisedDistrictsButton from "./DecentralisedDistrictsButton";
 const ToggleMenu = ({
   map,
   toggleButton,
-  selectedDistricts,
   centralisedDistrictsButtonHandler,
   centralisedToggle,
   setCentralisedToggle,
@@ -93,7 +92,6 @@ const ToggleMenu = ({
         <ToggleButton
           toggleButton={toggleButton}
           map={map}
-          selectedDistricts={selectedDistricts}
           data={button.data}
           id={button.id}
           key={button.id}

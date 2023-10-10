@@ -7,22 +7,20 @@ import { showCadastreFalse } from "../redux/slices/showCadastreSlice";
 import { openCadastreFalse } from "../redux/slices/openCadastreSlice";
 import { mapStyleButtonFalse } from "../redux/slices/mapStyleButtonSlice";
 import { changeSqmValue } from "../redux/slices/sqmSlice";
+import { selectedDistrictsChanging } from "../redux/slices/selectedDistrictsSlice";
+import { centralisedDistrictTrue } from "../redux/slices/centralisedDistrictSliceActive";
+import { showTransportTrue } from "../redux/slices/showTransportSlice";
 const ResetMap = ({
   map,
-  setSelectedDistricts,
   removeCustomMarker,
   draw,
-  // setSqml,
   setIsAllDistrictsVisible,
   setCentralisedToggle,
-  setIsCentralisedDistrictsVisible,
   setDecentralisedToggle,
   setIsDecentralisedDistrictsVisible,
   setAllDistrictsToggle,
   setServicesAction,
-  setShowTransport,
   mapStyleSetter,
-  setSqml,
   setSelectedFeatures,
 }) => {
   const dispatch = useDispatch();
@@ -31,15 +29,16 @@ const ResetMap = ({
     setCentralisedToggle(false);
     setServicesAction(false);
     setSelectedFeatures([]);
-    setIsCentralisedDistrictsVisible(true);
     setDecentralisedToggle(false);
     setIsDecentralisedDistrictsVisible(true);
-    setShowTransport(true);
     setAllDistrictsToggle(false);
     setIsAllDistrictsVisible(true);
     removeCustomMarker();
-    setSqml(0);
 
+    dispatch(showTransportTrue());
+    dispatch(changeSqmValue(0));
+    dispatch(centralisedDistrictTrue());
+    dispatch(selectedDistrictsChanging([]));
     dispatch(controlActiveFalse());
     dispatch(openBrusselsFalse());
     dispatch(openTransportFalse());
@@ -55,7 +54,6 @@ const ResetMap = ({
       pitch: 0,
     });
 
-    setSelectedDistricts([]);
     if (mapStyleSetter == 1) {
       map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     } else if (mapStyleSetter == 2) {
