@@ -6,19 +6,16 @@ import RotateRightButton from "./RotateRightButton";
 import IncreasePitchButton from "./IncreasePitchButton";
 import DecreasePitchButton from "./DecreasePitchButton";
 import { ActionControls } from "./ActionControls";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
-const SubMenu = ({
-  map,
-  isControlsActive,
-  submenuTag,
-  setIsControlsActive,
-}) => {
+const SubMenu = ({ map, submenuTag }) => {
+  const isControlsActive = useSelector(
+    (state: RootState) => state.activeControl.value
+  );
   return (
     <>
-      <ActionControls
-        setIsControlsActive={setIsControlsActive}
-        isControlsActive={isControlsActive}
-      ></ActionControls>
+      <ActionControls></ActionControls>
       <div
         className={isControlsActive ? "submenu submenu_open" : "submenu"}
         ref={submenuTag}

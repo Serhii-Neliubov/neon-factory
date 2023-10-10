@@ -1,17 +1,6 @@
 import React from "react";
-const customTilesetLayer = {
-  id: "custom-tileset-layer",
-  type: "fill",
-  source: {
-    type: "vector",
-    url: "mapbox://neon-factory.12ssh55s",
-  },
-  "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
-  paint: {
-    "fill-color": "rgba(255, 255, 255, 0)",
-    "fill-opacity": 0.3,
-  },
-};
+import { useDispatch } from "react-redux";
+import { controlActiveFalse } from "../redux/slices/ControlActiveSlice";
 const ResetMap = ({
   map,
   setSelectedDistricts,
@@ -29,11 +18,12 @@ const ResetMap = ({
   mapStyleSetter,
   setOpenBrussels,
   setMapStyleButtonOpen,
-  setIsControlsActive,
   setOpenTransport,
   setShowCadastre,
   setSelectedFeatures,
 }) => {
+  const dispatch = useDispatch();
+
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
     setServicesAction(false);
@@ -47,7 +37,9 @@ const ResetMap = ({
     removeCustomMarker();
     setSqml(0);
     setShowCadastre(false);
-    setIsControlsActive(false);
+
+    dispatch(controlActiveFalse());
+
     setOpenBrussels(false);
     setMapStyleButtonOpen(false);
     setOpenTransport(false);

@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { controlActiveSlice } from "./slices/ControlActiveSlice";
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    activeControl: controlActiveSlice.reducer,
+  },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
