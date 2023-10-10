@@ -9,6 +9,9 @@ import showCadastreSlice from "./slices/showCadastreSlice";
 import drawSlice from "./slices/drawSlice";
 import mapStyleButtonSlice from "./slices/mapStyleButtonSlice";
 import sqmSlice from "./slices/sqmSlice";
+import selectedDistrictsSlice from "./slices/selectedDistrictsSlice";
+import { centralisedDistrictSlice } from "./slices/centralisedDistrictSliceActive";
+import showTransportSlice from "./slices/showTransportSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +25,9 @@ export const store = configureStore({
     draw: drawSlice,
     mapStyleButton: mapStyleButtonSlice,
     sqm: sqmSlice,
+    selectedDistricts: selectedDistrictsSlice,
+    centralisedDistrict: centralisedDistrictSlice.reducer,
+    showTransport: showTransportSlice,
   },
 });
 

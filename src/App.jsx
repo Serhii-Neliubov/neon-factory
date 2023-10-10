@@ -46,6 +46,13 @@ import { openCadastreChanging } from "./redux/slices/openCadastreSlice";
 import { showCadastreFalse } from "./redux/slices/showCadastreSlice";
 import { changeDrawValue } from "./redux/slices/drawSlice";
 import { mapStyleButtonChanging } from "./redux/slices/mapStyleButtonSlice";
+import { changeSqmValue } from "./redux/slices/sqmSlice";
+import { selectedDistrictsChanging } from "./redux/slices/selectedDistrictsSlice";
+import {
+  centralisedDistrictFalse,
+  centralisedDistrictTrue,
+} from "./redux/slices/centralisedDistrictSliceActive";
+import { showTransportTrue } from "./redux/slices/showTransportSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -59,11 +66,15 @@ function App() {
   const openCadastre = useSelector((state) => state.openCadastre.value);
   const showCadastre = useSelector((state) => state.showCadastre.value);
   const mapStyleButtonOpen = useSelector((state) => state.mapStyleButton.value);
+  const sqm = useSelector((state) => state.sqm.value);
+  const selectedDistricts = useSelector(
+    (state) => state.selectedDistricts.value
+  );
+  const isCentralisedDistrictsVisible = useSelector(
+    (state) => state.centralisedDistrict.value
+  );
 
-  const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
-  const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] =
-    useState(true);
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
@@ -97,15 +108,11 @@ function App() {
   const centralisedDistricts = ["Louise", "North", "South", "CD", "EU"];
   const decentralisedDistricts = ["NE", "NW", "SW", "SE"];
 
-  const [Sqm, setSqml] = useState(0);
-
-  const [showTransport, setShowTransport] = useState(true);
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
 
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
-
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   const MAPBOX_ACCESS_TOKEN =
@@ -124,6 +131,7 @@ function App() {
 
     let map = new mapboxgl.Map(mapSettings);
     dispatch(changeMapValue(map));
+
     function createMarkerElement() {
       let container = document.createElement("div");
       container.className = "deleteCustomMarkerContainer";
@@ -244,7 +252,7 @@ function App() {
           showPolygonArea(clickedFeature);
         } else {
           // Если фигура не была найдена, сбросьте отображение размера
-          setSqml(0);
+          dispatch(changeSqmValue(0));
         }
       }
 
@@ -265,7 +273,7 @@ function App() {
       const area = turf.area(polygonFeature.geometry);
       const sqm = Math.round(area * 100) / 100;
       // Выводим метры полигона в какой-либо элемент (например, модальное окно)
-      setSqml(sqm);
+      dispatch(changeSqmValue(sqm));
     }
 
     let drawingCompleted = false;
@@ -343,7 +351,7 @@ function App() {
 
     map.on("draw.delete", function () {
       newDrawFeature.current = true;
-      setSqml(0); // Сбрасываем размер при удалении фигуры
+      dispatch(changeSqmValue(0));
     });
 
     map.on("draw.update", function (e) {
@@ -382,13 +390,13 @@ function App() {
         // eslint-disable-next-line no-undef
         const area = turf.area(selectedFeature.geometry);
         const sqm = Math.round(area * 100) / 100;
-        setSqml(sqm);
+        dispatch(changeSqmValue(sqm));
       }
     }
     return () => {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     if (map) {
       if (showCadastre) {
@@ -459,9 +467,10 @@ function App() {
       setDecentralisedToggle(true);
       setIsDecentralisedDistrictsVisible(false);
       setCentralisedToggle(true);
-      setIsCentralisedDistrictsVisible(false);
 
-      setSelectedDistricts(allDistricts);
+      dispatch(centralisedDistrictFalse());
+      dispatch(selectedDistrictsChanging(allDistricts));
+
       toggleDistrictsVisibility(selectedDistricts, map);
       if (mapStyleSetter == 1) {
         map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
@@ -481,9 +490,10 @@ function App() {
       setDecentralisedToggle(false);
       setIsDecentralisedDistrictsVisible(true);
       setCentralisedToggle(false);
-      setIsCentralisedDistrictsVisible(true);
 
-      setSelectedDistricts([]);
+      dispatch(centralisedDistrictFalse());
+      dispatch(selectedDistrictsChanging([]));
+
       allDistricts.forEach((district) => {
         if (selectedDistricts.includes(district)) {
           toggleButton(district, selectedDistricts, map);
@@ -580,26 +590,26 @@ function App() {
       setDecentralisedToggle(false);
       setIsDecentralisedDistrictsVisible(true);
 
-      setSelectedDistricts(centralisedDistricts);
+      dispatch(selectedDistrictsChanging(centralisedDistricts));
       toggleDistrictsVisibility(centralisedDistricts, map);
 
-      setIsCentralisedDistrictsVisible(false);
+      dispatch(centralisedDistrictFalse());
     } else {
       const withoutCentralisedDistricts = selectedDistricts.filter(
         (district) => !centralisedDistricts.includes(district)
       );
-      setSelectedDistricts(withoutCentralisedDistricts);
+      dispatch(selectedDistrictsChanging(withoutCentralisedDistricts));
       toggleDistrictsVisibility(withoutCentralisedDistricts, map);
-      setIsCentralisedDistrictsVisible(true);
+      dispatch(centralisedDistrictTrue());
     }
   }
 
   function decentralisedDistrictsButtonHandler() {
     if (isDecentralisedDistrictsVisible) {
       setCentralisedToggle(false);
-      setIsCentralisedDistrictsVisible(true);
+      dispatch(centralisedDistrictTrue());
 
-      setSelectedDistricts(decentralisedDistricts);
+      dispatch(selectedDistrictsChanging(decentralisedDistricts));
       toggleDistrictsVisibility(decentralisedDistricts, map);
 
       setIsDecentralisedDistrictsVisible(false);
@@ -607,7 +617,7 @@ function App() {
       const withoutDecentralisedDistricts = selectedDistricts.filter(
         (district) => !decentralisedDistricts.includes(district)
       );
-      setSelectedDistricts(withoutDecentralisedDistricts);
+      dispatch(selectedDistrictsChanging(withoutDecentralisedDistricts));
       toggleDistrictsVisibility(withoutDecentralisedDistricts, map);
       setIsDecentralisedDistrictsVisible(true);
     }
@@ -629,11 +639,11 @@ function App() {
         map.addImage("custom-pin", image);
       });
     }
-    setSelectedDistricts([]);
+    dispatch(selectedDistrictsChanging([]));
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
-    setShowTransport(true);
+    dispatch(showTransportTrue());
     setServicesAction(false);
     // setIsModalActive(true);
   }
@@ -656,11 +666,11 @@ function App() {
 
       // Остальной код обработки карты также может быть здесь
     }
-    setSelectedDistricts([]);
+    dispatch(selectedDistrictsChanging([]));
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
-    setShowTransport(true);
+    dispatch(showTransportTrue());
     // setIsModalActive(true);
     setServicesAction(false);
   }
@@ -682,12 +692,12 @@ function App() {
 
       // Остальной код обработки карты также может быть здесь
     }
-    setSelectedDistricts([]);
+    dispatch(selectedDistrictsChanging([]));
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     // setIsModalActive(true);
-    setShowTransport(true);
+    dispatch(showTransportTrue());
     setServicesAction(false);
   }
 
@@ -695,7 +705,7 @@ function App() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     dispatch(showCadastreFalse());
     setMapStyleSetter(1);
-    setShowTransport(true);
+    dispatch(showTransportTrue());
     setServicesAction(false);
 
     const inputElement = document.querySelector(".DefaultInput");
@@ -711,7 +721,7 @@ function App() {
 
       // Остальной код обработки карты также может быть здесь
     }
-    setSelectedDistricts([]);
+    dispatch(selectedDistrictsChanging([]));
     setCentralisedToggle(false);
     // setIsModalActive(false);
     setDecentralisedToggle(false);
@@ -887,7 +897,6 @@ function App() {
                     isAllDistrictsSelected={isAllDistrictsSelected}
                     toggleButton={toggleButton}
                     map={map}
-                    selectedDistricts={selectedDistricts}
                     centralisedDistrictsButtonHandler={
                       centralisedDistrictsButtonHandler
                     }
@@ -923,13 +932,7 @@ function App() {
               </button>
               {openTransport ? (
                 <div className="toggleIcons">
-                  <TransportButton
-                    setShowTransport={setShowTransport}
-                    showTransport={showTransport}
-                    map={map}
-                  >
-                    Transport
-                  </TransportButton>
+                  <TransportButton>Transport</TransportButton>
                   <MapIconsToggle
                     servicesAction={servicesAction}
                     setServicesAction={setServicesAction}
@@ -965,17 +968,11 @@ function App() {
                 setSelectedFeatures={setSelectedFeatures}
                 mapStyleSetter={mapStyleSetter}
                 setServicesAction={setServicesAction}
-                setShowTransport={setShowTransport}
-                setSqml={setSqml}
                 draw={draw}
                 map={map}
                 removeCustomMarker={removeCustomMarker}
-                setSelectedDistricts={setSelectedDistricts}
                 setIsAllDistrictsVisible={setIsAllDistrictsVisible}
                 setCentralisedToggle={setCentralisedToggle}
-                setIsCentralisedDistrictsVisible={
-                  setIsCentralisedDistrictsVisible
-                }
                 setDecentralisedToggle={setDecentralisedToggle}
                 setIsDecentralisedDistrictsVisible={
                   setIsDecentralisedDistrictsVisible
@@ -1032,7 +1029,7 @@ function App() {
 
         <RightTopMenuText />
         <div className="calculation-box">
-          <div id="calculated-area">{Sqm}.SQM</div>
+          <div id="calculated-area">{sqm}.SQM</div>
         </div>
         <input
           type="color"

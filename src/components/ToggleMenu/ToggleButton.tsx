@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const ToggleButton = ({
   data,
   id,
   children,
   toggleButton,
-  selectedDistricts,
   map,
   center,
   zoom,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false);
   const [toggleClass, setToggleClass] = useState<string>("");
+  const selectedDistricts = useSelector(
+    (state: RootState) => state.selectedDistricts.value
+  );
 
   const handleClick = () => {
     toggleButton(data, selectedDistricts, map);
