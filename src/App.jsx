@@ -38,23 +38,27 @@ import { Scrollbar } from "react-scrollbars-custom";
 import MapboxCircle from "mapbox-gl-circle";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { changeValue } from "./redux/slices/mapSlice";
+import { changeMapValue } from "./redux/slices/mapSlice";
 import { openBrusselsChanging } from "./redux/slices/openBrusselsSlice";
 import { activeSidebarChanging } from "./redux/slices/activeSidebarSlice";
 import { openTransportChanging } from "./redux/slices/openTransportSlice";
 import { openCadastreChanging } from "./redux/slices/openCadastreSlice";
 import { showCadastreFalse } from "./redux/slices/showCadastreSlice";
+import { changeDrawValue } from "./redux/slices/drawSlice";
+import { mapStyleButtonChanging } from "./redux/slices/mapStyleButtonSlice";
 
 function App() {
   const dispatch = useDispatch();
 
   const map = useSelector((state) => state.map.value);
+  const draw = useSelector((state) => state.draw.value);
 
   const openBrussels = useSelector((state) => state.openBrussels.value);
   const activeSidebar = useSelector((state) => state.activeSidebar.value);
   const openTransport = useSelector((state) => state.openTransport.value);
   const openCadastre = useSelector((state) => state.openCadastre.value);
   const showCadastre = useSelector((state) => state.showCadastre.value);
+  const mapStyleButtonOpen = useSelector((state) => state.mapStyleButton.value);
 
   const [selectedDistricts, setSelectedDistricts] = useState([]);
   const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
@@ -62,21 +66,22 @@ function App() {
     useState(true);
   const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
     useState(true);
-  const [mapStyleButtonOpen, setMapStyleButtonOpen] = useState(false);
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
   const [servicesAction, setServicesAction] = useState(false);
-  const [draw, setDraw] = useState(null);
+
   const submenuTag = useRef();
   const mapTag = useRef();
   const colorPicker = useRef();
   const geocoderContainer = useRef();
   const newDrawFeature = useRef(false);
+
   const drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const sreenLogo = document.querySelector(".logo-map");
   const palette = document.querySelector(".palette");
   const menuStyle = document.querySelector(".menuMapStyle");
   const rightTopMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const sqmBox = document.querySelector(".calculation-box");
+
   const allDistricts = [
     "SW",
     "SE",
@@ -91,23 +96,23 @@ function App() {
   ];
   const centralisedDistricts = ["Louise", "North", "South", "CD", "EU"];
   const decentralisedDistricts = ["NE", "NW", "SW", "SE"];
+
   const [Sqm, setSqml] = useState(0);
+
   const [showTransport, setShowTransport] = useState(true);
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
+
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
-  // const [showCadastre, setShowCadastre] = useState(false);
 
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
-  const drawFeatureID = useRef(
-    "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
-  );
+  const MAPBOX_ACCESS_TOKEN =
+    "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
 
   useEffect(() => {
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
+    mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
     let mapSettings = {
       container: "map",
@@ -118,7 +123,7 @@ function App() {
     };
 
     let map = new mapboxgl.Map(mapSettings);
-    dispatch(changeValue(map));
+    dispatch(changeMapValue(map));
     function createMarkerElement() {
       let container = document.createElement("div");
       container.className = "deleteCustomMarkerContainer";
@@ -164,16 +169,16 @@ function App() {
     colorPicker.current.addEventListener("input", function () {
       var selectedColor = colorPicker.current.value;
 
-      if (drawFeatureID.current !== "" && typeof draw === "object") {
+      if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
         // Установите выбранный цвет для выбранной фигуры
         draw.setFeatureProperty(
-          drawFeatureID.current,
+          MAPBOX_ACCESS_TOKEN.current,
           "portColor",
           selectedColor
         );
 
         // Обновите фигуру на карте
-        var feat = draw.get(drawFeatureID.current);
+        var feat = draw.get(MAPBOX_ACCESS_TOKEN.current);
         draw.add(feat);
       }
     });
@@ -216,7 +221,8 @@ function App() {
       document.getElementById("distance-marker").style.display = "none";
     });
 
-    setDraw(draw);
+    dispatch(changeDrawValue(draw));
+
     map.addControl(new mapboxgl.NavigationControl());
 
     map.on("load", function () {
@@ -229,7 +235,7 @@ function App() {
         var drawFeatureAtPoint = draw.getFeatureIdsAt(e.point);
 
         //if another drawFeature is not found - reset drawFeatureID
-        drawFeatureID.current = drawFeatureAtPoint.length
+        MAPBOX_ACCESS_TOKEN.current = drawFeatureAtPoint.length
           ? drawFeatureAtPoint[0]
           : "";
         if (drawFeatureAtPoint.length) {
@@ -840,7 +846,7 @@ function App() {
               <div ref={geocoderContainer}></div>
               <SubMenu map={map} submenuTag={submenuTag}></SubMenu>
               <button
-                onClick={() => setMapStyleButtonOpen(!mapStyleButtonOpen)}
+                onClick={() => dispatch(mapStyleButtonChanging())}
                 className={`mapStyleButton ${
                   mapStyleButtonOpen ? "mapStyleButton_open" : ""
                 }`}
@@ -975,7 +981,6 @@ function App() {
                   setIsDecentralisedDistrictsVisible
                 }
                 setAllDistrictsToggle={setAllDistrictsToggle}
-                setMapStyleButtonOpen={setMapStyleButtonOpen}
               ></ResetMap>
 
               <PrintScreen
