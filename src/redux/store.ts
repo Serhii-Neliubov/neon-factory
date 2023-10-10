@@ -6,6 +6,9 @@ import activeSidebarSlice from "./slices/activeSidebarSlice";
 import openTransportSlice from "./slices/openTransportSlice";
 import openCadastreSlice from "./slices/openCadastreSlice";
 import showCadastreSlice from "./slices/showCadastreSlice";
+import drawSlice from "./slices/drawSlice";
+import mapStyleButtonSlice from "./slices/mapStyleButtonSlice";
+import sqmSlice from "./slices/sqmSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +19,9 @@ export const store = configureStore({
     openTransport: openTransportSlice,
     openCadastre: openCadastreSlice,
     showCadastre: showCadastreSlice,
+    draw: drawSlice,
+    mapStyleButton: mapStyleButtonSlice,
+    sqm: sqmSlice,
   },
 });
 
