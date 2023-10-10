@@ -39,7 +39,6 @@ import MapboxCircle from "mapbox-gl-circle";
 
 function App() {
   const [map, setMap] = useState(null);
-  const [isControlsActive, setIsControlsActive] = useState(false);
   const [activeSidebar, setActiveSidebar] = useState(true);
   // const [isModalActive, setIsModalActive] = useState(false);
   const [selectedDistricts, setSelectedDistricts] = useState([]);
@@ -827,12 +826,7 @@ function App() {
           <Scrollbar className="scrollbar">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
-              <SubMenu
-                setIsControlsActive={setIsControlsActive}
-                isControlsActive={isControlsActive}
-                map={map}
-                submenuTag={submenuTag}
-              ></SubMenu>
+              <SubMenu map={map} submenuTag={submenuTag}></SubMenu>
               <button
                 onClick={() => setMapStyleButtonOpen(!mapStyleButtonOpen)}
                 className={`mapStyleButton ${
@@ -976,7 +970,6 @@ function App() {
                 setAllDistrictsToggle={setAllDistrictsToggle}
                 setOpenBrussels={setOpenBrussels}
                 setMapStyleButtonOpen={setMapStyleButtonOpen}
-                setIsControlsActive={setIsControlsActive}
                 setOpenTransport={setOpenTransport}
               ></ResetMap>
 
