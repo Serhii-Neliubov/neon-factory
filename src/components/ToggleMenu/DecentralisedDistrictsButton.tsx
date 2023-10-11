@@ -10,6 +10,7 @@ const DecentralisedDistrictsButton = ({
   const decentralisedToggle = useSelector(
     (state: RootState) => state.decentralisedToggle.value
   );
+
   const handleClick = () => {
     decentralisedDistrictsButtonHandler();
     dispatch(decentralisedToggleChanging());

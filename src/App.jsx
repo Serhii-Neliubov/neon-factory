@@ -15,7 +15,6 @@ import SubMenu from "./components/SubMenu/SubMenu";
 import ResetMap from "./components/ResetMap";
 import PrintScreen from "./components/PrintScreen";
 import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
-import MapIconsToggle from "./components/ToggleMenu/MapIconsToggle";
 // Utils
 import defaultDrawStyles from "./utils/DefaultDrawStyles";
 //Map functions
@@ -25,25 +24,15 @@ import {
   toggleButton,
   createMarkerElement,
 } from "./utils/MapFunctions";
-import TransportButton from "./components/ToggleMenu/TransportButton";
-import CadastreButton from "./components/ToggleMenu/CadastreButton";
 import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
 import RightTopMenuText from "./components/RightTopMenuText";
 // import MyModal from "./components/MyModal/MyModal";
-import DefaultStyle from "./components/MapStyleButtons/DefaultStyle";
-import DarkStyle from "./components/MapStyleButtons/DarkStyle";
-import MonochromeStyle from "./components/MapStyleButtons/MonochromeStyle";
-import SatelliteStyle from "./components/MapStyleButtons/SatelliteStyle";
 import { Scrollbar } from "react-scrollbars-custom";
-import MapboxCircle from "mapbox-gl-circle";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { openBrusselsChanging } from "./redux/slices/openBrusselsSlice";
 import { activeSidebarChanging } from "./redux/slices/activeSidebarSlice";
-import { openTransportChanging } from "./redux/slices/openTransportSlice";
-import { openCadastreChanging } from "./redux/slices/openCadastreSlice";
 import { showCadastreFalse } from "./redux/slices/showCadastreSlice";
-import { mapStyleButtonChanging } from "./redux/slices/mapStyleButtonSlice";
 import {
   centralisedDistrictsVisibleFalse,
   centralisedDistrictsVisibleTrue,
@@ -64,6 +53,11 @@ import {
   decentralisedToggleFalse,
   decentralisedToggleTrue,
 } from "./redux/slices/decentralisedToggleSlice";
+import Container from "./components/Container";
+import CircleMenu from "./components/CircleMenu";
+import OpenTranportButton from "./components/ToggleMenu/OpenTranportButton";
+import OpenCadastreButton from "./components/ToggleMenu/OpenCadastreButton";
+import OpenMapStyleButton from "./components/ToggleMenu/OpenMapStyleButton";
 
 function App() {
   const dispatch = useDispatch();
@@ -73,10 +67,7 @@ function App() {
 
   const openBrussels = useSelector((state) => state.openBrussels.value);
   const activeSidebar = useSelector((state) => state.activeSidebar.value);
-  const openTransport = useSelector((state) => state.openTransport.value);
-  const openCadastre = useSelector((state) => state.openCadastre.value);
   const showCadastre = useSelector((state) => state.showCadastre.value);
-  const mapStyleButtonOpen = useSelector((state) => state.mapStyleButton.value);
   const isCentralisedDistrictsVisible = useSelector(
     (state) => state.centralisedDistrictsVisible.value
   );
@@ -126,6 +117,19 @@ function App() {
   const MAPBOX_ACCESS_TOKEN = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
   );
+  const customTilesetLayer = {
+    id: "custom-tileset-layer",
+    type: "line",
+    source: {
+      type: "vector",
+      url: "mapbox://neon-factory.12ssh55s",
+    },
+    "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+    paint: {
+      "line-color": "rgba(255, 255, 255, 0)", // начальный цвет контура
+      "line-width": 3, // начальная толщина контура
+    },
+  };
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN.current;
@@ -166,22 +170,11 @@ function App() {
       },
       styles: defaultDrawStyles,
     });
-    const customTilesetLayer = {
-      id: "custom-tileset-layer",
-      type: "fill",
-      source: {
-        type: "vector",
-        url: "mapbox://neon-factory.12ssh55s",
-      },
-      "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
-      paint: {
-        "fill-color": "rgba(255, 255, 255, 0)",
-        "fill-opacity": 1,
-      },
-    };
+
     map.on("style.load", function () {
       map.addLayer(customTilesetLayer);
     });
+
     const marker = document.getElementById("distance-marker");
     map.on("draw.delete", function () {
       // Скрываем маркер при удалении линии
@@ -406,24 +399,23 @@ function App() {
 
       if (showCadastre) {
         map.on("idle", function () {
-          // Define the style expression to dynamically set fill color based on "CaPaKey"
-          const fillColorExpression = [
+          const lineWidthExpression = [
             "match",
             ["to-string", ["get", "CaPaKey"]],
             selectedFeatures.map(String),
-            "rgb(255, 0, 0)", // Color for selected features
-            "rgba(255, 255, 255, 0)", // Default color for other features
+            10, // толщина контура для выбранных полигонов
+            1, // начальная толщина контура
           ];
-          // Update the fill-color property of the "custom-tileset-layer"
           map.setPaintProperty(
             "custom-tileset-layer",
-            "fill-outline-color",
-            fillColorExpression
+            "line-width",
+            lineWidthExpression
           );
         });
       }
     }
   }, [map, selectedFeatures, showCadastre]);
+
   useEffect(() => {
     if (map) {
       map.loadImage("pin.png", function (error, image) {
@@ -476,84 +468,6 @@ function App() {
   //   setIsModalActive(!isModalActive);
   //   defaultStyleHandler();
   // }
-  function generateUniqueId() {
-    return "_" + Math.random().toString(36).substr(2, 9);
-  }
-  let selectedCircle = null;
-  const circles = [];
-  const radiusDisplay = document.getElementById("radius-display");
-
-  function createCircleButton() {
-    if (map) {
-      const center = map.getCenter(); // Получаем центральные координаты карты
-      const uniqueId = generateUniqueId();
-      const myCircle = new MapboxCircle(
-        center, // Используем центральные координаты
-        3275,
-        {
-          editable: true,
-          minRadius: 10,
-          fillColor: "#29AB87",
-          id: uniqueId,
-        }
-      ).addTo(map);
-
-      circles.push(myCircle);
-
-      let radius = 3275;
-      radiusDisplay.textContent = `Radius: ${radius} meters`;
-
-      myCircle.on("centerchanged", function (circleObj) {
-        console.log("New center:", circleObj.getCenter());
-      });
-
-      myCircle.on("radiuschanged", function (circleObj) {
-        radius = circleObj.getRadius();
-        radiusDisplay.textContent = `Radius: ${radius} meters`;
-      });
-
-      myCircle.on("click", function (mapMouseEvent) {
-        console.log("Click:", mapMouseEvent.point);
-        // Сохраняем выбранный круг
-        selectedCircle = myCircle;
-        radius = myCircle.getRadius();
-        radiusDisplay.textContent = `Radius: ${radius} meters`;
-      });
-
-      myCircle.on("contextmenu", function (mapMouseEvent) {
-        console.log("Right-click:", mapMouseEvent.lngLat);
-      });
-    }
-  }
-
-  function deleteCircleButton() {
-    if (selectedCircle) {
-      // Если есть выбранный круг, удаляем его
-      const index = circles.indexOf(selectedCircle);
-      if (index !== -1) {
-        circles.splice(index, 1);
-        selectedCircle.remove();
-      }
-      selectedCircle = null; // Сбрасываем выбранный круг после удаления
-      radiusDisplay.textContent = "";
-    }
-  }
-  function deleteAllCirclesButton() {
-    // Удаляем все круги из массива circles и с карты
-    circles.forEach(function (circle) {
-      circle.remove();
-    });
-
-    // Очищаем массив circles
-    circles.length = 0;
-
-    // Сбрасываем выбранный круг
-    selectedCircle = null;
-
-    // Очищаем отображение радиуса
-    radiusDisplay.textContent = "";
-  }
-
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
       dispatch(decentralisedToggleFalse());
@@ -686,7 +600,7 @@ function App() {
   }, [draw, map]);
 
   return (
-    <div id="mapContainer">
+    <Container>
       <button onClick={() => dispatch(activeSidebarChanging())} />
       {activeSidebar && (
         <div className="sidebar">
@@ -718,39 +632,13 @@ function App() {
           <Scrollbar className="scrollbar">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
-              <SubMenu map={map} submenuTag={submenuTag}></SubMenu>
-              <button
-                onClick={() => dispatch(mapStyleButtonChanging())}
-                className={`mapStyleButton ${
-                  mapStyleButtonOpen ? "mapStyleButton_open" : ""
-                }`}
-              >
-                map style
-              </button>
-              {mapStyleButtonOpen ? (
-                <div className="toggleInputs">
-                  <DefaultStyle
-                    map={map}
-                    mapStyleSetter={mapStyleSetter}
-                    setMapStyleSetter={setMapStyleSetter}
-                  />
-                  <DarkStyle
-                    map={map}
-                    mapStyleSetter={mapStyleSetter}
-                    setMapStyleSetter={setMapStyleSetter}
-                  />
-                  <MonochromeStyle
-                    setMapStyleSetter={setMapStyleSetter}
-                    map={map}
-                    mapStyleSetter={mapStyleSetter}
-                  />
-                  <SatelliteStyle
-                    map={map}
-                    mapStyleSetter={mapStyleSetter}
-                    setMapStyleSetter={setMapStyleSetter}
-                  />
-                </div>
-              ) : null}
+              <SubMenu map={map} submenuTag={submenuTag} />
+              <OpenMapStyleButton
+                setSelectedDistricts={setSelectedDistricts}
+                map={map}
+                mapStyleSetter={mapStyleSetter}
+                setMapStyleSetter={setMapStyleSetter}
+              />
               <button
                 onClick={() => dispatch(openBrusselsChanging())}
                 className={`BrusselsButton BrusselsButton_bg ${
@@ -782,39 +670,8 @@ function App() {
               <button className="AreasButton">antwerp (soon)</button>
               <button className="AreasButton">Gent (soon)</button>
               <button className="AreasButton">luxembourg (soon)</button>
-              <button
-                onClick={() => dispatch(openTransportChanging())}
-                className={`TransportButton TransportButton_bg ${
-                  openTransport ? "TransportButton_open" : ""
-                }`}
-              >
-                Transports & Amenieties
-              </button>
-              {openTransport ? (
-                <div className="toggleIcons">
-                  <TransportButton map={map}>Transport</TransportButton>
-                  <MapIconsToggle map={map}>
-                    SHOPS, RESTAURANTS & SERVICES
-                  </MapIconsToggle>
-                </div>
-              ) : (
-                ""
-              )}
-              <button
-                onClick={() => dispatch(openCadastreChanging())}
-                className={`CadastreButton TransportButton_bg ${
-                  openCadastre ? "CadastreButton_open" : ""
-                }`}
-              >
-                Cadastre
-              </button>
-              {openCadastre ? (
-                <div className="toggleIcons">
-                  <CadastreButton map={map}>Cadastre</CadastreButton>
-                </div>
-              ) : (
-                ""
-              )}
+              <OpenTranportButton map={map} />
+              <OpenCadastreButton map={map} />
             </div>
 
             <div className="down-sidebar__buttons">
@@ -856,25 +713,7 @@ function App() {
         ) : (
           ""
         )} */}
-        <div id="radius-display"></div>
-        <button id="delete-circle-button" onClick={deleteCircleButton}>
-          Delete circle
-        </button>
-        <button id="delete-circles-button" onClick={deleteAllCirclesButton}>
-          Delete all circles
-        </button>
-        <button onClick={createCircleButton} id="createCircleButton">
-          Create a circle
-        </button>
-        <div id="distance-marker" className="distance-marker">
-          <div className="distance-close" id="distance-close">
-            ×
-          </div>
-          <div id="distance-value" className="distance-value">
-            0 m
-          </div>
-        </div>
-
+        <CircleMenu map={map} />
         <RightTopMenuText />
         <div className="calculation-box">
           <div id="calculated-area">{Sqm}.SQM</div>
@@ -888,7 +727,7 @@ function App() {
         />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>
-    </div>
+    </Container>
   );
 }
 
