@@ -16,6 +16,7 @@ import centralisedDistrictsVisibleSlice from "./slices/centralisedDistrictsVisib
 import servicesActionSlice from "./slices/servicesActionSlice";
 import allDistrictsVisibleSlice from "./slices/allDistrictsVisibleSlice";
 import decentralisedDistrictsVisibleSlice from "./slices/decentralisedDistrictsVisibleSlice";
+import allDistrictsSelectedSlice from "./slices/allDistrictsSelectedSlice";
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ export const store = configureStore({
     servicesAction: servicesActionSlice,
     allDistrictsVisible: allDistrictsVisibleSlice,
     decentralisedDistrictsVisible: decentralisedDistrictsVisibleSlice,
+    allDistrictsSelected: allDistrictsSelectedSlice,
   },
 });
 
