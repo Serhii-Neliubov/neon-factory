@@ -1,17 +1,19 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { servicesActionChanging } from "../../redux/slices/servicesActionSlice";
 
-const MapIconsToggle = ({
-  children,
-  setServicesAction,
-  servicesAction,
-  map,
-}) => {
+const MapIconsToggle = ({ children, map }) => {
   const [toggle, setToggle] = useState(false);
   const [toggleClass, setToggleClass] = useState<string>("");
+  const dispatch = useDispatch();
+  const servicesAction = useSelector(
+    (state: RootState) => state.servicesAction.value
+  );
 
   function toggleDistrictLayerVisibility() {
-    setServicesAction((prev) => !prev);
+    dispatch(servicesActionChanging());
     if (!servicesAction) {
       map.setLayoutProperty("poi-label", "visibility", "visible");
       setToggle(true);

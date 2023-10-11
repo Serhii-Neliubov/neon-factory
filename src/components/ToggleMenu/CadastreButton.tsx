@@ -4,7 +4,7 @@ import { showCadastreChanging } from "../../redux/slices/showCadastreSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
-const CadastreButton = ({ children }) => {
+const CadastreButton = ({ children, map }) => {
   const [toggleClass, setToggleClass] = useState<string>("");
 
   const dispatch = useDispatch();
@@ -12,7 +12,6 @@ const CadastreButton = ({ children }) => {
   const showCadastre = useSelector(
     (state: RootState) => state.showCadastre.value
   );
-  const map = useSelector((state: RootState) => state.map.value);
 
   function toggleTransportLayerVisibility() {
     dispatch(showCadastreChanging());

@@ -10,16 +10,20 @@ import { changeSqmValue } from "../redux/slices/sqmSlice";
 import { selectedDistrictsChanging } from "../redux/slices/selectedDistrictsSlice";
 import { centralisedDistrictTrue } from "../redux/slices/centralisedDistrictSliceActive";
 import { showTransportTrue } from "../redux/slices/showTransportSlice";
+import { centralisedDistrictsVisibleTrue } from "../redux/slices/centralisedDistrictsVisibleSlice";
+import { servicesActionFalse } from "../redux/slices/servicesActionSlice";
+import { allDistrictsVisibleTrue } from "../redux/slices/allDistrictsVisibleSlice";
+import {
+  decentralisedDistrictsVisibleFalse,
+  decentralisedDistrictsVisibleTrue,
+} from "../redux/slices/decentralisedDistrictsVisibleSlice";
 const ResetMap = ({
   map,
   removeCustomMarker,
   draw,
-  setIsAllDistrictsVisible,
   setCentralisedToggle,
   setDecentralisedToggle,
-  setIsDecentralisedDistrictsVisible,
   setAllDistrictsToggle,
-  setServicesAction,
   mapStyleSetter,
   setSelectedFeatures,
 }) => {
@@ -27,15 +31,16 @@ const ResetMap = ({
 
   function resetMapButtonHandler() {
     setCentralisedToggle(false);
-    setServicesAction(false);
     setSelectedFeatures([]);
     setDecentralisedToggle(false);
-    setIsDecentralisedDistrictsVisible(true);
     setAllDistrictsToggle(false);
-    setIsAllDistrictsVisible(true);
     removeCustomMarker();
 
+    dispatch(decentralisedDistrictsVisibleTrue());
     dispatch(showTransportTrue());
+    dispatch(allDistrictsVisibleTrue());
+    dispatch(servicesActionFalse());
+    dispatch(centralisedDistrictsVisibleTrue());
     dispatch(changeSqmValue(0));
     dispatch(centralisedDistrictTrue());
     dispatch(selectedDistrictsChanging([]));

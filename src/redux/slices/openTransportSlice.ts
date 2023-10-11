@@ -5,7 +5,7 @@ export interface openTransportState {
 }
 
 const initialState: openTransportState = {
-  value: true,
+  value: false,
 };
 
 export const openTransportSlice = createSlice({
