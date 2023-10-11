@@ -23,7 +23,6 @@ import {
   removeCustomMarker,
   toggleDistrictsVisibility,
   toggleButton,
-  changeColor,
   createMarkerElement,
 } from "./utils/MapFunctions";
 import TransportButton from "./components/ToggleMenu/TransportButton";
@@ -154,23 +153,6 @@ function App() {
       clearOnBlur: false,
     });
 
-    colorPicker.current.addEventListener("input", function () {
-      var selectedColor = colorPicker.current.value;
-
-      if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
-        // Установите выбранный цвет для выбранной фигуры
-        draw.setFeatureProperty(
-          MAPBOX_ACCESS_TOKEN.current,
-          "portColor",
-          selectedColor
-        );
-
-        // Обновите фигуру на карте
-        var feat = draw.get(MAPBOX_ACCESS_TOKEN.current);
-        draw.add(feat);
-      }
-    });
-
     var draw = new MapboxDraw({
       // this is used to allow for custom properties for styling
       // it appends the word "user_" to the property
@@ -240,9 +222,6 @@ function App() {
       // Вызываем функцию для отображения метров полигона
 
       showPolygonArea(clickedPolygon);
-    });
-    colorPicker.current.addEventListener("change", function (event) {
-      changeColor(event.target.value, mapboxgl, draw);
     });
 
     function showPolygonArea(polygonFeature) {
@@ -374,6 +353,23 @@ function App() {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
   }, []);
+
+  function changeColor() {
+    let selectedColor = colorPicker.current.value;
+    if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
+      // Установите выбранный цвет для выбранной фигуры
+      draw.setFeatureProperty(
+        MAPBOX_ACCESS_TOKEN.current,
+        "portColor",
+        selectedColor
+      );
+
+      // Обновите фигуру на карте
+      let feat = draw.get(MAPBOX_ACCESS_TOKEN.current);
+      draw.add(feat);
+    }
+  }
+
   useEffect(() => {
     if (map) {
       if (showCadastre) {
@@ -888,7 +884,7 @@ function App() {
           ref={colorPicker}
           id="colorPicker"
           className="palette"
-          onChange={(event) => changeColor(event.target.value, mapboxgl, draw)}
+          onChange={changeColor}
         />
         <img alt="Logo" className="logo-map" src="logo.png" />
       </div>

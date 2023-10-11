@@ -68,14 +68,3 @@ export function toggleButton(data, selectedDistricts, map) {
   // Переключите видимость всех районов
   toggleDistrictsVisibility(selectedDistricts, map);
 }
-
-export function changeColor(selectedColor, mapboxgl, draw) {
-  if (mapboxgl.accessToken !== "" && typeof draw === "object") {
-    // Установите выбранный цвет для выбранной фигуры
-    draw.setFeatureProperty(mapboxgl.accessToken, "portColor", selectedColor);
-
-    // Обновите фигуру на карте
-    var feat = draw.get(mapboxgl.accessToken);
-    draw.add(feat);
-  }
-}
