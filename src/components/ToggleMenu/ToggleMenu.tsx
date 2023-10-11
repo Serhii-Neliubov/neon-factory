@@ -7,8 +7,6 @@ const ToggleMenu = ({
   map,
   toggleButton,
   centralisedDistrictsButtonHandler,
-  centralisedToggle,
-  setCentralisedToggle,
   decentralisedDistrictsButtonHandler,
   decentralisedToggle,
   setDecentralisedToggle,
@@ -105,8 +103,6 @@ const ToggleMenu = ({
       ))}
       <CentralisedDistrictsButton
         centralisedDistrictsButtonHandler={centralisedDistrictsButtonHandler}
-        centralisedToggle={centralisedToggle}
-        setCentralisedToggle={setCentralisedToggle}
       >
         CBD
       </CentralisedDistrictsButton>

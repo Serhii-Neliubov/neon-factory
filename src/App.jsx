@@ -59,6 +59,10 @@ import {
   allDistrictsSelectedTrue,
 } from "./redux/slices/allDistrictsSelectedSlice";
 import { showTransportTrue } from "./redux/slices/showTransportSlice";
+import {
+  centralisedToggleFalse,
+  centralisedToggleTrue,
+} from "./redux/slices/centralisedToggleSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -114,8 +118,9 @@ function App() {
 
   const [Sqm, setSqml] = useState(0);
 
-  // const showTransport = useSelector((state) => state.showTransport.value);
-  const [centralisedToggle, setCentralisedToggle] = useState(false);
+  // const centralisedToggle = useSelector(
+  //   (state) => state.centralisedToggle.value
+  // );
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
 
@@ -439,7 +444,7 @@ function App() {
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
       setDecentralisedToggle(true);
-      setCentralisedToggle(true);
+      dispatch(centralisedToggleTrue());
       dispatch(decentralisedDistrictsVisibleFalse());
       dispatch(centralisedDistrictsVisibleFalse());
 
@@ -462,7 +467,7 @@ function App() {
     } else {
       setDecentralisedToggle(false);
       dispatch(decentralisedDistrictsVisibleTrue());
-      setCentralisedToggle(false);
+      dispatch(centralisedToggleFalse());
       dispatch(centralisedDistrictsVisibleTrue());
       setSelectedDistricts([]);
       allDistricts.forEach((district) => {
@@ -577,7 +582,8 @@ function App() {
 
   function decentralisedDistrictsButtonHandler() {
     if (isDecentralisedDistrictsVisible) {
-      setCentralisedToggle(false);
+      dispatch(centralisedToggleFalse());
+
       dispatch(centralisedDistrictsVisibleTrue());
 
       setSelectedDistricts(decentralisedDistricts);
@@ -609,7 +615,7 @@ function App() {
       // Остальной код обработки карты также может быть здесь
     }
     setSelectedDistricts([]);
-    setCentralisedToggle(false);
+    dispatch(centralisedToggleFalse());
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     dispatch(showTransportTrue());
@@ -634,7 +640,8 @@ function App() {
       // Остальной код обработки карты также может быть здесь
     }
     setSelectedDistricts([]);
-    setCentralisedToggle(false);
+    dispatch(centralisedToggleFalse());
+
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     // setIsModalActive(true);
@@ -664,7 +671,8 @@ function App() {
       // Остальной код обработки карты также может быть здесь
     }
     setSelectedDistricts([]);
-    setCentralisedToggle(false);
+    dispatch(centralisedToggleFalse());
+
     // setIsModalActive(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
@@ -823,7 +831,6 @@ function App() {
                     map={map}
                     mapStyleSetter={mapStyleSetter}
                     setMapStyleSetter={setMapStyleSetter}
-                    setCentralisedToggle={setCentralisedToggle}
                     setDecentralisedToggle={setDecentralisedToggle}
                     setAllDistrictsToggle={setAllDistrictsToggle}
                   />
@@ -846,8 +853,6 @@ function App() {
                     centralisedDistrictsButtonHandler={
                       centralisedDistrictsButtonHandler
                     }
-                    centralisedToggle={centralisedToggle}
-                    setCentralisedToggle={setCentralisedToggle}
                     decentralisedDistrictsButtonHandler={
                       decentralisedDistrictsButtonHandler
                     }
@@ -910,7 +915,6 @@ function App() {
                 map={map}
                 removeCustomMarker={removeCustomMarker}
                 setSelectedDistricts={setSelectedDistricts}
-                setCentralisedToggle={setCentralisedToggle}
                 setDecentralisedToggle={setDecentralisedToggle}
                 setAllDistrictsToggle={setAllDistrictsToggle}
               ></ResetMap>
