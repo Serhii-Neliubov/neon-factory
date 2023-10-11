@@ -1,14 +1,3 @@
-export function createCustomMarkerElement() {
-  let element = document.createElement("div");
-  element.className = "custom-marker";
-  element.style.backgroundImage = "url(pin.png)";
-  element.style.width = "32px"; // Установите желаемую ширину и высоту маркера
-  element.style.height = "32px";
-  element.draggable = true;
-
-  return element;
-}
-
 export function removeCustomMarker() {
   // Get the custom marker element
   let customMarker = document.querySelector(".custom-marker");
@@ -17,6 +6,36 @@ export function removeCustomMarker() {
   if (customMarker) {
     customMarker.parentNode.removeChild(customMarker);
   }
+}
+
+export function createMarkerElement() {
+  let container = document.createElement("div");
+  container.className = "deleteCustomMarkerContainer";
+
+  // Создайте элемент маркера
+  let marker = document.createElement("div");
+  marker.className = "custom-marker";
+  marker.style.backgroundImage = "url(pin.png)";
+  marker.style.width = "32px"; // Установите желаемую ширину и высоту маркера
+  marker.style.height = "32px";
+  marker.draggable = true;
+
+  // Создайте кнопку удаления
+  let deleteButton = document.createElement("button");
+  deleteButton.innerText = "×";
+  deleteButton.className = "delete-button";
+
+  // Добавьте обработчик события на кнопку удаления
+  deleteButton.addEventListener("click", function () {
+    // Удалите маркер и его контейнер из карты
+    container.remove();
+  });
+
+  // Добавьте маркер и кнопку в контейнер
+  container.appendChild(marker);
+  container.appendChild(deleteButton);
+
+  return container;
 }
 
 export function toggleDistrictsVisibility(selectedDistricts, map) {

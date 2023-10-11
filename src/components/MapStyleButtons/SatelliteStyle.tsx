@@ -1,14 +1,51 @@
 import React, { useEffect, useState } from "react";
+import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
+import { useDispatch } from "react-redux";
+import { selectedDistrictsChanging } from "../../redux/slices/selectedDistrictsSlice";
+import { showTransportTrue } from "../../redux/slices/showTransportSlice";
 
-const SatelliteStyle = ({ satelitteStyleHandler, mapStyleSetter }) => {
+const SatelliteStyle = ({
+  mapStyleSetter,
+  map,
+  setMapStyleSetter,
+  setCentralisedToggle,
+  setDecentralisedToggle,
+  setAllDistrictsToggle,
+  setServicesAction,
+}) => {
+  const dispatch = useDispatch();
+
   const [toggleClass, setToggleClass] = useState<string>("");
-  const [toggle, setToggle] = useState<boolean>(true);
+  const [toggle, setToggle] = useState<boolean>(false);
+
+  function satelitteStyleHandler() {
+    map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+    setMapStyleSetter(2);
+
+    if (map) {
+      map.loadImage("pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+      });
+    }
+
+    dispatch(showCadastreFalse());
+    dispatch(selectedDistrictsChanging([]));
+    dispatch(showTransportTrue());
+
+    setCentralisedToggle(false);
+    setDecentralisedToggle(false);
+    setAllDistrictsToggle(false);
+    setServicesAction(false);
+    // setIsModalActive(true);
+  }
 
   const handleClick = () => {
     setToggle(true);
   };
+
   useEffect(() => {
-    if (mapStyleSetter == 2) {
+    if (mapStyleSetter == "2") {
       setToggleClass("switch-btn switch-on");
     } else {
       setToggleClass("switch-btn");
@@ -17,8 +54,8 @@ const SatelliteStyle = ({ satelitteStyleHandler, mapStyleSetter }) => {
   return (
     <div
       onClick={() => {
-        satelitteStyleHandler();
         handleClick();
+        satelitteStyleHandler();
       }}
       className="toggleButton"
     >
