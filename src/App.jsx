@@ -49,7 +49,6 @@ import {
   centralisedDistrictsVisibleFalse,
   centralisedDistrictsVisibleTrue,
 } from "./redux/slices/centralisedDistrictsVisibleSlice";
-import { servicesActionFalse } from "./redux/slices/servicesActionSlice";
 import {
   decentralisedDistrictsVisibleFalse,
   decentralisedDistrictsVisibleTrue,
@@ -58,7 +57,6 @@ import {
   allDistrictsSelectedFalse,
   allDistrictsSelectedTrue,
 } from "./redux/slices/allDistrictsSelectedSlice";
-import { showTransportTrue } from "./redux/slices/showTransportSlice";
 import {
   centralisedToggleFalse,
   centralisedToggleTrue,
@@ -67,7 +65,6 @@ import {
   decentralisedToggleFalse,
   decentralisedToggleTrue,
 } from "./redux/slices/decentralisedToggleSlice";
-import { allDistrictsToggleFalse } from "./redux/slices/allDistrictsToggleSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -122,8 +119,6 @@ function App() {
   const decentralisedDistricts = ["NE", "NW", "SW", "SE"];
 
   const [Sqm, setSqml] = useState(0);
-
-  // const allDistrictsToggle = useSelector((state) => state.allDistrictsToggle.value)
 
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
 
@@ -601,87 +596,6 @@ function App() {
       dispatch(decentralisedDistrictsVisibleTrue());
     }
   }
-
-  function monochromeStyleHandler() {
-    map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
-    dispatch(showCadastreFalse());
-
-    setMapStyleSetter(3);
-
-    if (map) {
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-      });
-
-      // Остальной код обработки карты также может быть здесь
-    }
-    setSelectedDistricts([]);
-    dispatch(centralisedToggleFalse());
-    dispatch(decentralisedToggleFalse());
-
-    dispatch(allDistrictsToggleFalse());
-    dispatch(showTransportTrue());
-    // setIsModalActive(true);
-    dispatch(servicesActionFalse());
-  }
-  function darkStyleHandler() {
-    map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
-    dispatch(showCadastreFalse());
-    const inputElement = document.querySelector(".DarkInput");
-    setMapStyleSetter(4);
-    if (inputElement) {
-      inputElement.checked = true;
-    }
-
-    if (map) {
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-      });
-
-      // Остальной код обработки карты также может быть здесь
-    }
-    setSelectedDistricts([]);
-    dispatch(centralisedToggleFalse());
-    dispatch(decentralisedToggleFalse());
-
-    dispatch(allDistrictsToggleFalse());
-    // setIsModalActive(true);
-    dispatch(showTransportTrue());
-
-    dispatch(servicesActionFalse());
-  }
-  function defaultStyleHandler() {
-    map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
-    dispatch(showCadastreFalse());
-    setMapStyleSetter(1);
-    dispatch(showTransportTrue());
-
-    dispatch(servicesActionFalse());
-
-    const inputElement = document.querySelector(".DefaultInput");
-    if (inputElement) {
-      inputElement.checked = true;
-    }
-
-    if (map) {
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-      });
-
-      // Остальной код обработки карты также может быть здесь
-    }
-    setSelectedDistricts([]);
-    dispatch(centralisedToggleFalse());
-
-    // setIsModalActive(false);
-    dispatch(decentralisedToggleFalse());
-
-    dispatch(allDistrictsToggleFalse());
-  }
-
   useEffect(() => {
     if (map) {
       map.resize(); // Обновите размеры карты
@@ -820,15 +734,18 @@ function App() {
               {mapStyleButtonOpen ? (
                 <div className="toggleInputs">
                   <DefaultStyle
-                    defaultStyleHandler={defaultStyleHandler}
+                    map={map}
                     mapStyleSetter={mapStyleSetter}
+                    setMapStyleSetter={setMapStyleSetter}
                   />
                   <DarkStyle
-                    darkStyleHandler={darkStyleHandler}
+                    map={map}
                     mapStyleSetter={mapStyleSetter}
+                    setMapStyleSetter={setMapStyleSetter}
                   />
                   <MonochromeStyle
-                    monochromeStyleHandler={monochromeStyleHandler}
+                    setMapStyleSetter={setMapStyleSetter}
+                    map={map}
                     mapStyleSetter={mapStyleSetter}
                   />
                   <SatelliteStyle
