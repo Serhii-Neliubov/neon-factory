@@ -12,6 +12,7 @@ const ToggleMenu = ({
   decentralisedDistrictsButtonHandler,
   decentralisedToggle,
   setDecentralisedToggle,
+  selectedDistricts,
 }) => {
   const buttons = [
     {
@@ -90,6 +91,7 @@ const ToggleMenu = ({
     <>
       {buttons.map((button) => (
         <ToggleButton
+          selectedDistricts={selectedDistricts}
           toggleButton={toggleButton}
           map={map}
           data={button.data}
