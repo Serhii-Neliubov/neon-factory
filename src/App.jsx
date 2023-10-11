@@ -112,7 +112,6 @@ function App() {
 
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
   const [hoveredFeatureId, setHoveredFeatureId] = useState(null);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   const MAPBOX_ACCESS_TOKEN = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
@@ -371,6 +370,8 @@ function App() {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
   }, []);
+
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
   useEffect(() => {
     if (map) {
       map.on("mousemove", "custom-tileset-layer", (e) => {
@@ -398,6 +399,22 @@ function App() {
             },
             { hover: true }
           );
+
+          // Получите значение CaPaKey из текущей фичи
+          const CaPaKey = e.features[0].properties.CaPaKey;
+
+          // Обновите стиль для дома с учетом CaPaKey
+          map.setPaintProperty(
+            "custom-tileset-layer", // Замените на ваш слой с домами
+            "fill-color",
+            [
+              "match",
+              ["get", "CaPaKey"],
+              CaPaKey,
+              "rgb(255,0,0)",
+              "rgba(255,255,255,0)",
+            ]
+          );
         }
       });
 
@@ -414,25 +431,17 @@ function App() {
             { hover: false }
           );
           setHoveredFeatureId(null);
+
+          // Сбросьте стиль дома при уходе с фичи
+          map.setPaintProperty(
+            "custom-tileset-layer", // Замените на ваш слой с домами
+            "fill-color",
+            "rgba(255,255,255,0)"
+          );
         }
       });
     }
   }, [map, hoveredFeatureId]);
-  function changeColor() {
-    let selectedColor = colorPicker.current.value;
-    if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
-      // Установите выбранный цвет для выбранной фигуры
-      draw.setFeatureProperty(
-        MAPBOX_ACCESS_TOKEN.current,
-        "portColor",
-        selectedColor
-      );
-
-      // Обновите фигуру на карте
-      let feat = draw.get(MAPBOX_ACCESS_TOKEN.current);
-      draw.add(feat);
-    }
-  }
 
   useEffect(() => {
     if (map) {
@@ -487,6 +496,22 @@ function App() {
       }
     }
   }, [map, selectedFeatures, showCadastre]);
+
+  function changeColor() {
+    let selectedColor = colorPicker.current.value;
+    if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
+      // Установите выбранный цвет для выбранной фигуры
+      draw.setFeatureProperty(
+        MAPBOX_ACCESS_TOKEN.current,
+        "portColor",
+        selectedColor
+      );
+
+      // Обновите фигуру на карте
+      let feat = draw.get(MAPBOX_ACCESS_TOKEN.current);
+      draw.add(feat);
+    }
+  }
 
   useEffect(() => {
     if (map) {
