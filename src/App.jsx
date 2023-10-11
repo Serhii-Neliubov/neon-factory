@@ -54,6 +54,10 @@ import {
   decentralisedDistrictsVisibleFalse,
   decentralisedDistrictsVisibleTrue,
 } from "./redux/slices/decentralisedDistrictsVisibleSlice";
+import {
+  allDistrictsSelectedFalse,
+  allDistrictsSelectedTrue,
+} from "./redux/slices/allDistrictsSelectedSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -73,13 +77,12 @@ function App() {
   const isAllDistrictsVisible = useSelector(
     (state) => state.allDistrictsVisible.value
   );
-  // const isDecentralisedDistrictsVisible = useSelector(
-  //   (state) => state.decentralisedDistrictsVisible.value
-  // );
+  const isDecentralisedDistrictsVisible = useSelector(
+    (state) => state.decentralisedDistrictsVisible.value
+  );
+  // const isAllDistrictsSelected = useSelector((state) => state.allDistrictsSelected.value)
 
   const [selectedDistricts, setSelectedDistricts] = useState([]);
-
-  const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
 
   const submenuTag = useRef();
   const mapTag = useRef();
@@ -455,7 +458,7 @@ function App() {
         map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
         dispatch(showCadastreFalse());
       }
-      setIsAllDistrictsSelected(true);
+      dispatch(allDistrictsSelectedTrue());
     } else {
       setDecentralisedToggle(false);
       dispatch(decentralisedDistrictsVisibleTrue());
@@ -468,7 +471,7 @@ function App() {
         }
       });
       toggleDistrictsVisibility(selectedDistricts, map);
-      setIsAllDistrictsSelected(false);
+      dispatch(allDistrictsSelectedFalse());
     }
   }
 
@@ -835,7 +838,6 @@ function App() {
               {openBrussels ? (
                 <div className="toggleContainer">
                   <ToggleMenu
-                    isAllDistrictsSelected={isAllDistrictsSelected}
                     toggleButton={toggleButton}
                     map={map}
                     selectedDistricts={selectedDistricts}
@@ -915,9 +917,6 @@ function App() {
                 setSelectedDistricts={setSelectedDistricts}
                 setCentralisedToggle={setCentralisedToggle}
                 setDecentralisedToggle={setDecentralisedToggle}
-                setIsDecentralisedDistrictsVisible={
-                  setIsDecentralisedDistrictsVisible
-                }
                 setAllDistrictsToggle={setAllDistrictsToggle}
               ></ResetMap>
 
