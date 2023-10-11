@@ -111,7 +111,7 @@ function App() {
   const [Sqm, setSqml] = useState(0);
 
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
-
+  const [hoveredFeatureId, setHoveredFeatureId] = useState(null);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   const MAPBOX_ACCESS_TOKEN = useRef(
@@ -373,10 +373,7 @@ function App() {
   }, []);
   useEffect(() => {
     if (map) {
-      let hoveredFeatureId = null; // To keep track of which feature is currently being hovered
-
       map.on("mousemove", "custom-tileset-layer", (e) => {
-        console.log("Mouse move event triggered"); // Добавлено для отладки
         map.getCanvas().style.cursor = "pointer";
 
         if (hoveredFeatureId) {
@@ -391,38 +388,36 @@ function App() {
         }
 
         if (e.features.length > 0) {
-          hoveredFeatureId = e.features[0].id;
+          const newHoveredFeatureId = e.features[0].id;
+          setHoveredFeatureId(newHoveredFeatureId);
           map.setFeatureState(
             {
               source: "custom-tileset-layer",
               sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
-              id: hoveredFeatureId,
+              id: newHoveredFeatureId,
             },
             { hover: true }
           );
-          console.log("Feature state set to hover"); // Добавлено для отладки
         }
       });
 
       map.on("mouseleave", "custom-tileset-layer", () => {
         map.getCanvas().style.cursor = "";
 
-        // If there's an already hovered feature, reset its state
         if (hoveredFeatureId) {
           map.setFeatureState(
             {
-              source: "neon-factory.12ssh55s",
+              source: "custom-tileset-layer",
               sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
               id: hoveredFeatureId,
             },
             { hover: false }
           );
+          setHoveredFeatureId(null);
         }
-        hoveredFeatureId = null; // Reset the hovered feature ID
       });
     }
-  }, [map]);
-
+  }, [map, hoveredFeatureId]);
   function changeColor() {
     let selectedColor = colorPicker.current.value;
     if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
