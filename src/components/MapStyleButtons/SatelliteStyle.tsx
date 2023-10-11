@@ -8,7 +8,12 @@ import { centralisedToggleFalse } from "../../redux/slices/centralisedToggleSlic
 import { decentralisedToggleFalse } from "../../redux/slices/decentralisedToggleSlice";
 import { allDistrictsToggleFalse } from "../../redux/slices/allDistrictsToggleSlice";
 
-const SatelliteStyle = ({ mapStyleSetter, map, setMapStyleSetter }) => {
+const SatelliteStyle = ({
+  mapStyleSetter,
+  map,
+  setMapStyleSetter,
+  setSelectedDistricts,
+}) => {
   const dispatch = useDispatch();
 
   const [toggleClass, setToggleClass] = useState<string>("");
@@ -26,9 +31,8 @@ const SatelliteStyle = ({ mapStyleSetter, map, setMapStyleSetter }) => {
     }
 
     dispatch(showCadastreFalse());
-    dispatch(selectedDistrictsChanging([]));
     dispatch(showTransportTrue());
-
+    setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
     dispatch(decentralisedToggleFalse());
 

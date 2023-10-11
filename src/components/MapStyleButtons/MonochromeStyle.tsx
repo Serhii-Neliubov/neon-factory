@@ -1,8 +1,44 @@
 import React, { useEffect, useState } from "react";
+import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
+import { centralisedToggleFalse } from "../../redux/slices/centralisedToggleSlice";
+import { decentralisedToggleFalse } from "../../redux/slices/decentralisedToggleSlice";
+import { allDistrictsToggleFalse } from "../../redux/slices/allDistrictsToggleSlice";
+import { showTransportTrue } from "../../redux/slices/showTransportSlice";
+import { servicesActionFalse } from "../../redux/slices/servicesActionSlice";
+import { useDispatch } from "react-redux";
 
-const MonochromeStyle = ({ monochromeStyleHandler, mapStyleSetter }) => {
+const MonochromeStyle = ({
+  mapStyleSetter,
+  map,
+  setSelectedDistricts,
+  setMapStyleSetter,
+}) => {
   const [toggleClass, setToggleClass] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(true);
+  const dispatch = useDispatch();
+  function monochromeStyleHandler() {
+    map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
+    dispatch(showCadastreFalse());
+
+    setMapStyleSetter(3);
+
+    if (map) {
+      map.loadImage("pin.png", function (error, image) {
+        if (error) throw error;
+        map.addImage("custom-pin", image);
+      });
+
+      // Остальной код обработки карты также может быть здесь
+    }
+    setSelectedDistricts([]);
+    dispatch(centralisedToggleFalse());
+    dispatch(decentralisedToggleFalse());
+
+    dispatch(allDistrictsToggleFalse());
+    dispatch(showTransportTrue());
+    // setIsModalActive(true);
+    dispatch(servicesActionFalse());
+  }
 
   const handleClick = () => {
     setToggle(true);
