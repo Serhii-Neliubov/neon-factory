@@ -24,6 +24,7 @@ import {
   toggleDistrictsVisibility,
   toggleButton,
   changeColor,
+  createMarkerElement,
 } from "./utils/MapFunctions";
 import TransportButton from "./components/ToggleMenu/TransportButton";
 import CadastreButton from "./components/ToggleMenu/CadastreButton";
@@ -106,11 +107,12 @@ function App() {
 
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
-  const MAPBOX_ACCESS_TOKEN =
-    "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A";
+  const MAPBOX_ACCESS_TOKEN = useRef(
+    "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
+  );
 
   useEffect(() => {
-    mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+    mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN.current;
 
     let mapSettings = {
       container: "map",
@@ -122,35 +124,6 @@ function App() {
 
     let map = new mapboxgl.Map(mapSettings);
     setMap(map);
-    function createMarkerElement() {
-      let container = document.createElement("div");
-      container.className = "deleteCustomMarkerContainer";
-
-      // Создайте элемент маркера
-      let marker = document.createElement("div");
-      marker.className = "custom-marker";
-      marker.style.backgroundImage = "url(pin.png)";
-      marker.style.width = "32px"; // Установите желаемую ширину и высоту маркера
-      marker.style.height = "32px";
-      marker.draggable = true;
-
-      // Создайте кнопку удаления
-      let deleteButton = document.createElement("button");
-      deleteButton.innerText = "×";
-      deleteButton.className = "delete-button";
-
-      // Добавьте обработчик события на кнопку удаления
-      deleteButton.addEventListener("click", function () {
-        // Удалите маркер и его контейнер из карты
-        container.remove();
-      });
-
-      // Добавьте маркер и кнопку в контейнер
-      container.appendChild(marker);
-      container.appendChild(deleteButton);
-
-      return container;
-    }
 
     let geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -444,8 +417,6 @@ function App() {
         if (error) throw error;
         map.addImage("custom-pin", image);
       });
-
-      // Остальной код обработки карты также может быть здесь
     }
   }, [map]);
 
@@ -570,6 +541,7 @@ function App() {
     // Очищаем отображение радиуса
     radiusDisplay.textContent = "";
   }
+
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
       setDecentralisedToggle(false);
@@ -608,39 +580,10 @@ function App() {
     }
   }
 
-  function satelitteStyleHandler() {
-    map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
-    dispatch(showCadastreFalse());
-
-    const inputElement = document.querySelector(".SatelitteInput");
-    if (inputElement) {
-      inputElement.checked = true;
-    }
-    setMapStyleSetter(2);
-
-    if (map) {
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-      });
-    }
-    setSelectedDistricts([]);
-    setCentralisedToggle(false);
-    setDecentralisedToggle(false);
-    setAllDistrictsToggle(false);
-    setShowTransport(true);
-    setServicesAction(false);
-    // setIsModalActive(true);
-  }
-
   function monochromeStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
     dispatch(showCadastreFalse());
 
-    const inputElement = document.querySelector(".MonochromeInput");
-    if (inputElement) {
-      inputElement.checked = true;
-    }
     setMapStyleSetter(3);
 
     if (map) {
@@ -659,7 +602,6 @@ function App() {
     // setIsModalActive(true);
     setServicesAction(false);
   }
-
   function darkStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
     dispatch(showCadastreFalse());
@@ -862,8 +804,13 @@ function App() {
                     mapStyleSetter={mapStyleSetter}
                   />
                   <SatelliteStyle
-                    satelitteStyleHandler={satelitteStyleHandler}
+                    map={map}
                     mapStyleSetter={mapStyleSetter}
+                    setMapStyleSetter={setMapStyleSetter}
+                    setCentralisedToggle={setCentralisedToggle}
+                    setDecentralisedToggle={setDecentralisedToggle}
+                    setAllDistrictsToggle={setAllDistrictsToggle}
+                    setServicesAction={setServicesAction}
                   />
                 </div>
               ) : null}
