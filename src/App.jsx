@@ -119,6 +119,19 @@ function App() {
   );
   const customTilesetLayer = {
     id: "custom-tileset-layer",
+    type: "fill",
+    source: {
+      type: "vector",
+      url: "mapbox://neon-factory.12ssh55s",
+    },
+    "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
+    paint: {
+      "fill-color": "rgba(255, 255, 255, 0)",
+      "fill-opacity": 1,
+    },
+  };
+  const customTilesetLineLayer = {
+    id: "custom-tileset-line-layer",
     type: "line",
     source: {
       type: "vector",
@@ -126,8 +139,8 @@ function App() {
     },
     "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
     paint: {
-      "line-color": "rgba(255, 255, 255, 0)", // начальный цвет контура
-      "line-width": 3, // начальная толщина контура
+      "line-color": "rgba(255, 255, 255, 0)", // цвет контура
+      "line-width": 2.5, // ширина контура
     },
   };
 
@@ -171,8 +184,14 @@ function App() {
       styles: defaultDrawStyles,
     });
 
+    map.on("move", function () {
+      map.addLayer(customTilesetLayer);
+      map.addLayer(customTilesetLineLayer);
+    });
+
     map.on("style.load", function () {
       map.addLayer(customTilesetLayer);
+      map.addLayer(customTilesetLineLayer);
     });
 
     const marker = document.getElementById("distance-marker");
@@ -367,13 +386,13 @@ function App() {
     if (map) {
       if (showCadastre) {
         map.on("click", "custom-tileset-layer", function (e) {
-          var features = map.queryRenderedFeatures(e.point, {
+          let features = map.queryRenderedFeatures(e.point, {
             layers: ["custom-tileset-layer"],
           });
 
           if (features.length > 0) {
-            var feature = features[0];
-            var index = selectedFeatures.indexOf(feature.properties.CaPaKey);
+            let feature = features[0];
+            let index = selectedFeatures.indexOf(feature.properties.CaPaKey);
             if (index === -1) {
               setSelectedFeatures([
                 ...selectedFeatures,
@@ -399,17 +418,19 @@ function App() {
 
       if (showCadastre) {
         map.on("idle", function () {
-          const lineWidthExpression = [
+          const lineColorExpression = [
             "match",
             ["to-string", ["get", "CaPaKey"]],
-            selectedFeatures.map(String),
-            10, // толщина контура для выбранных полигонов
-            1, // начальная толщина контура
+            ...selectedFeatures.flatMap((feature) => [
+              String(feature),
+              "rgb(255,0,0)",
+            ]),
+            "rgba(255,255,255,0)",
           ];
           map.setPaintProperty(
-            "custom-tileset-layer",
-            "line-width",
-            lineWidthExpression
+            "custom-tileset-line-layer",
+            "line-color",
+            lineColorExpression
           );
         });
       }
