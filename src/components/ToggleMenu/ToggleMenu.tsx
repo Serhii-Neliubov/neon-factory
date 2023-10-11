@@ -8,8 +8,6 @@ const ToggleMenu = ({
   toggleButton,
   centralisedDistrictsButtonHandler,
   decentralisedDistrictsButtonHandler,
-  decentralisedToggle,
-  setDecentralisedToggle,
   selectedDistricts,
 }) => {
   const buttons = [
@@ -110,8 +108,6 @@ const ToggleMenu = ({
         decentralisedDistrictsButtonHandler={
           decentralisedDistrictsButtonHandler
         }
-        decentralisedToggle={decentralisedToggle}
-        setDecentralisedToggle={setDecentralisedToggle}
       >
         Decentralised
       </DecentralisedDistrictsButton>

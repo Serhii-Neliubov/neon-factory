@@ -63,6 +63,10 @@ import {
   centralisedToggleFalse,
   centralisedToggleTrue,
 } from "./redux/slices/centralisedToggleSlice";
+import {
+  decentralisedToggleFalse,
+  decentralisedToggleTrue,
+} from "./redux/slices/decentralisedToggleSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -118,10 +122,6 @@ function App() {
 
   const [Sqm, setSqml] = useState(0);
 
-  // const centralisedToggle = useSelector(
-  //   (state) => state.centralisedToggle.value
-  // );
-  const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
 
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
@@ -443,7 +443,7 @@ function App() {
 
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
-      setDecentralisedToggle(true);
+      dispatch(decentralisedToggleTrue());
       dispatch(centralisedToggleTrue());
       dispatch(decentralisedDistrictsVisibleFalse());
       dispatch(centralisedDistrictsVisibleFalse());
@@ -465,7 +465,7 @@ function App() {
       }
       dispatch(allDistrictsSelectedTrue());
     } else {
-      setDecentralisedToggle(false);
+      dispatch(decentralisedToggleFalse());
       dispatch(decentralisedDistrictsVisibleTrue());
       dispatch(centralisedToggleFalse());
       dispatch(centralisedDistrictsVisibleTrue());
@@ -564,7 +564,8 @@ function App() {
 
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
-      setDecentralisedToggle(false);
+      dispatch(decentralisedToggleFalse());
+
       dispatch(decentralisedDistrictsVisibleTrue());
       setSelectedDistricts(centralisedDistricts);
       toggleDistrictsVisibility(centralisedDistricts, map);
@@ -616,7 +617,8 @@ function App() {
     }
     setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
-    setDecentralisedToggle(false);
+    dispatch(decentralisedToggleFalse());
+
     setAllDistrictsToggle(false);
     dispatch(showTransportTrue());
     // setIsModalActive(true);
@@ -641,8 +643,8 @@ function App() {
     }
     setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
+    dispatch(decentralisedToggleFalse());
 
-    setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     // setIsModalActive(true);
     dispatch(showTransportTrue());
@@ -674,7 +676,8 @@ function App() {
     dispatch(centralisedToggleFalse());
 
     // setIsModalActive(false);
-    setDecentralisedToggle(false);
+    dispatch(decentralisedToggleFalse());
+
     setAllDistrictsToggle(false);
   }
 
@@ -831,7 +834,6 @@ function App() {
                     map={map}
                     mapStyleSetter={mapStyleSetter}
                     setMapStyleSetter={setMapStyleSetter}
-                    setDecentralisedToggle={setDecentralisedToggle}
                     setAllDistrictsToggle={setAllDistrictsToggle}
                   />
                 </div>
@@ -856,8 +858,6 @@ function App() {
                     decentralisedDistrictsButtonHandler={
                       decentralisedDistrictsButtonHandler
                     }
-                    decentralisedToggle={decentralisedToggle}
-                    setDecentralisedToggle={setDecentralisedToggle}
                   />
                   <AllDistrictsButton
                     allDistrictsButtonHandler={allDistrictsButtonHandler}
@@ -915,7 +915,6 @@ function App() {
                 map={map}
                 removeCustomMarker={removeCustomMarker}
                 setSelectedDistricts={setSelectedDistricts}
-                setDecentralisedToggle={setDecentralisedToggle}
                 setAllDistrictsToggle={setAllDistrictsToggle}
               ></ResetMap>
 

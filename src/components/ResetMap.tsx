@@ -15,11 +15,11 @@ import { servicesActionFalse } from "../redux/slices/servicesActionSlice";
 import { allDistrictsVisibleTrue } from "../redux/slices/allDistrictsVisibleSlice";
 import { decentralisedDistrictsVisibleTrue } from "../redux/slices/decentralisedDistrictsVisibleSlice";
 import { centralisedToggleFalse } from "../redux/slices/centralisedToggleSlice";
+import { decentralisedToggleFalse } from "../redux/slices/decentralisedToggleSlice";
 const ResetMap = ({
   map,
   removeCustomMarker,
   draw,
-  setDecentralisedToggle,
   setAllDistrictsToggle,
   mapStyleSetter,
   setSelectedFeatures,
@@ -29,12 +29,12 @@ const ResetMap = ({
 
   function resetMapButtonHandler() {
     setSelectedFeatures([]);
-    setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     removeCustomMarker();
     setSelectedDistricts([]);
 
     dispatch(centralisedToggleFalse());
+    dispatch(decentralisedToggleFalse());
     dispatch(decentralisedDistrictsVisibleTrue());
     dispatch(showTransportTrue());
     dispatch(allDistrictsVisibleTrue());
