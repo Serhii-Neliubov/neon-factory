@@ -80,7 +80,6 @@ function App() {
   const isDecentralisedDistrictsVisible = useSelector(
     (state) => state.decentralisedDistrictsVisible.value
   );
-  // const isAllDistrictsSelected = useSelector((state) => state.allDistrictsSelected.value)
 
   const [selectedDistricts, setSelectedDistricts] = useState([]);
 

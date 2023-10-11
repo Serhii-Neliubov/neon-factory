@@ -26,6 +26,7 @@ const ResetMap = ({
   setAllDistrictsToggle,
   mapStyleSetter,
   setSelectedFeatures,
+  setSelectedDistricts,
 }) => {
   const dispatch = useDispatch();
 
@@ -35,6 +36,7 @@ const ResetMap = ({
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     removeCustomMarker();
+    setSelectedDistricts([]);
 
     dispatch(decentralisedDistrictsVisibleTrue());
     dispatch(showTransportTrue());
