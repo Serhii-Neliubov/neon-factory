@@ -67,6 +67,7 @@ import {
   decentralisedToggleFalse,
   decentralisedToggleTrue,
 } from "./redux/slices/decentralisedToggleSlice";
+import { allDistrictsToggleFalse } from "./redux/slices/allDistrictsToggleSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -122,7 +123,7 @@ function App() {
 
   const [Sqm, setSqml] = useState(0);
 
-  const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
+  // const allDistrictsToggle = useSelector((state) => state.allDistrictsToggle.value)
 
   const [mapStyleSetter, setMapStyleSetter] = useState(1);
 
@@ -619,7 +620,7 @@ function App() {
     dispatch(centralisedToggleFalse());
     dispatch(decentralisedToggleFalse());
 
-    setAllDistrictsToggle(false);
+    dispatch(allDistrictsToggleFalse());
     dispatch(showTransportTrue());
     // setIsModalActive(true);
     dispatch(servicesActionFalse());
@@ -645,7 +646,7 @@ function App() {
     dispatch(centralisedToggleFalse());
     dispatch(decentralisedToggleFalse());
 
-    setAllDistrictsToggle(false);
+    dispatch(allDistrictsToggleFalse());
     // setIsModalActive(true);
     dispatch(showTransportTrue());
 
@@ -678,7 +679,7 @@ function App() {
     // setIsModalActive(false);
     dispatch(decentralisedToggleFalse());
 
-    setAllDistrictsToggle(false);
+    dispatch(allDistrictsToggleFalse());
   }
 
   useEffect(() => {
@@ -834,7 +835,6 @@ function App() {
                     map={map}
                     mapStyleSetter={mapStyleSetter}
                     setMapStyleSetter={setMapStyleSetter}
-                    setAllDistrictsToggle={setAllDistrictsToggle}
                   />
                 </div>
               ) : null}
@@ -861,8 +861,6 @@ function App() {
                   />
                   <AllDistrictsButton
                     allDistrictsButtonHandler={allDistrictsButtonHandler}
-                    allDistrictsToggle={allDistrictsToggle}
-                    setAllDistrictsToggle={setAllDistrictsToggle}
                   >
                     All Districts
                   </AllDistrictsButton>
@@ -915,7 +913,6 @@ function App() {
                 map={map}
                 removeCustomMarker={removeCustomMarker}
                 setSelectedDistricts={setSelectedDistricts}
-                setAllDistrictsToggle={setAllDistrictsToggle}
               ></ResetMap>
 
               <PrintScreen
