@@ -13,10 +13,7 @@ import { showTransportTrue } from "../redux/slices/showTransportSlice";
 import { centralisedDistrictsVisibleTrue } from "../redux/slices/centralisedDistrictsVisibleSlice";
 import { servicesActionFalse } from "../redux/slices/servicesActionSlice";
 import { allDistrictsVisibleTrue } from "../redux/slices/allDistrictsVisibleSlice";
-import {
-  decentralisedDistrictsVisibleFalse,
-  decentralisedDistrictsVisibleTrue,
-} from "../redux/slices/decentralisedDistrictsVisibleSlice";
+import { decentralisedDistrictsVisibleTrue } from "../redux/slices/decentralisedDistrictsVisibleSlice";
 const ResetMap = ({
   map,
   removeCustomMarker,

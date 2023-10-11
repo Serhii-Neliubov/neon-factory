@@ -58,6 +58,7 @@ import {
   allDistrictsSelectedFalse,
   allDistrictsSelectedTrue,
 } from "./redux/slices/allDistrictsSelectedSlice";
+import { showTransportTrue } from "./redux/slices/showTransportSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -113,7 +114,7 @@ function App() {
 
   const [Sqm, setSqml] = useState(0);
 
-  const [showTransport, setShowTransport] = useState(true);
+  // const showTransport = useSelector((state) => state.showTransport.value);
   const [centralisedToggle, setCentralisedToggle] = useState(false);
   const [decentralisedToggle, setDecentralisedToggle] = useState(false);
   const [allDistrictsToggle, setAllDistrictsToggle] = useState(false);
@@ -611,7 +612,7 @@ function App() {
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
-    setShowTransport(true);
+    dispatch(showTransportTrue());
     // setIsModalActive(true);
     dispatch(servicesActionFalse());
   }
@@ -637,14 +638,16 @@ function App() {
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
     // setIsModalActive(true);
-    setShowTransport(true);
+    dispatch(showTransportTrue());
+
     dispatch(servicesActionFalse());
   }
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     dispatch(showCadastreFalse());
     setMapStyleSetter(1);
-    setShowTransport(true);
+    dispatch(showTransportTrue());
+
     dispatch(servicesActionFalse());
 
     const inputElement = document.querySelector(".DefaultInput");
@@ -873,13 +876,7 @@ function App() {
               </button>
               {openTransport ? (
                 <div className="toggleIcons">
-                  <TransportButton
-                    setShowTransport={setShowTransport}
-                    showTransport={showTransport}
-                    map={map}
-                  >
-                    Transport
-                  </TransportButton>
+                  <TransportButton map={map}>Transport</TransportButton>
                   <MapIconsToggle map={map}>
                     SHOPS, RESTAURANTS & SERVICES
                   </MapIconsToggle>
@@ -908,7 +905,6 @@ function App() {
               <ResetMap
                 setSelectedFeatures={setSelectedFeatures}
                 mapStyleSetter={mapStyleSetter}
-                setShowTransport={setShowTransport}
                 setSqml={setSqml}
                 draw={draw}
                 map={map}
