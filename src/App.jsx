@@ -38,20 +38,18 @@ import { Scrollbar } from "react-scrollbars-custom";
 import MapboxCircle from "mapbox-gl-circle";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { changeMapValue } from "./redux/slices/mapSlice";
 import { openBrusselsChanging } from "./redux/slices/openBrusselsSlice";
 import { activeSidebarChanging } from "./redux/slices/activeSidebarSlice";
 import { openTransportChanging } from "./redux/slices/openTransportSlice";
 import { openCadastreChanging } from "./redux/slices/openCadastreSlice";
 import { showCadastreFalse } from "./redux/slices/showCadastreSlice";
-import { changeDrawValue } from "./redux/slices/drawSlice";
 import { mapStyleButtonChanging } from "./redux/slices/mapStyleButtonSlice";
 
 function App() {
   const dispatch = useDispatch();
 
-  const map = useSelector((state) => state.map.value);
-  const draw = useSelector((state) => state.draw.value);
+  const [map, setMap] = useState(null);
+  const [draw, setDraw] = useState(null);
 
   const openBrussels = useSelector((state) => state.openBrussels.value);
   const activeSidebar = useSelector((state) => state.activeSidebar.value);
@@ -123,7 +121,7 @@ function App() {
     };
 
     let map = new mapboxgl.Map(mapSettings);
-    dispatch(changeMapValue(map));
+    setMap(map);
     function createMarkerElement() {
       let container = document.createElement("div");
       container.className = "deleteCustomMarkerContainer";
@@ -212,16 +210,13 @@ function App() {
     map.on("style.load", function () {
       map.addLayer(customTilesetLayer);
     });
-    map.on("move", function () {
-      map.addLayer(customTilesetLayer);
-    });
     const marker = document.getElementById("distance-marker");
     map.on("draw.delete", function () {
       // Скрываем маркер при удалении линии
       document.getElementById("distance-marker").style.display = "none";
     });
 
-    dispatch(changeDrawValue(draw));
+    setDraw(draw);
 
     map.addControl(new mapboxgl.NavigationControl());
 
@@ -690,7 +685,6 @@ function App() {
     setShowTransport(true);
     setServicesAction(false);
   }
-
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     dispatch(showCadastreFalse());
