@@ -2,17 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { allDistrictsVisibleChanging } from "../../redux/slices/allDistrictsVisibleSlice";
+import { allDistrictsToggleChanging } from "../../redux/slices/allDistrictsToggleSlice";
 
-const AllDistrictsButton = ({
-  children,
-  allDistrictsButtonHandler,
-  setAllDistrictsToggle,
-  allDistrictsToggle,
-}) => {
+const AllDistrictsButton = ({ children, allDistrictsButtonHandler }) => {
   const dispatch = useDispatch();
+  const allDistrictsToggle = useSelector(
+    (state: RootState) => state.allDistrictsToggle.value
+  );
 
   const handleClick = () => {
-    setAllDistrictsToggle((prevToggle) => !prevToggle);
+    dispatch(allDistrictsToggleChanging());
     dispatch(allDistrictsVisibleChanging());
     allDistrictsButtonHandler();
   };

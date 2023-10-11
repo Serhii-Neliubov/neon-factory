@@ -19,6 +19,7 @@ import decentralisedDistrictsVisibleSlice from "./slices/decentralisedDistrictsV
 import allDistrictsSelectedSlice from "./slices/allDistrictsSelectedSlice";
 import centralisedToggleSlice from "./slices/centralisedToggleSlice";
 import decentralisedToggleSlice from "./slices/decentralisedToggleSlice";
+import allDistrictsToggleSlice from "./slices/allDistrictsToggleSlice";
 
 export const store = configureStore({
   reducer: {
@@ -42,6 +43,7 @@ export const store = configureStore({
     allDistrictsSelected: allDistrictsSelectedSlice,
     centralisedToggle: centralisedToggleSlice.reducer,
     decentralisedToggle: decentralisedToggleSlice,
+    allDistrictsToggle: allDistrictsToggleSlice,
   },
 });
 
