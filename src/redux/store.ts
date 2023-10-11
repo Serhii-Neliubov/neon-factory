@@ -12,6 +12,10 @@ import sqmSlice from "./slices/sqmSlice";
 import selectedDistrictsSlice from "./slices/selectedDistrictsSlice";
 import { centralisedDistrictSlice } from "./slices/centralisedDistrictSliceActive";
 import showTransportSlice from "./slices/showTransportSlice";
+import centralisedDistrictsVisibleSlice from "./slices/centralisedDistrictsVisibleSlice";
+import servicesActionSlice from "./slices/servicesActionSlice";
+import allDistrictsVisibleSlice from "./slices/allDistrictsVisibleSlice";
+import decentralisedDistrictsVisibleSlice from "./slices/decentralisedDistrictsVisibleSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +32,10 @@ export const store = configureStore({
     selectedDistricts: selectedDistrictsSlice,
     centralisedDistrict: centralisedDistrictSlice.reducer,
     showTransport: showTransportSlice,
+    centralisedDistrictsVisible: centralisedDistrictsVisibleSlice,
+    servicesAction: servicesActionSlice,
+    allDistrictsVisible: allDistrictsVisibleSlice,
+    decentralisedDistrictsVisible: decentralisedDistrictsVisibleSlice,
   },
 });
 

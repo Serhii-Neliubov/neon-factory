@@ -3,6 +3,7 @@ import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
 import { useDispatch } from "react-redux";
 import { selectedDistrictsChanging } from "../../redux/slices/selectedDistrictsSlice";
 import { showTransportTrue } from "../../redux/slices/showTransportSlice";
+import { servicesActionFalse } from "../../redux/slices/servicesActionSlice";
 
 const SatelliteStyle = ({
   mapStyleSetter,
@@ -11,7 +12,7 @@ const SatelliteStyle = ({
   setCentralisedToggle,
   setDecentralisedToggle,
   setAllDistrictsToggle,
-  setServicesAction,
+  // setServicesAction,
 }) => {
   const dispatch = useDispatch();
 
@@ -36,7 +37,7 @@ const SatelliteStyle = ({
     setCentralisedToggle(false);
     setDecentralisedToggle(false);
     setAllDistrictsToggle(false);
-    setServicesAction(false);
+    dispatch(servicesActionFalse());
     // setIsModalActive(true);
   }
 

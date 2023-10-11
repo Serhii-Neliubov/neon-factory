@@ -45,6 +45,15 @@ import { openTransportChanging } from "./redux/slices/openTransportSlice";
 import { openCadastreChanging } from "./redux/slices/openCadastreSlice";
 import { showCadastreFalse } from "./redux/slices/showCadastreSlice";
 import { mapStyleButtonChanging } from "./redux/slices/mapStyleButtonSlice";
+import {
+  centralisedDistrictsVisibleFalse,
+  centralisedDistrictsVisibleTrue,
+} from "./redux/slices/centralisedDistrictsVisibleSlice";
+import { servicesActionFalse } from "./redux/slices/servicesActionSlice";
+import {
+  decentralisedDistrictsVisibleFalse,
+  decentralisedDistrictsVisibleTrue,
+} from "./redux/slices/decentralisedDistrictsVisibleSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,15 +67,19 @@ function App() {
   const openCadastre = useSelector((state) => state.openCadastre.value);
   const showCadastre = useSelector((state) => state.showCadastre.value);
   const mapStyleButtonOpen = useSelector((state) => state.mapStyleButton.value);
+  const isCentralisedDistrictsVisible = useSelector(
+    (state) => state.centralisedDistrictsVisible.value
+  );
+  const isAllDistrictsVisible = useSelector(
+    (state) => state.allDistrictsVisible.value
+  );
+  // const isDecentralisedDistrictsVisible = useSelector(
+  //   (state) => state.decentralisedDistrictsVisible.value
+  // );
 
   const [selectedDistricts, setSelectedDistricts] = useState([]);
-  const [isAllDistrictsVisible, setIsAllDistrictsVisible] = useState(true);
-  const [isCentralisedDistrictsVisible, setIsCentralisedDistrictsVisible] =
-    useState(true);
-  const [isDecentralisedDistrictsVisible, setIsDecentralisedDistrictsVisible] =
-    useState(true);
+
   const [isAllDistrictsSelected, setIsAllDistrictsSelected] = useState(false);
-  const [servicesAction, setServicesAction] = useState(false);
 
   const submenuTag = useRef();
   const mapTag = useRef();
@@ -423,9 +436,9 @@ function App() {
   function allDistrictsButtonHandler() {
     if (isAllDistrictsVisible) {
       setDecentralisedToggle(true);
-      setIsDecentralisedDistrictsVisible(false);
       setCentralisedToggle(true);
-      setIsCentralisedDistrictsVisible(false);
+      dispatch(decentralisedDistrictsVisibleFalse());
+      dispatch(centralisedDistrictsVisibleFalse());
 
       setSelectedDistricts(allDistricts);
       toggleDistrictsVisibility(selectedDistricts, map);
@@ -445,10 +458,9 @@ function App() {
       setIsAllDistrictsSelected(true);
     } else {
       setDecentralisedToggle(false);
-      setIsDecentralisedDistrictsVisible(true);
+      dispatch(decentralisedDistrictsVisibleTrue());
       setCentralisedToggle(false);
-      setIsCentralisedDistrictsVisible(true);
-
+      dispatch(centralisedDistrictsVisibleTrue());
       setSelectedDistricts([]);
       allDistricts.forEach((district) => {
         if (selectedDistricts.includes(district)) {
@@ -545,38 +557,37 @@ function App() {
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
       setDecentralisedToggle(false);
-      setIsDecentralisedDistrictsVisible(true);
-
+      dispatch(decentralisedDistrictsVisibleTrue());
       setSelectedDistricts(centralisedDistricts);
       toggleDistrictsVisibility(centralisedDistricts, map);
 
-      setIsCentralisedDistrictsVisible(false);
+      dispatch(centralisedDistrictsVisibleFalse());
     } else {
       const withoutCentralisedDistricts = selectedDistricts.filter(
         (district) => !centralisedDistricts.includes(district)
       );
       setSelectedDistricts(withoutCentralisedDistricts);
       toggleDistrictsVisibility(withoutCentralisedDistricts, map);
-      setIsCentralisedDistrictsVisible(true);
+      dispatch(centralisedDistrictsVisibleTrue());
     }
   }
 
   function decentralisedDistrictsButtonHandler() {
     if (isDecentralisedDistrictsVisible) {
       setCentralisedToggle(false);
-      setIsCentralisedDistrictsVisible(true);
+      dispatch(centralisedDistrictsVisibleTrue());
 
       setSelectedDistricts(decentralisedDistricts);
       toggleDistrictsVisibility(decentralisedDistricts, map);
 
-      setIsDecentralisedDistrictsVisible(false);
+      dispatch(decentralisedDistrictsVisibleFalse());
     } else {
       const withoutDecentralisedDistricts = selectedDistricts.filter(
         (district) => !decentralisedDistricts.includes(district)
       );
       setSelectedDistricts(withoutDecentralisedDistricts);
       toggleDistrictsVisibility(withoutDecentralisedDistricts, map);
-      setIsDecentralisedDistrictsVisible(true);
+      dispatch(decentralisedDistrictsVisibleTrue());
     }
   }
 
@@ -600,7 +611,7 @@ function App() {
     setAllDistrictsToggle(false);
     setShowTransport(true);
     // setIsModalActive(true);
-    setServicesAction(false);
+    dispatch(servicesActionFalse());
   }
   function darkStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
@@ -625,14 +636,14 @@ function App() {
     setAllDistrictsToggle(false);
     // setIsModalActive(true);
     setShowTransport(true);
-    setServicesAction(false);
+    dispatch(servicesActionFalse());
   }
   function defaultStyleHandler() {
     map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
     dispatch(showCadastreFalse());
     setMapStyleSetter(1);
     setShowTransport(true);
-    setServicesAction(false);
+    dispatch(servicesActionFalse());
 
     const inputElement = document.querySelector(".DefaultInput");
     if (inputElement) {
@@ -810,7 +821,6 @@ function App() {
                     setCentralisedToggle={setCentralisedToggle}
                     setDecentralisedToggle={setDecentralisedToggle}
                     setAllDistrictsToggle={setAllDistrictsToggle}
-                    setServicesAction={setServicesAction}
                   />
                 </div>
               ) : null}
@@ -841,9 +851,7 @@ function App() {
                     setDecentralisedToggle={setDecentralisedToggle}
                   />
                   <AllDistrictsButton
-                    setIsAllDistrictsVisible={setIsAllDistrictsVisible}
                     allDistrictsButtonHandler={allDistrictsButtonHandler}
-                    isAllDistrictsVisible={isAllDistrictsVisible}
                     allDistrictsToggle={allDistrictsToggle}
                     setAllDistrictsToggle={setAllDistrictsToggle}
                   >
@@ -871,11 +879,7 @@ function App() {
                   >
                     Transport
                   </TransportButton>
-                  <MapIconsToggle
-                    servicesAction={servicesAction}
-                    setServicesAction={setServicesAction}
-                    map={map}
-                  >
+                  <MapIconsToggle map={map}>
                     SHOPS, RESTAURANTS & SERVICES
                   </MapIconsToggle>
                 </div>
@@ -892,9 +896,7 @@ function App() {
               </button>
               {openCadastre ? (
                 <div className="toggleIcons">
-                  <CadastreButton showCadastre={showCadastre} map={map}>
-                    Cadastre
-                  </CadastreButton>
+                  <CadastreButton map={map}>Cadastre</CadastreButton>
                 </div>
               ) : (
                 ""
@@ -905,18 +907,13 @@ function App() {
               <ResetMap
                 setSelectedFeatures={setSelectedFeatures}
                 mapStyleSetter={mapStyleSetter}
-                setServicesAction={setServicesAction}
                 setShowTransport={setShowTransport}
                 setSqml={setSqml}
                 draw={draw}
                 map={map}
                 removeCustomMarker={removeCustomMarker}
                 setSelectedDistricts={setSelectedDistricts}
-                setIsAllDistrictsVisible={setIsAllDistrictsVisible}
                 setCentralisedToggle={setCentralisedToggle}
-                setIsCentralisedDistrictsVisible={
-                  setIsCentralisedDistrictsVisible
-                }
                 setDecentralisedToggle={setDecentralisedToggle}
                 setIsDecentralisedDistrictsVisible={
                   setIsDecentralisedDistrictsVisible
