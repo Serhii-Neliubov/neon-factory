@@ -126,10 +126,16 @@ function App() {
     },
     "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
     paint: {
-      "fill-color": "rgba(255, 255, 255, 0)",
-      "fill-opacity": 1,
+      "fill-color": [
+        "case",
+        ["boolean", ["feature-state", "hover"], false],
+        "black",
+        "rgba(255, 255, 255, 0)",
+      ],
+      "fill-opacity": 0.2,
     },
   };
+
   const customTilesetLineLayer = {
     id: "custom-tileset-line-layer",
     type: "line",
@@ -365,6 +371,57 @@ function App() {
       geocoderContainerRef.removeChild(geocoderContainerRef.firstChild);
     };
   }, []);
+  useEffect(() => {
+    if (map) {
+      let hoveredFeatureId = null; // To keep track of which feature is currently being hovered
+
+      map.on("mousemove", "custom-tileset-layer", (e) => {
+        console.log("Mouse move event triggered"); // Добавлено для отладки
+        map.getCanvas().style.cursor = "pointer";
+
+        if (hoveredFeatureId) {
+          map.setFeatureState(
+            {
+              source: "custom-tileset-layer",
+              sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+              id: hoveredFeatureId,
+            },
+            { hover: false }
+          );
+        }
+
+        if (e.features.length > 0) {
+          hoveredFeatureId = e.features[0].id;
+          map.setFeatureState(
+            {
+              source: "custom-tileset-layer",
+              sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+              id: hoveredFeatureId,
+            },
+            { hover: true }
+          );
+          console.log("Feature state set to hover"); // Добавлено для отладки
+        }
+      });
+
+      map.on("mouseleave", "custom-tileset-layer", () => {
+        map.getCanvas().style.cursor = "";
+
+        // If there's an already hovered feature, reset its state
+        if (hoveredFeatureId) {
+          map.setFeatureState(
+            {
+              source: "neon-factory.12ssh55s",
+              sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+              id: hoveredFeatureId,
+            },
+            { hover: false }
+          );
+        }
+        hoveredFeatureId = null; // Reset the hovered feature ID
+      });
+    }
+  }, [map]);
 
   function changeColor() {
     let selectedColor = colorPicker.current.value;
@@ -415,7 +472,6 @@ function App() {
           }
         });
       }
-
       if (showCadastre) {
         map.on("idle", function () {
           const lineColorExpression = [
