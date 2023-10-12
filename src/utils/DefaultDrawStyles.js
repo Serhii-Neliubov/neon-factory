@@ -56,8 +56,8 @@ const defaultDrawStyles = [
       "line-join": "round",
     },
     paint: {
-      "line-color": "#fbb03b",
-      "line-dasharray": [0.2, 2],
+      "line-color": "#4cc0ad",
+      "line-dasharray": [2, 2],
       "line-width": 2,
     },
   },
