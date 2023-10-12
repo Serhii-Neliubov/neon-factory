@@ -228,7 +228,7 @@ function App() {
       map.off("mousemove", "custom-tileset-layer", handleMouseMove);
       map.off("mouseleave", "custom-tileset-layer", handleMouseLeave);
     };
-  }, [map, showCadastre]);
+  }, [map, showCadastre, hoveredFeatureId]);
   useEffect(() => {
     if (!map) return;
 
@@ -269,6 +269,17 @@ function App() {
       map.setFeatureState(featureState, { hover: false });
     };
   }, [map, hoveredFeatureId]);
+  const resetLayerStyles = () => {
+    map.setPaintProperty("custom-tileset-line-layer", "line-color", [
+      "match",
+      ["get", "CaPaKey"],
+      "specificValue1",
+      "rgb(255, 0, 0)",
+      "specificValue2",
+      "rgb(0, 255, 0)",
+      "rgba(255, 255, 255, 0)",
+    ]);
+  };
 
   useEffect(() => {
     if (map) {
@@ -301,24 +312,31 @@ function App() {
               );
             }
           }
+          if (selectedFeatures.length === 0) {
+            resetLayerStyles();
+          }
         });
       }
       if (showCadastre) {
         map.on("idle", function () {
-          const lineColorExpression = [
-            "match",
-            ["to-string", ["get", "CaPaKey"]],
-            ...selectedFeatures.flatMap((feature) => [
-              String(feature),
-              "rgb(255,0,0)",
-            ]),
-            "rgba(255,255,255,0)",
-          ];
-          map.setPaintProperty(
-            "custom-tileset-line-layer",
-            "line-color",
-            lineColorExpression
-          );
+          if (selectedFeatures.length === 0) {
+            resetLayerStyles();
+          } else {
+            const lineColorExpression = [
+              "match",
+              ["to-string", ["get", "CaPaKey"]],
+              ...selectedFeatures.flatMap((feature) => [
+                String(feature),
+                "rgb(255,0,0)",
+              ]),
+              "rgba(255,255,255,0)",
+            ];
+            map.setPaintProperty(
+              "custom-tileset-line-layer",
+              "line-color",
+              lineColorExpression
+            );
+          }
         });
       }
     }
