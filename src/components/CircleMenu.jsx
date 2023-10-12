@@ -9,7 +9,7 @@ const CircleMenu = ({ map }) => {
   const updateRadiusDisplay = (radius) => {
     const radiusDisplay = document.getElementById("radius-display");
     if (radius !== undefined && radius > 0) {
-      radiusDisplay.textContent = `Radius: ${radius} meters`;
+      radiusDisplay.textContent = `Radius: ${radius}`;
     } else {
       radiusDisplay.textContent = "";
     }
@@ -22,14 +22,14 @@ const CircleMenu = ({ map }) => {
     const center = map.getCenter();
     const uniqueId = "_" + Math.random().toString(36).substr(2, 9);
 
-    const myCircle = new MapboxCircle(center, 3275, {
+    const myCircle = new MapboxCircle(center, 10, {
       editable: true,
       minRadius: 10,
       fillColor: "rgba(0,0,0,0.2)",
       id: uniqueId,
     }).addTo(map);
 
-    let radius = 3275;
+    let radius = 10;
     updateRadiusDisplay(radius);
 
     myCircle.on("centerchanged", (circleObj) => {

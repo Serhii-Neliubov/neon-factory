@@ -32,7 +32,6 @@ import { Scrollbar } from "react-scrollbars-custom";
 import { useDispatch, useSelector } from "react-redux";
 import { openBrusselsChanging } from "./redux/slices/openBrusselsSlice";
 import { activeSidebarChanging } from "./redux/slices/activeSidebarSlice";
-import { showCadastreFalse } from "./redux/slices/showCadastreSlice";
 import {
   centralisedDistrictsVisibleFalse,
   centralisedDistrictsVisibleTrue,
@@ -67,7 +66,8 @@ function App() {
 
   const openBrussels = useSelector((state) => state.openBrussels.value);
   const activeSidebar = useSelector((state) => state.activeSidebar.value);
-  const showCadastre = useSelector((state) => state.showCadastre.value);
+  const [showCadastre, setShowCadastre] = useState(false);
+
   const isCentralisedDistrictsVisible = useSelector(
     (state) => state.centralisedDistrictsVisible.value
   );
@@ -553,16 +553,16 @@ function App() {
       toggleDistrictsVisibility(selectedDistricts, map);
       if (mapStyleSetter == 1) {
         map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
-        dispatch(showCadastreFalse());
+        setShowCadastre(false);
       } else if (mapStyleSetter == 2) {
         map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
-        dispatch(showCadastreFalse());
+        setShowCadastre(false);
       } else if (mapStyleSetter == 3) {
         map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
-        dispatch(showCadastreFalse());
+        setShowCadastre(false);
       } else {
         map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
-        dispatch(showCadastreFalse());
+        setShowCadastre(false);
       }
       dispatch(allDistrictsSelectedTrue());
     } else {
@@ -788,7 +788,11 @@ function App() {
               <button className="AreasButton">Gent (soon)</button>
               <button className="AreasButton">luxembourg (soon)</button>
               <OpenTranportButton map={map} />
-              <OpenCadastreButton showCadastre={showCadastre} map={map} />
+              <OpenCadastreButton
+                showCadastre={showCadastre}
+                setShowCadastre={setShowCadastre}
+                map={map}
+              />
             </div>
 
             <div className="down-sidebar__buttons">

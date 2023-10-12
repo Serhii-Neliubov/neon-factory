@@ -4,7 +4,7 @@ import { RootState } from "../../redux/store";
 import { openCadastreChanging } from "../../redux/slices/openCadastreSlice";
 import CadastreButton from "./CadastreButton";
 
-const OpenCadastreButton = ({ map }) => {
+const OpenCadastreButton = ({ map, setShowCadastre, showCadastre }) => {
   const dispatch = useDispatch();
   const openCadastre = useSelector(
     (state: RootState) => state.openCadastre.value
@@ -21,7 +21,13 @@ const OpenCadastreButton = ({ map }) => {
       </button>
       {openCadastre ? (
         <div className="toggleIcons">
-          <CadastreButton map={map}>Cadastre</CadastreButton>
+          <CadastreButton
+            showCadastre={showCadastre}
+            setShowCadastre={setShowCadastre}
+            map={map}
+          >
+            Cadastre
+          </CadastreButton>
         </div>
       ) : (
         ""
