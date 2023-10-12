@@ -25,7 +25,7 @@ const CircleMenu = ({ map }) => {
     const myCircle = new MapboxCircle(center, 3275, {
       editable: true,
       minRadius: 10,
-      fillColor: "#29AB87",
+      fillColor: "rgba(0,0,0,0.2)",
       id: uniqueId,
     }).addTo(map);
 
