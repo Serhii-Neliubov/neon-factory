@@ -336,11 +336,16 @@ function App() {
           }
         });
       }
+    }
+  }, [map, selectedFeatures, showCadastre]);
+
+  useEffect(() => {
+    if (map) {
       if (selectedFeatures.length === 0) {
         resetLayerStyles();
       }
     }
-  }, [map, selectedFeatures, showCadastre]);
+  }, [selectedFeatures]);
 
   useEffect(() => {
     setTimeout(() => {
