@@ -312,9 +312,6 @@ function App() {
               );
             }
           }
-          if (selectedFeatures.length === 0) {
-            resetLayerStyles();
-          }
         });
       }
       if (showCadastre) {
@@ -338,6 +335,9 @@ function App() {
             );
           }
         });
+      }
+      if (selectedFeatures.length === 0) {
+        resetLayerStyles();
       }
     }
   }, [map, selectedFeatures, showCadastre]);
@@ -390,7 +390,6 @@ function App() {
         map.addLayer(layer);
       }
     }
-
     map.on("move", function () {
       addLayerIfAbsent(map, customTilesetLayer);
       addLayerIfAbsent(map, customTilesetLineLayer);
@@ -867,8 +866,10 @@ function App() {
                   setSqml={setSqml}
                   draw={draw}
                   map={map}
+                  setShowCadastre={setShowCadastre}
                   removeCustomMarker={removeCustomMarker}
                   setSelectedDistricts={setSelectedDistricts}
+                  resetLayerStyles={resetLayerStyles}
                 ></ResetMap>
 
                 <PrintScreen
