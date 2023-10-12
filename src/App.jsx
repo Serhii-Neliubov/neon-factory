@@ -496,6 +496,11 @@ function App() {
         document.getElementById("distance-value").textContent = `${distance} m`;
         marker.style.left = `${map.project(menuPosition).x}px`;
         marker.style.top = `${map.project(menuPosition).y}px`;
+      } else if (updatedFeature.geometry.type === "Polygon") {
+        // Calculate the area of the updated polygon
+        const area = turf.area(updatedFeature.geometry);
+        const sqm = Math.round(area * 100) / 100;
+        setSqml(sqm);
       }
     });
 
