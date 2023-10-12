@@ -24,6 +24,7 @@ const ResetMap = ({
   mapStyleSetter,
   setSelectedFeatures,
   setSelectedDistricts,
+  setShowCadastre,
 }) => {
   const dispatch = useDispatch();
 
@@ -31,7 +32,6 @@ const ResetMap = ({
     setSelectedFeatures([]);
     removeCustomMarker();
     setSelectedDistricts([]);
-
     dispatch(centralisedToggleFalse());
     dispatch(allDistrictsToggleFalse());
     dispatch(decentralisedToggleFalse());
@@ -46,7 +46,7 @@ const ResetMap = ({
     dispatch(controlActiveFalse());
     dispatch(openBrusselsFalse());
     dispatch(openTransportFalse());
-    dispatch(showCadastreFalse());
+    setShowCadastre(false);
     dispatch(openCadastreFalse());
     dispatch(mapStyleButtonFalse());
 
