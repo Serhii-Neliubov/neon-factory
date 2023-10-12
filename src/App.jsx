@@ -159,84 +159,116 @@ function App() {
   };
 
   const [selectedFeatures, setSelectedFeatures] = useState([]);
+  useEffect(() => {
+    if (!map || !showCadastre) return;
+
+    const handleMouseMove = (e) => {
+      map.getCanvas().style.cursor = "pointer";
+
+      if (hoveredFeatureId) {
+        map.setFeatureState(
+          {
+            source: "custom-tileset-layer",
+            sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+            id: hoveredFeatureId,
+          },
+          { hover: false }
+        );
+      }
+
+      if (e.features.length > 0) {
+        const newHoveredFeatureId = e.features[0].id;
+        setHoveredFeatureId(newHoveredFeatureId);
+        map.setFeatureState(
+          {
+            source: "custom-tileset-layer",
+            sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+            id: newHoveredFeatureId,
+          },
+          { hover: true }
+        );
+
+        const CaPaKey = e.features[0].properties.CaPaKey;
+        map.setPaintProperty("custom-tileset-layer", "fill-color", [
+          "match",
+          ["get", "CaPaKey"],
+          CaPaKey,
+          "rgba(0,0,0, 0.4)",
+          "rgba(255,255,255,0)",
+        ]);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      map.getCanvas().style.cursor = "";
+
+      if (hoveredFeatureId) {
+        map.setFeatureState(
+          {
+            source: "custom-tileset-layer",
+            sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+            id: hoveredFeatureId,
+          },
+          { hover: false }
+        );
+        setHoveredFeatureId(null);
+
+        map.setPaintProperty(
+          "custom-tileset-layer",
+          "fill-color",
+          "rgba(255,255,255,0)"
+        );
+      }
+    };
+
+    map.on("mousemove", "custom-tileset-layer", handleMouseMove);
+    map.on("mouseleave", "custom-tileset-layer", handleMouseLeave);
+
+    return () => {
+      map.off("mousemove", "custom-tileset-layer", handleMouseMove);
+      map.off("mouseleave", "custom-tileset-layer", handleMouseLeave);
+    };
+  }, [map, showCadastre]);
+  useEffect(() => {
+    if (!map) return;
+
+    if (!showCadastre && hoveredFeatureId) {
+      // Сбросьте стиль дома
+      map.setPaintProperty(
+        "custom-tileset-layer",
+        "fill-color",
+        "rgba(255,255,255,0)"
+      );
+
+      // Установите состояние фичи в неактивное
+      map.setFeatureState(
+        {
+          source: "custom-tileset-layer",
+          sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+          id: hoveredFeatureId,
+        },
+        { hover: false }
+      );
+
+      // Обнулите hoveredFeatureId
+      setHoveredFeatureId(null);
+    }
+  }, [map, showCadastre, hoveredFeatureId]);
 
   useEffect(() => {
-    if (map) {
-      if (showCadastre) {
-        map.on("mousemove", "custom-tileset-layer", (e) => {
-          map.getCanvas().style.cursor = "pointer";
+    if (!map || !hoveredFeatureId) return;
 
-          if (hoveredFeatureId) {
-            map.setFeatureState(
-              {
-                source: "custom-tileset-layer",
-                sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
-                id: hoveredFeatureId,
-              },
-              { hover: false }
-            );
-          }
+    const featureState = {
+      source: "custom-tileset-layer",
+      sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+      id: hoveredFeatureId,
+    };
 
-          if (e.features.length > 0) {
-            const newHoveredFeatureId = e.features[0].id;
-            setHoveredFeatureId(newHoveredFeatureId);
-            map.setFeatureState(
-              {
-                source: "custom-tileset-layer",
-                sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
-                id: newHoveredFeatureId,
-              },
-              { hover: true }
-            );
-
-            // Получите значение CaPaKey из текущей фичи
-            const CaPaKey = e.features[0].properties.CaPaKey;
-
-            // Обновите стиль для дома с учетом CaPaKey
-            map.setPaintProperty(
-              "custom-tileset-layer", // Замените на ваш слой с домами
-              "fill-color",
-              [
-                "match",
-                ["get", "CaPaKey"],
-                CaPaKey,
-                "rgba(0,0,0, 0.4)",
-                "rgba(255,255,255,0)",
-              ]
-            );
-          }
-        });
-
-        map.on("mouseleave", "custom-tileset-layer", () => {
-          map.getCanvas().style.cursor = "";
-
-          if (hoveredFeatureId) {
-            map.setFeatureState(
-              {
-                source: "custom-tileset-layer",
-                sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
-                id: hoveredFeatureId,
-              },
-              { hover: false }
-            );
-            setHoveredFeatureId(null);
-
-            // Сбросьте стиль дома при уходе с фичи
-            map.setPaintProperty(
-              "custom-tileset-layer", // Замените на ваш слой с домами
-              "fill-color",
-              "rgba(255,255,255,0)"
-            );
-          }
-        });
-
-        return () => {
-          map.off("mousemove", "custom-tileset-layer");
-          map.off("mouseleave", "custom-tileset-layer");
-        };
-      }
-    }
-  }, [map, hoveredFeatureId, showCadastre]);
+    map.setFeatureState(featureState, { hover: true });
+    return () => {
+      map.setFeatureState(featureState, { hover: false });
+    };
+  }, [map, hoveredFeatureId]);
 
   useEffect(() => {
     if (map) {
