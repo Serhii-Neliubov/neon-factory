@@ -12,6 +12,7 @@ const MonochromeStyle = ({
   map,
   setSelectedDistricts,
   setMapStyleSetter,
+  setShowCadastre,
 }) => {
   const [toggleClass, setToggleClass] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(true);
@@ -33,7 +34,7 @@ const MonochromeStyle = ({
     setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
     dispatch(decentralisedToggleFalse());
-
+    setShowCadastre(false);
     dispatch(allDistrictsToggleFalse());
     dispatch(showTransportTrue());
     // setIsModalActive(true);
