@@ -151,12 +151,52 @@ function App() {
         "rgb(255, 0, 0)", // When CaPaKey matches specificValue1
         "specificValue2",
         "rgb(0, 255, 0)", // When CaPaKey matches specificValue2
+        "rgba(255, 255, 255, 0)", // Default color when there is no match
+      ],
     },
   };
 
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  useEffect(() => {
+    if (map) {
+      if (showCadastre) {
+        map.on("mousemove", "custom-tileset-layer", (e) => {
+          map.getCanvas().style.cursor = "pointer";
 
           if (hoveredFeatureId) {
             map.setFeatureState(
+              {
+                source: "custom-tileset-layer",
+                sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+                id: hoveredFeatureId,
+              },
+              { hover: false }
+            );
+          }
+
+          if (e.features.length > 0) {
+            const newHoveredFeatureId = e.features[0].id;
+            setHoveredFeatureId(newHoveredFeatureId);
+            map.setFeatureState(
+              {
+                source: "custom-tileset-layer",
+                sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+                id: newHoveredFeatureId,
+              },
+              { hover: true }
+            );
+
+            // Получите значение CaPaKey из текущей фичи
+            const CaPaKey = e.features[0].properties.CaPaKey;
+
+            // Обновите стиль для дома с учетом CaPaKey
+            map.setPaintProperty(
+              "custom-tileset-layer", // Замените на ваш слой с домами
+              "fill-color",
+              [
+                "match",
+                ["get", "CaPaKey"],
+                CaPaKey,
                 "rgba(0,0,0, 0.4)",
                 "rgba(255,255,255,0)",
               ]
@@ -296,10 +336,13 @@ function App() {
     }
 
     map.on("move", function () {
+      addLayerIfAbsent(map, customTilesetLayer);
+      addLayerIfAbsent(map, customTilesetLineLayer);
     });
 
     map.on("style.load", function () {
-      map.addLayer(customTilesetLayer);
+      addLayerIfAbsent(map, customTilesetLayer);
+      addLayerIfAbsent(map, customTilesetLineLayer);
     });
 
     const marker = document.getElementById("distance-marker");
@@ -474,8 +517,6 @@ function App() {
     };
   }, []);
 
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
-  useEffect(() => {
   function changeColor() {
     let selectedColor = colorPicker.current.value;
     if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
