@@ -144,10 +144,110 @@ function App() {
     },
     "source-layer": "Bruxelles_Cadastre_complet-7xijuk",
     paint: {
-      "line-color": "rgba(255, 255, 255, 0)", // цвет контура
-      "line-width": 2.5, // ширина контура
+      "line-color": [
+        "match",
+        ["get", "CaPaKey"], // The attribute to match
+        "specificValue1",
+        "rgb(255, 0, 0)", // When CaPaKey matches specificValue1
+        "specificValue2",
+        "rgb(0, 255, 0)", // When CaPaKey matches specificValue2
     },
   };
+
+
+          if (hoveredFeatureId) {
+            map.setFeatureState(
+                "rgba(0,0,0, 0.4)",
+                "rgba(255,255,255,0)",
+              ]
+            );
+          }
+        });
+
+        map.on("mouseleave", "custom-tileset-layer", () => {
+          map.getCanvas().style.cursor = "";
+
+          if (hoveredFeatureId) {
+            map.setFeatureState(
+              {
+                source: "custom-tileset-layer",
+                sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+                id: hoveredFeatureId,
+              },
+              { hover: false }
+            );
+            setHoveredFeatureId(null);
+
+            // Сбросьте стиль дома при уходе с фичи
+            map.setPaintProperty(
+              "custom-tileset-layer", // Замените на ваш слой с домами
+              "fill-color",
+              "rgba(255,255,255,0)"
+            );
+          }
+        });
+
+        return () => {
+          map.off("mousemove", "custom-tileset-layer");
+          map.off("mouseleave", "custom-tileset-layer");
+        };
+      }
+    }
+  }, [map, hoveredFeatureId, showCadastre]);
+
+  useEffect(() => {
+    if (map) {
+      if (showCadastre) {
+        map.on("click", "custom-tileset-layer", function (e) {
+          let features = map.queryRenderedFeatures(e.point, {
+            layers: ["custom-tileset-layer"],
+          });
+
+          if (features.length > 0) {
+            let feature = features[0];
+            let index = selectedFeatures.indexOf(feature.properties.CaPaKey);
+            if (index === -1) {
+              setSelectedFeatures([
+                ...selectedFeatures,
+                feature.properties.CaPaKey,
+              ]);
+              map.setFeatureState(
+                { source: "your-source-id", id: feature.id },
+                { selected: true }
+              );
+            } else {
+              const updatedSelectedFeatures = [...selectedFeatures];
+              updatedSelectedFeatures.splice(index, 1);
+              setSelectedFeatures(updatedSelectedFeatures);
+              // Удаляем выбранный полигон из массива и восстанавливаем его стиль
+              map.setFeatureState(
+                { source: "your-source-id", id: feature.id },
+                { selected: false }
+              );
+            }
+          }
+        });
+      }
+      if (showCadastre) {
+        map.on("idle", function () {
+          const lineColorExpression = [
+            "match",
+            ["to-string", ["get", "CaPaKey"]],
+            ...selectedFeatures.flatMap((feature) => [
+              String(feature),
+              "rgb(255,0,0)",
+            ]),
+            "rgba(255,255,255,0)",
+          ];
+          map.setPaintProperty(
+            "custom-tileset-line-layer",
+            "line-color",
+            lineColorExpression
+          );
+        });
+      }
+    }
+  }, [map, selectedFeatures, showCadastre]);
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN.current;
@@ -189,14 +289,17 @@ function App() {
       styles: defaultDrawStyles,
     });
 
+    function addLayerIfAbsent(map, layer) {
+      if (!map.getLayer(layer.id)) {
+        map.addLayer(layer);
+      }
+    }
+
     map.on("move", function () {
-      map.addLayer(customTilesetLayer);
-      map.addLayer(customTilesetLineLayer);
     });
 
     map.on("style.load", function () {
       map.addLayer(customTilesetLayer);
-      map.addLayer(customTilesetLineLayer);
     });
 
     const marker = document.getElementById("distance-marker");
@@ -373,130 +476,6 @@ function App() {
 
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   useEffect(() => {
-    if (map) {
-      map.on("mousemove", "custom-tileset-layer", (e) => {
-        map.getCanvas().style.cursor = "pointer";
-
-        if (hoveredFeatureId) {
-          map.setFeatureState(
-            {
-              source: "custom-tileset-layer",
-              sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
-              id: hoveredFeatureId,
-            },
-            { hover: false }
-          );
-        }
-
-        if (e.features.length > 0) {
-          const newHoveredFeatureId = e.features[0].id;
-          setHoveredFeatureId(newHoveredFeatureId);
-          map.setFeatureState(
-            {
-              source: "custom-tileset-layer",
-              sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
-              id: newHoveredFeatureId,
-            },
-            { hover: true }
-          );
-
-          // Получите значение CaPaKey из текущей фичи
-          const CaPaKey = e.features[0].properties.CaPaKey;
-
-          // Обновите стиль для дома с учетом CaPaKey
-          map.setPaintProperty(
-            "custom-tileset-layer", // Замените на ваш слой с домами
-            "fill-color",
-            [
-              "match",
-              ["get", "CaPaKey"],
-              CaPaKey,
-              "rgb(255,0,0)",
-              "rgba(255,255,255,0)",
-            ]
-          );
-        }
-      });
-
-      map.on("mouseleave", "custom-tileset-layer", () => {
-        map.getCanvas().style.cursor = "";
-
-        if (hoveredFeatureId) {
-          map.setFeatureState(
-            {
-              source: "custom-tileset-layer",
-              sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
-              id: hoveredFeatureId,
-            },
-            { hover: false }
-          );
-          setHoveredFeatureId(null);
-
-          // Сбросьте стиль дома при уходе с фичи
-          map.setPaintProperty(
-            "custom-tileset-layer", // Замените на ваш слой с домами
-            "fill-color",
-            "rgba(255,255,255,0)"
-          );
-        }
-      });
-    }
-  }, [map, hoveredFeatureId]);
-
-  useEffect(() => {
-    if (map) {
-      if (showCadastre) {
-        map.on("click", "custom-tileset-layer", function (e) {
-          let features = map.queryRenderedFeatures(e.point, {
-            layers: ["custom-tileset-layer"],
-          });
-
-          if (features.length > 0) {
-            let feature = features[0];
-            let index = selectedFeatures.indexOf(feature.properties.CaPaKey);
-            if (index === -1) {
-              setSelectedFeatures([
-                ...selectedFeatures,
-                feature.properties.CaPaKey,
-              ]);
-              map.setFeatureState(
-                { source: "your-source-id", id: feature.id },
-                { selected: true }
-              );
-            } else {
-              const updatedSelectedFeatures = [...selectedFeatures];
-              updatedSelectedFeatures.splice(index, 1);
-              setSelectedFeatures(updatedSelectedFeatures);
-              // Удаляем выбранный полигон из массива и восстанавливаем его стиль
-              map.setFeatureState(
-                { source: "your-source-id", id: feature.id },
-                { selected: false }
-              );
-            }
-          }
-        });
-      }
-      if (showCadastre) {
-        map.on("idle", function () {
-          const lineColorExpression = [
-            "match",
-            ["to-string", ["get", "CaPaKey"]],
-            ...selectedFeatures.flatMap((feature) => [
-              String(feature),
-              "rgb(255,0,0)",
-            ]),
-            "rgba(255,255,255,0)",
-          ];
-          map.setPaintProperty(
-            "custom-tileset-line-layer",
-            "line-color",
-            lineColorExpression
-          );
-        });
-      }
-    }
-  }, [map, selectedFeatures, showCadastre]);
-
   function changeColor() {
     let selectedColor = colorPicker.current.value;
     if (MAPBOX_ACCESS_TOKEN.current !== "" && typeof draw === "object") {
@@ -768,7 +747,7 @@ function App() {
               <button className="AreasButton">Gent (soon)</button>
               <button className="AreasButton">luxembourg (soon)</button>
               <OpenTranportButton map={map} />
-              <OpenCadastreButton map={map} />
+              <OpenCadastreButton showCadastre={showCadastre} map={map} />
             </div>
 
             <div className="down-sidebar__buttons">
