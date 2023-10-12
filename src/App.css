@@ -50,6 +50,22 @@
   background-color: white;
   border: 1px solid black;
 }
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.loading__img {
+  position: relative;
+  z-index: 1000;
+  animation: fadeIn 1s forwards, fadeOut 1s 2s forwards;
+}
+
 .delete-button {
   position: absolute;
   top: 50%;
