@@ -13,6 +13,7 @@ const SatelliteStyle = ({
   map,
   setMapStyleSetter,
   setSelectedDistricts,
+  setShowCadastre,
 }) => {
   const dispatch = useDispatch();
 
@@ -35,7 +36,7 @@ const SatelliteStyle = ({
     setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
     dispatch(decentralisedToggleFalse());
-
+    setShowCadastre(false);
     dispatch(servicesActionFalse());
     dispatch(allDistrictsToggleFalse());
     // setIsModalActive(true);

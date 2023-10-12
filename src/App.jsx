@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 // MapBox
 import mapboxgl from "mapbox-gl";
@@ -118,6 +118,7 @@ function App() {
   const MAPBOX_ACCESS_TOKEN = useRef(
     "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
   );
+
   const customTilesetLayer = {
     id: "custom-tileset-layer",
     type: "fill",
@@ -269,7 +270,8 @@ function App() {
       map.setFeatureState(featureState, { hover: false });
     };
   }, [map, hoveredFeatureId]);
-  const resetLayerStyles = () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const resetLayerStyles = useCallback(() => {
     map.setPaintProperty("custom-tileset-line-layer", "line-color", [
       "match",
       ["get", "CaPaKey"],
@@ -279,7 +281,7 @@ function App() {
       "rgb(0, 255, 0)",
       "rgba(255, 255, 255, 0)",
     ]);
-  };
+  });
 
   useEffect(() => {
     if (map) {
@@ -337,15 +339,7 @@ function App() {
         });
       }
     }
-  }, [map, selectedFeatures, showCadastre]);
-
-  useEffect(() => {
-    if (map) {
-      if (selectedFeatures.length === 0) {
-        resetLayerStyles();
-      }
-    }
-  }, [selectedFeatures]);
+  }, [map, selectedFeatures, showCadastre, resetLayerStyles]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -783,6 +777,19 @@ function App() {
     }
   }, [draw, map]);
 
+  useEffect(() => {
+    if (map && map.isStyleLoaded()) {
+      if (!showCadastre && selectedDistricts.length === 0) {
+        map.on("idle", function () {
+          resetLayerStyles();
+        });
+      }
+      if (selectedFeatures.length === 0) {
+        resetLayerStyles();
+      }
+    }
+  }, [selectedFeatures, resetLayerStyles, map, showCadastre]);
+
   return (
     <>
       {showLoader && <MyLoader />}
@@ -820,6 +827,7 @@ function App() {
                 <div ref={geocoderContainer}></div>
                 <SubMenu map={map} submenuTag={submenuTag} />
                 <OpenMapStyleButton
+                  setShowCadastre={setShowCadastre}
                   setSelectedDistricts={setSelectedDistricts}
                   map={map}
                   mapStyleSetter={mapStyleSetter}
@@ -874,7 +882,6 @@ function App() {
                   setShowCadastre={setShowCadastre}
                   removeCustomMarker={removeCustomMarker}
                   setSelectedDistricts={setSelectedDistricts}
-                  resetLayerStyles={resetLayerStyles}
                 ></ResetMap>
 
                 <PrintScreen

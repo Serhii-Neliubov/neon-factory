@@ -13,6 +13,7 @@ const DefaultStyle = ({
   map,
   setMapStyleSetter,
   setSelectedDistricts,
+  setShowCadastre,
 }) => {
   const [toggleClass, setToggleClass] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(true);
@@ -23,7 +24,7 @@ const DefaultStyle = ({
     dispatch(showCadastreFalse());
     setMapStyleSetter(1);
     dispatch(showTransportTrue());
-
+    setShowCadastre(false);
     dispatch(servicesActionFalse());
 
     if (map) {

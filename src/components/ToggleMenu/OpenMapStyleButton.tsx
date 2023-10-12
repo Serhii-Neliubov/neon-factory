@@ -12,6 +12,7 @@ const OpenMapStyleButton = ({
   setMapStyleSetter,
   mapStyleSetter,
   setSelectedDistricts,
+  setShowCadastre,
 }) => {
   const dispatch = useDispatch();
   const mapStyleButtonOpen = useSelector(
@@ -31,23 +32,27 @@ const OpenMapStyleButton = ({
         <div className="toggleInputs">
           <DefaultStyle
             map={map}
+            setShowCadastre={setShowCadastre}
             mapStyleSetter={mapStyleSetter}
             setMapStyleSetter={setMapStyleSetter}
             setSelectedDistricts={setSelectedDistricts}
           />
           <DarkStyle
             map={map}
+            setShowCadastre={setShowCadastre}
             mapStyleSetter={mapStyleSetter}
             setMapStyleSetter={setMapStyleSetter}
             setSelectedDistricts={setSelectedDistricts}
           />
           <MonochromeStyle
+            setShowCadastre={setShowCadastre}
             setMapStyleSetter={setMapStyleSetter}
             map={map}
             mapStyleSetter={mapStyleSetter}
             setSelectedDistricts={setSelectedDistricts}
           />
           <SatelliteStyle
+            setShowCadastre={setShowCadastre}
             map={map}
             mapStyleSetter={mapStyleSetter}
             setMapStyleSetter={setMapStyleSetter}
