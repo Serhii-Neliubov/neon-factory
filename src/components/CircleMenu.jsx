@@ -87,13 +87,13 @@ const CircleMenu = ({ map }) => {
     <>
       <div id="radius-display"></div>
       <button id="delete-circle-button" onClick={handleDeleteCircle}>
-        Delete circle
+        Delete Radius
       </button>
       <button id="delete-circles-button" onClick={handleDeleteAllCircles}>
-        Delete all circles
+        Delete all Radius
       </button>
       <button onClick={handleCreateCircle} id="createCircleButton">
-        Create a circle
+        Draw Radius
       </button>
       <div id="distance-marker" className="distance-marker">
         <div className="distance-close" id="distance-close">
