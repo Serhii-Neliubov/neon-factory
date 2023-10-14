@@ -1,8 +1,7 @@
 import React from "react";
-import styles from "./Container.module.scss";
 
 const Container = ({ children }) => {
-  return <div className={styles.container}>{children}</div>;
+  return <div className="mapContainer">{children}</div>;
 };
 
 export default Container;

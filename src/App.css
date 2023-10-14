@@ -117,6 +117,7 @@
 body {
   padding: 36px;
   position: relative;
+  background-color: #001524;
 }
 
 .sidebar {
@@ -572,20 +573,19 @@ body {
   font-size: 12px;
   text-transform: uppercase;
 }
-.PrintScreen:hover {
-  border: 1px solid #55a295c1;
-  background-color: #71e3d0c1;
-  color: #fff;
-}
 
 .resetMap {
   margin-bottom: 15px;
   cursor: pointer;
-  background: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0) 0.01%,
+    rgba(255, 255, 255, 0.21) 100%
+  );
   border: none;
-  color: #ffffff;
+  color: #4cc0ad;
   transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.7);
   color: #4cc0ad;
   width: 360px;
   padding: 15px 0;
@@ -597,12 +597,6 @@ body {
   font-weight: 700;
   font-size: 12px;
   text-transform: uppercase;
-}
-
-.resetMap:hover {
-  border: 1px solid #55a295c1;
-  background-color: #71e3d0c1;
-  color: #fff;
 }
 
 .geocoderContainer {
@@ -905,23 +899,24 @@ p {
 }
 .TransportButton {
   text-transform: uppercase;
-  border: 1px solid #606060;
   padding: 15px 0;
   position: relative;
   margin-bottom: 13.2px;
   cursor: pointer;
   font-size: 12px;
-  background: none; /* Remove background color and border */
   width: 360px;
+
   font-family: "Helvetica";
   font-weight: 700;
-  color: #4cc0ad;
-  border-radius: 10px;
+  border-radius: 8px;
   transition: color 0.3s ease; /* Add a smooth color transition */
   outline: none; /* Remove the outline when button is clicked */
 }
 .TransportButton_bg {
   background: #434343;
+  background: rgba(76, 192, 173, 0.6);
+  color: #fff;
+  border: none;
 }
 .TransportButton::after {
   content: "";
@@ -942,25 +937,63 @@ p {
 }
 .BrusselsButton {
   text-transform: uppercase;
-  border: 1px solid #606060;
+  border: none;
   padding: 15px 0;
   font-weight: 700;
-
+  border-radius: 8px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0) 0.01%,
+    rgba(255, 255, 255, 0.21) 100%
+  );
   position: relative;
   margin-bottom: 13.2px;
   cursor: pointer;
   font-size: 12px;
-  background: none; /* Remove background color and border */
   width: 360px;
   font-family: "Helvetica";
-  color: #4cc0ad;
+  color: rgba(76, 192, 173, 0.9);
+
   border-radius: 10px;
   transition: color 0.3s ease; /* Add a smooth color transition */
   outline: none; /* Remove the outline when button is clicked */
 }
+.sidebarContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  z-index: 10;
+  background: #000;
+}
+
+.mapContainer {
+  position: relative;
+  height: 88vh;
+  display: flex;
+}
+.Container {
+  position: relative;
+}
+.sidebar {
+  overflow: hidden;
+  background: linear-gradient(
+    91deg,
+    #001524 4.18%,
+    rgba(0, 21, 36, 0.91) 60%,
+    rgba(0, 21, 36, 0) 80%
+  );
+  position: absolute;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 45%;
+  z-index: 100;
+}
 .mapStyleButton {
   text-transform: uppercase;
-  border: 1px solid #606060;
+  border: none;
   padding: 15px 0;
   font-weight: 700;
   position: relative;
@@ -971,7 +1004,13 @@ p {
   width: 360px;
   font-family: "Helvetica";
   color: #4cc0ad;
-  border-radius: 10px;
+  border-radius: 8px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0) 0.01%,
+    rgba(255, 255, 255, 0.21) 100%
+  );
   transition: color 0.3s ease; /* Add a smooth color transition */
   outline: none; /* Remove the outline when button is clicked */
 }
@@ -1001,29 +1040,29 @@ p {
   transform: rotate(90deg) !important;
 }
 .BrusselsButton_bg {
-  background: #434343;
+  background: rgba(76, 192, 173, 0.6);
+  color: white;
 }
 .BrusselsButton_open::after {
   transform: rotate(90deg) !important;
 }
 .AreasButton {
   text-transform: uppercase;
-  border: 1px solid #606060;
+  border: none;
+  background: rgba(76, 192, 173, 0.6);
   padding: 15px 0;
   position: relative;
   margin-bottom: 13.2px;
   cursor: pointer;
   font-size: 12px;
-  background: none; /* Remove background color and border */
   width: 360px;
   font-weight: 700;
 
   font-family: "Helvetica";
-  color: #4cc0ad;
-  border-radius: 10px;
+  color: #fff;
+  border-radius: 8px;
   transition: color 0.3s ease; /* Add a smooth color transition */
   outline: none; /* Remove the outline when button is clicked */
-  background: #434343;
 }
 
 .BrusselsButton::after {
