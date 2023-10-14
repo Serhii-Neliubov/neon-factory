@@ -159,7 +159,6 @@ function App() {
     },
   };
 
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
   useEffect(() => {
     if (!map || !showCadastre) return;
 
@@ -283,6 +282,8 @@ function App() {
     ]);
   });
 
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+
   useEffect(() => {
     if (map) {
       if (showCadastre) {
@@ -300,7 +301,11 @@ function App() {
                 feature.properties.CaPaKey,
               ]);
               map.setFeatureState(
-                { source: "your-source-id", id: feature.id },
+                {
+                  source: "custom-tileset-layer",
+                  sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+                  id: feature.id,
+                },
                 { selected: true }
               );
             } else {
@@ -309,7 +314,11 @@ function App() {
               setSelectedFeatures(updatedSelectedFeatures);
               // Удаляем выбранный полигон из массива и восстанавливаем его стиль
               map.setFeatureState(
-                { source: "your-source-id", id: feature.id },
+                {
+                  source: "custom-tileset-layer",
+                  sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+                  id: feature.id,
+                },
                 { selected: false }
               );
             }
@@ -338,8 +347,45 @@ function App() {
           }
         });
       }
+      return () => {
+        map.off("click", "custom-tileset-layer");
+        map.off("idle");
+      };
     }
   }, [map, selectedFeatures, showCadastre, resetLayerStyles]);
+
+  useEffect(() => {
+    if (map && map.isStyleLoaded()) {
+      const updateStyles = () => {
+        if (!showCadastre && selectedDistricts.length === 0) {
+          resetLayerStyles();
+        } else if (selectedFeatures.length === 0) {
+          resetLayerStyles();
+        } else {
+          const lineColorExpression = [
+            "match",
+            ["to-string", ["get", "CaPaKey"]],
+            ...selectedFeatures.flatMap((feature) => [
+              String(feature),
+              "rgb(255,0,0)",
+            ]),
+            "rgba(255,255,255,0)",
+          ];
+          map.setPaintProperty(
+            "custom-tileset-line-layer",
+            "line-color",
+            lineColorExpression
+          );
+        }
+      };
+
+      map.on("idle", updateStyles);
+
+      return () => {
+        map.off("idle", updateStyles);
+      };
+    }
+  }, [selectedFeatures, map, showCadastre, selectedDistricts.length]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -410,6 +456,8 @@ function App() {
     map.addControl(new mapboxgl.NavigationControl());
 
     map.on("load", function () {
+      addLayerIfAbsent(map, customTilesetLayer);
+      addLayerIfAbsent(map, customTilesetLineLayer);
       map.addControl(draw);
       map.setLayoutProperty("poi-label", "visibility", "none");
     });
@@ -777,19 +825,6 @@ function App() {
     }
   }, [draw, map]);
 
-  useEffect(() => {
-    if (map && map.isStyleLoaded()) {
-      if (!showCadastre && selectedDistricts.length === 0) {
-        map.on("idle", function () {
-          resetLayerStyles();
-        });
-      }
-      if (selectedFeatures.length === 0) {
-        resetLayerStyles();
-      }
-    }
-  }, [selectedFeatures, resetLayerStyles, map, showCadastre]);
-
   return (
     <>
       {showLoader && <MyLoader />}
@@ -822,80 +857,77 @@ function App() {
               </p>
             </div>
             <h1 className="title">Districts map</h1>
-            <Scrollbar className="scrollbar">
-              <div className="mainToggleButtons">
-                <div ref={geocoderContainer}></div>
-                <SubMenu map={map} submenuTag={submenuTag} />
-                <OpenMapStyleButton
-                  setShowCadastre={setShowCadastre}
-                  setSelectedDistricts={setSelectedDistricts}
-                  map={map}
-                  mapStyleSetter={mapStyleSetter}
-                  setMapStyleSetter={setMapStyleSetter}
-                />
-                <button
-                  onClick={() => dispatch(openBrusselsChanging())}
-                  className={`BrusselsButton BrusselsButton_bg ${
-                    openBrussels ? "BrusselsButton_open" : ""
-                  }`}
-                >
-                  Brussels
-                </button>
-                {openBrussels ? (
-                  <div className="toggleContainer">
-                    <ToggleMenu
-                      toggleButton={toggleButton}
-                      map={map}
-                      selectedDistricts={selectedDistricts}
-                      centralisedDistrictsButtonHandler={
-                        centralisedDistrictsButtonHandler
-                      }
-                      decentralisedDistrictsButtonHandler={
-                        decentralisedDistrictsButtonHandler
-                      }
-                    />
-                    <AllDistrictsButton
-                      allDistrictsButtonHandler={allDistrictsButtonHandler}
-                    >
-                      All Districts
-                    </AllDistrictsButton>
-                  </div>
-                ) : null}
-                <button className="AreasButton">antwerp (soon)</button>
-                <button className="AreasButton">Gent (soon)</button>
-                <button className="AreasButton">luxembourg (soon)</button>
-                <OpenTranportButton map={map} />
-                <OpenCadastreButton
-                  showCadastre={showCadastre}
-                  setShowCadastre={setShowCadastre}
-                  map={map}
-                />
-              </div>
+            <div className="mainToggleButtons">
+              <div ref={geocoderContainer}></div>
+              <SubMenu map={map} submenuTag={submenuTag} />
+              <OpenMapStyleButton
+                setShowCadastre={setShowCadastre}
+                setSelectedDistricts={setSelectedDistricts}
+                map={map}
+                mapStyleSetter={mapStyleSetter}
+                setMapStyleSetter={setMapStyleSetter}
+              />
+              <button
+                onClick={() => dispatch(openBrusselsChanging())}
+                className={`BrusselsButton BrusselsButton_bg ${
+                  openBrussels ? "BrusselsButton_open" : ""
+                }`}
+              >
+                Brussels
+              </button>
+              {openBrussels ? (
+                <div className="toggleContainer">
+                  <ToggleMenu
+                    toggleButton={toggleButton}
+                    map={map}
+                    selectedDistricts={selectedDistricts}
+                    centralisedDistrictsButtonHandler={
+                      centralisedDistrictsButtonHandler
+                    }
+                    decentralisedDistrictsButtonHandler={
+                      decentralisedDistrictsButtonHandler
+                    }
+                  />
+                  <AllDistrictsButton
+                    allDistrictsButtonHandler={allDistrictsButtonHandler}
+                  >
+                    All Districts
+                  </AllDistrictsButton>
+                </div>
+              ) : null}
+              <button className="AreasButton">antwerp (soon)</button>
+              <button className="AreasButton">Gent (soon)</button>
+              <button className="AreasButton">luxembourg (soon)</button>
+              <OpenTranportButton map={map} />
+              <OpenCadastreButton
+                showCadastre={showCadastre}
+                setShowCadastre={setShowCadastre}
+                map={map}
+              />
+            </div>
+            <div className="down-sidebar__buttons">
+              <ResetMap
+                setSelectedFeatures={setSelectedFeatures}
+                mapStyleSetter={mapStyleSetter}
+                setSqml={setSqml}
+                draw={draw}
+                map={map}
+                setShowCadastre={setShowCadastre}
+                removeCustomMarker={removeCustomMarker}
+                setSelectedDistricts={setSelectedDistricts}
+              ></ResetMap>
 
-              <div className="down-sidebar__buttons">
-                <ResetMap
-                  setSelectedFeatures={setSelectedFeatures}
-                  mapStyleSetter={mapStyleSetter}
-                  setSqml={setSqml}
-                  draw={draw}
-                  map={map}
-                  setShowCadastre={setShowCadastre}
-                  removeCustomMarker={removeCustomMarker}
-                  setSelectedDistricts={setSelectedDistricts}
-                ></ResetMap>
-
-                <PrintScreen
-                  sqmBox={sqmBox}
-                  palette={palette}
-                  sreenLogo={sreenLogo}
-                  drawMenu={drawMenu}
-                  mapTag={mapTag.current}
-                  menuStyle={menuStyle}
-                  colorPicker={colorPicker}
-                  rightTopMenu={rightTopMenu}
-                ></PrintScreen>
-              </div>
-            </Scrollbar>
+              <PrintScreen
+                sqmBox={sqmBox}
+                palette={palette}
+                sreenLogo={sreenLogo}
+                drawMenu={drawMenu}
+                mapTag={mapTag.current}
+                menuStyle={menuStyle}
+                colorPicker={colorPicker}
+                rightTopMenu={rightTopMenu}
+              ></PrintScreen>
+            </div>
           </div>
         )}
 
