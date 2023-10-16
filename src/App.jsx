@@ -67,6 +67,8 @@ function App() {
   const activeSidebar = useSelector((state) => state.activeSidebar.value);
   const [showCadastre, setShowCadastre] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
+  const [showTool, setShowTool] = useState(true);
+  const [showCircleMenu, setShowCircleMenu] = useState(true);
 
   const isCentralisedDistrictsVisible = useSelector(
     (state) => state.centralisedDistrictsVisible.value
@@ -93,7 +95,7 @@ function App() {
   const rightTopMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const sqmBox = document.querySelector(".calculation-box");
   const sidebar = useRef();
-
+  const toolbarButton = useRef();
   const allDistricts = [
     "SW",
     "SE",
@@ -228,6 +230,7 @@ function App() {
       map.off("mouseleave", "custom-tileset-layer", handleMouseLeave);
     };
   }, [map, showCadastre, hoveredFeatureId]);
+
   useEffect(() => {
     if (!map) return;
 
@@ -712,10 +715,26 @@ function App() {
       dispatch(centralisedDistrictsVisibleTrue());
     }
   }
+
   function toggleSidebar() {
     sidebar.current.classList.toggle("sidebar-active");
     sidebarButton.current.classList.toggle("closeSidebar");
   }
+
+  function toggleToolbar() {
+    const elements = document.querySelectorAll(".mapboxgl-ctrl-group");
+    const lastElement = elements[elements.length - 1];
+    setShowTool(!showTool);
+
+    if (showTool) {
+      lastElement.style.display = "flex";
+      palette.style.display = "block";
+    } else {
+      lastElement.style.display = "none";
+      palette.style.display = "none";
+    }
+  }
+
   function decentralisedDistrictsButtonHandler() {
     if (isDecentralisedDistrictsVisible) {
       dispatch(centralisedToggleFalse());
@@ -735,6 +754,11 @@ function App() {
       dispatch(decentralisedDistrictsVisibleTrue());
     }
   }
+
+  function circleToggleMenu() {
+    setShowCircleMenu(!showCircleMenu);
+  }
+
   useEffect(() => {
     if (map) {
       map.resize(); // Обновите размеры карты
@@ -837,6 +861,13 @@ function App() {
           className="activeSidebar"
           onClick={toggleSidebar}
         />
+        <button
+          ref={toolbarButton}
+          className="activeToolbar"
+          onClick={toggleToolbar}
+        >
+          Tools
+        </button>
         <div ref={sidebar} className="sidebar">
           <div className="logo">
             <div className="logo__name">
@@ -951,7 +982,8 @@ function App() {
   ) : (
     ""
   )} */}
-          <CircleMenu map={map} />
+          <CircleMenu map={map} showCircleMenu={showCircleMenu} />
+
           <RightTopMenuText />
           <div className="calculation-box">
             <div id="calculated-area">{Sqm}.SQM</div>
@@ -962,6 +994,12 @@ function App() {
             id="colorPicker"
             className="palette"
             onChange={changeColor}
+          />
+          <img
+            onClick={circleToggleMenu}
+            className="circleMenu"
+            src="circleMenu.svg"
+            alt="logo"
           />
           <img alt="Logo" className="logo-map" src="logo.png" />
         </div>

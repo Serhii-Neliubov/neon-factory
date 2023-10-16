@@ -111,6 +111,8 @@
 body {
   padding: 48px 36px 0px 36px;
   background-color: #001524;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .sidebar {
@@ -169,13 +171,14 @@ body {
   z-index: 100;
   border: none;
   background-image: url("arrow-left-close.png");
-  transform: rotate(180deg);
   background-size: cover;
   background-repeat: no-repeat;
+  transform: translate(1790%, 0) !important;
+
   transition: transform 0.3s ease; /* Анимация перехода */
 }
 .closeSidebar {
-  transform: rotate(0) translate(1790%, 0) !important;
+  transform: rotate(180deg) translate(60%, 0) !important;
 }
 .loading__img {
   position: absolute;
@@ -222,8 +225,6 @@ body {
 
 /* Map container styles */
 .mapboxgl-map {
-  border-radius: 10px;
-  border: 1px solid #606060;
   overflow: hidden;
 }
 /*================================================= Modal Window =================================================*/
@@ -399,8 +400,6 @@ body {
 /*===========================================================================================================*/
 
 /* Logo styles */
-#map {
-}
 .logo {
   margin: 0 0 9px 0;
   position: relative;
@@ -686,20 +685,24 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
-
 .mapboxgl-ctrl-group:not(:first-child) {
-  border-radius: 8px;
+  border-radius: none;
   background: #0f293a;
   box-shadow: none !important;
   border: none;
-  display: flex;
+  height: 47px;
   position: absolute;
-  top: 750px;
-  right: 850px;
+  display: none;
+  top: 777px;
+  right: 797px;
+  animation: fadeIn 1s forwards;
+}
+.mapbox-gl-draw_polygon {
+  margin-right: 130px;
 }
 
 .mapboxgl-ctrl-group:not(:first-child) button {
-  padding: 20px !important;
+  padding: 25px !important;
   border: none !important;
   cursor: pointer;
 }
@@ -758,7 +761,6 @@ body {
   position: relative;
   transition-duration: 300ms; /* анимация */
 }
-
 .switch-btn::after {
   content: "";
   height: 16px; /* высота кнопки */
@@ -803,30 +805,60 @@ body {
 
 .palette {
   border: none;
-  width: 40px;
-  height: 40px;
+  display: none;
+  width: 50px;
+  height: 47px;
   position: absolute;
   background: #0f293a;
-  top: 760px;
+  top: 787px;
   cursor: pointer;
-  right: 827px;
+  right: 767px;
   z-index: 100;
+  border-radius: 0 3px 3px 0;
 }
 .palette::after {
   content: "";
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
   z-index: 10;
   border-radius: 100%;
   width: 40px;
   height: 40px;
-  left: 0;
+  left: 50%;
   background-image: url("iconPalette.png");
   background-position: center;
   background-repeat: no-repeat;
 }
-.palette:hover {
-  background-color: #f2f2f2;
+.activeToolbar {
+  position: absolute;
+  width: 106px;
+  border: none;
+  color: white;
+  font-size: 18px;
+  font-family: "Arial";
+  border-radius: 8px;
+  background: #0f293a;
+  height: 45px;
+  flex-shrink: 0;
+  bottom: 15px;
+  right: 49.6%;
+  z-index: 50;
+}
+
+.circleMenu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  z-index: 10;
+  background: #0f293a;
+}
+
+.activeToolbar:hover {
+  border-radius: 8px;
+  background: linear-gradient(89deg, #001524 0.54%, #001524 126.38%);
+  cursor: pointer;
 }
 .down-sidebar__buttons {
   display: flex;
@@ -845,7 +877,6 @@ input[type="color"]::-webkit-color-swatch {
   top: 8px;
   right: 50px;
   z-index: 100;
-  display: flex;
   flex-direction: column;
   gap: 2px;
 }
@@ -891,20 +922,23 @@ input[type="color"]::-webkit-color-swatch {
 .calculation-box {
   padding: 0 5px;
   min-width: 64px;
-  border-radius: 10px;
   position: absolute;
   bottom: 50px;
   right: 8px;
+  color: #fff;
   z-index: 100;
-  border: 1px solid #606060;
-  background-color: rgba(255, 255, 255, 1);
+  border-radius: 8px;
+  background: linear-gradient(
+    89deg,
+    rgba(15, 41, 58, 0.9) 0.54%,
+    rgba(3, 25, 40, 0.9) 126.38%
+  );
   text-align: center;
   align-items: center;
   justify-content: center;
   display: flex;
   font-family: "Helvetica";
   height: 45px;
-  overflow: hidden;
   margin-top: 250px;
 }
 
@@ -917,7 +951,7 @@ p {
 }
 
 #calculated-area {
-  color: black;
+  color: #fff;
 }
 .TransportButton {
   text-transform: uppercase;
@@ -1011,13 +1045,8 @@ p {
   z-index: -1;
   top: 0;
   left: 0;
-  background: linear-gradient(
-    91deg,
-    #001524 4.18%,
-    rgba(0, 21, 36, 0.91) 69%,
-    rgba(0, 21, 36, 0) 95%
-  );
-  width: 650px;
+  background: linear-gradient(91deg, #001524 4.18%, rgba(0, 21, 36, 0.91) 35%);
+  width: 425px;
   height: 100%;
 }
 .mapStyleButton {
