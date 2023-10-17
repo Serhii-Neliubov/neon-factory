@@ -81,7 +81,7 @@ function App() {
   );
 
   const [selectedDistricts, setSelectedDistricts] = useState([]);
-
+  const circleMenu = useRef();
   const submenuTag = useRef();
   const mapTag = useRef();
   const colorPicker = useRef();
@@ -729,9 +729,11 @@ function App() {
     if (showTool) {
       lastElement.style.display = "flex";
       palette.style.display = "block";
+      circleMenu.current.style.opacity = 1;
     } else {
       lastElement.style.display = "none";
       palette.style.display = "none";
+      circleMenu.current.style.opacity = 0;
     }
   }
 
@@ -982,7 +984,7 @@ function App() {
   ) : (
     ""
   )} */}
-          <CircleMenu map={map} showCircleMenu={showCircleMenu} />
+          <CircleMenu map={map} />
 
           <RightTopMenuText />
           <div className="calculation-box">
@@ -996,6 +998,7 @@ function App() {
             onChange={changeColor}
           />
           <img
+            ref={circleMenu}
             onClick={circleToggleMenu}
             className="circleMenu"
             src="circleMenu.svg"

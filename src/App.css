@@ -812,7 +812,7 @@ body {
   background: #0f293a;
   top: 787px;
   cursor: pointer;
-  right: 767px;
+  right: 760px;
   z-index: 100;
   border-radius: 0 3px 3px 0;
 }
@@ -842,16 +842,19 @@ body {
   height: 45px;
   flex-shrink: 0;
   bottom: 15px;
-  right: 49.6%;
+  right: 50%;
   z-index: 50;
 }
 
 .circleMenu {
+  cursor: pointer;
   position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px;
+  top: 92.7%;
+  right: 61.92%;
+  padding: 14.3px;
   z-index: 10;
+  opacity: 0;
+  border-radius: 8px 0 0 8px;
   background: #0f293a;
 }
 
