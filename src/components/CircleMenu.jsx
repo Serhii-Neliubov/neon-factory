@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import MapboxCircle from "mapbox-gl-circle";
 
 // eslint-disable-next-line react/prop-types
-const CircleMenu = ({ map, showCircleMenu }) => {
+const CircleMenu = ({ map }) => {
   const [circles, setCircles] = useState([]);
   const selectedCircleRef = useRef(null);
 
@@ -83,7 +83,7 @@ const CircleMenu = ({ map, showCircleMenu }) => {
     updateRadiusDisplay(); // обнуляем отображение радиуса
   }, [circles]);
 
-  return showCircleMenu ? (
+  return (
     <>
       <div id="radius-display"></div>
       <button id="delete-circle-button" onClick={handleDeleteCircle}>
@@ -104,7 +104,7 @@ const CircleMenu = ({ map, showCircleMenu }) => {
         </div>
       </div>
     </>
-  ) : null;
+  );
 };
 
 export default CircleMenu;
