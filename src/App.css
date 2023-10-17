@@ -23,34 +23,39 @@
 .deleteCustomMarkerContainer {
   position: relative;
 }
-#createCircleButton {
-  height: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-#delete-circle-button {
-  position: absolute;
-  z-index: 10;
-  top: 20px;
-  left: 0;
-}
-#delete-circles-button {
-  position: absolute;
-  z-index: 10;
-  top: 40px;
-  left: 0;
-}
 #radius-display {
-  position: absolute;
-  z-index: 10;
-  top: 60px;
-  left: 0;
-  background-color: white;
-  border: 1px solid black;
+  padding: 10px;
+  border: 1px solid #4cc0ad;
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 5px;
 }
-
+.circleMenuTool {
+  background: #0c2536;
+  position: absolute;
+  top: 78%;
+  opacity: 0;
+  left: 32.5%;
+  padding: 10px;
+  gap: 5px;
+  z-index: 10;
+  display: flex;
+  border-radius: 3px;
+  flex-direction: column-reverse;
+}
+.circleMenuTool button {
+  border: none;
+  text-transform: uppercase;
+  background: none;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+.circleMenuTool button:hover {
+  cursor: pointer;
+  color: #4cc0ad;
+}
 @keyframes fadeOut {
   from {
     opacity: 1;
@@ -830,6 +835,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
 }
+
 .activeToolbar {
   position: absolute;
   width: 106px;
@@ -921,12 +927,15 @@ input[type="color"]::-webkit-color-swatch {
 .rightTopMenu-button-color {
   margin-top: 157px;
 }
-
+.logo {
+  margin: 45px 0 50px 0;
+  width: 300px;
+}
 .calculation-box {
-  padding: 0 5px;
+  padding: 10px;
   min-width: 64px;
   position: absolute;
-  bottom: 50px;
+  bottom: 30px;
   right: 8px;
   color: #fff;
   z-index: 100;
