@@ -94,6 +94,7 @@ function App() {
   const menuStyle = document.querySelector(".menuMapStyle");
   const rightTopMenu = document.querySelector(".mapboxgl-ctrl-top-right");
   const sqmBox = document.querySelector(".calculation-box");
+  const circleMenuTool = document.querySelector(".circleMenuTool");
   const sidebar = useRef();
   const toolbarButton = useRef();
   const allDistricts = [
@@ -734,6 +735,8 @@ function App() {
       lastElement.style.display = "none";
       palette.style.display = "none";
       circleMenu.current.style.opacity = 0;
+      circleMenuTool.style.opacity = 0;
+      setShowCircleMenu(true);
     }
   }
 
@@ -759,6 +762,11 @@ function App() {
 
   function circleToggleMenu() {
     setShowCircleMenu(!showCircleMenu);
+    if (showCircleMenu) {
+      circleMenuTool.style.opacity = 1;
+    } else {
+      circleMenuTool.style.opacity = 0;
+    }
   }
 
   useEffect(() => {
@@ -767,92 +775,92 @@ function App() {
     }
   }, [activeSidebar, map]);
 
-  useEffect(() => {
-    if (map) {
-      map.on("load", () => {
-        document
-          .querySelector(".mapboxgl-ctrl-group")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-north").style.display =
-              "unset";
-          });
-        document
-          .querySelector(".mapboxgl-ctrl-group")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-north").style.display =
-              "none";
-          });
+  // useEffect(() => {
+  //   if (map) {
+  //     map.on("load", () => {
+  //       document
+  //         .querySelector(".mapboxgl-ctrl-group")
+  //         .addEventListener("mouseover", function () {
+  //           document.querySelector(".rightTopMenu-button-north").style.display =
+  //             "unset";
+  //         });
+  //       document
+  //         .querySelector(".mapboxgl-ctrl-group")
+  //         .addEventListener("mouseout", function () {
+  //           document.querySelector(".rightTopMenu-button-north").style.display =
+  //             "none";
+  //         });
 
-        document
-          .querySelector(".mapbox-gl-draw_line")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-line").style.display =
-              "unset";
-          });
-        document
-          .querySelector(".mapbox-gl-draw_line")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-line").style.display =
-              "none";
-          });
+  //       document
+  //         .querySelector(".mapbox-gl-draw_line")
+  //         .addEventListener("mouseover", function () {
+  //           document.querySelector(".rightTopMenu-button-line").style.display =
+  //             "unset";
+  //         });
+  //       document
+  //         .querySelector(".mapbox-gl-draw_line")
+  //         .addEventListener("mouseout", function () {
+  //           document.querySelector(".rightTopMenu-button-line").style.display =
+  //             "none";
+  //         });
 
-        document
-          .querySelector(".mapbox-gl-draw_polygon")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-shape").style.display =
-              "unset";
-          });
+  //       document
+  //         .querySelector(".mapbox-gl-draw_polygon")
+  //         .addEventListener("mouseover", function () {
+  //           document.querySelector(".rightTopMenu-button-shape").style.display =
+  //             "unset";
+  //         });
 
-        document
-          .querySelector(".mapbox-gl-draw_polygon")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-shape").style.display =
-              "none";
-          });
+  //       document
+  //         .querySelector(".mapbox-gl-draw_polygon")
+  //         .addEventListener("mouseout", function () {
+  //           document.querySelector(".rightTopMenu-button-shape").style.display =
+  //             "none";
+  //         });
 
-        document
-          .querySelector(".mapbox-gl-draw_point")
-          .addEventListener("mouseover", function () {
-            document.querySelector(
-              ".rightTopMenu-button-location"
-            ).style.display = "unset";
-          });
-        document
-          .querySelector(".mapbox-gl-draw_point")
-          .addEventListener("mouseout", function () {
-            document.querySelector(
-              ".rightTopMenu-button-location"
-            ).style.display = "none";
-          });
+  //       document
+  //         .querySelector(".mapbox-gl-draw_point")
+  //         .addEventListener("mouseover", function () {
+  //           document.querySelector(
+  //             ".rightTopMenu-button-location"
+  //           ).style.display = "unset";
+  //         });
+  //       document
+  //         .querySelector(".mapbox-gl-draw_point")
+  //         .addEventListener("mouseout", function () {
+  //           document.querySelector(
+  //             ".rightTopMenu-button-location"
+  //           ).style.display = "none";
+  //         });
 
-        document
-          .querySelector(".mapbox-gl-draw_trash")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-erase").style.display =
-              "unset";
-          });
-        document
-          .querySelector(".mapbox-gl-draw_trash")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-erase").style.display =
-              "none";
-          });
+  //       document
+  //         .querySelector(".mapbox-gl-draw_trash")
+  //         .addEventListener("mouseover", function () {
+  //           document.querySelector(".rightTopMenu-button-erase").style.display =
+  //             "unset";
+  //         });
+  //       document
+  //         .querySelector(".mapbox-gl-draw_trash")
+  //         .addEventListener("mouseout", function () {
+  //           document.querySelector(".rightTopMenu-button-erase").style.display =
+  //             "none";
+  //         });
 
-        document
-          .querySelector(".palette")
-          .addEventListener("mouseover", function () {
-            document.querySelector(".rightTopMenu-button-color").style.display =
-              "unset";
-          });
-        document
-          .querySelector(".palette")
-          .addEventListener("mouseout", function () {
-            document.querySelector(".rightTopMenu-button-color").style.display =
-              "none";
-          });
-      });
-    }
-  }, [draw, map]);
+  //       document
+  //         .querySelector(".palette")
+  //         .addEventListener("mouseover", function () {
+  //           document.querySelector(".rightTopMenu-button-color").style.display =
+  //             "unset";
+  //         });
+  //       document
+  //         .querySelector(".palette")
+  //         .addEventListener("mouseout", function () {
+  //           document.querySelector(".rightTopMenu-button-color").style.display =
+  //             "none";
+  //         });
+  //     });
+  //   }
+  // }, [draw, map]);
 
   return (
     <>
@@ -871,31 +879,7 @@ function App() {
           Tools
         </button>
         <div ref={sidebar} className="sidebar">
-          <div className="logo">
-            <div className="logo__name">
-              <a href="https://neon-factory.design/">
-                <svg
-                  width="55"
-                  height="60"
-                  viewBox="0 0 55 60"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M21.3602 24.8521C21.3602 24.8521 20.9618 21.743 26.7845 21.5916C32.6071 21.4401 49.2018 21.5916 49.2018 21.5916C49.2018 21.5916 53.27 21.1372 53.27 16.0564C53.27 10.9771 48.1644 8.55098 43.2979 9.76402M16.414 24.8521C16.414 24.8521 15.9359 20.2984 18.0091 17.1536M8.67596 17.1551C8.67596 17.1551 10.2711 14.6177 12.9035 14.3905C15.536 14.1633 35.7989 14.3905 35.7989 14.3905C35.7989 14.3905 39.389 14.0876 40.4264 10.5242C41.4637 6.9608 38.1923 3.70028 38.1923 3.70028C38.1923 3.70028 36.1176 1.87997 32.2087 1.87997C28.2999 1.87997 26.4642 4.98905 26.2252 5.822C25.9861 6.65643 25.9065 9.45668 25.9065 9.45668M13.5425 9.45668C13.5425 9.45668 14.1815 3.54735 19.3667 3.16874C24.5519 2.79013 26.2267 5.822 26.2267 5.822M3.5704 17.1551C3.5704 17.1551 2.30807 4.36248 14.8658 5.85169M14.8658 32.4347V27.734H22.7163V32.4347M40.6295 44.5652H53.2715V57.7572H1.65503V19.8485H9.87267L9.71176 57.7572M10.5898 34.7851H37.9533V57.7572M16.3671 48.8101V53.8909M21.3539 48.8101V53.8909M26.5454 48.8101V53.8909M31.651 48.8101V53.8909M42.9792 48.8101V53.8909M48.1644 48.8101V53.8909"
-                    stroke="#4CC0AD"
-                    strokeWidth="3"
-                    strokeMiterlimit="10"
-                  />
-                </svg>
-              </a>
-              <h2>NEON-FACTORY</h2>
-            </div>
-            <p className="logo__text">
-              A <span>DESIGN AGENCY</span> FOR COMMERCIAL REAL ESTATE
-            </p>
-          </div>
-          <h1 className="title">Districts map</h1>
+          <img className="logo" src="logo-sidebar.png" />
           <div className="content-buttons">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>

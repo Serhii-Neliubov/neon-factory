@@ -11,7 +11,7 @@ const CircleMenu = ({ map }) => {
     if (radius !== undefined && radius > 0) {
       radiusDisplay.textContent = `Radius: ${radius}`;
     } else {
-      radiusDisplay.textContent = "";
+      radiusDisplay.textContent = "...";
     }
   };
 
@@ -84,8 +84,7 @@ const CircleMenu = ({ map }) => {
   }, [circles]);
 
   return (
-    <>
-      <div id="radius-display"></div>
+    <div className="circleMenuTool">
       <button id="delete-circle-button" onClick={handleDeleteCircle}>
         Delete Radius
       </button>
@@ -103,7 +102,8 @@ const CircleMenu = ({ map }) => {
           0 m
         </div>
       </div>
-    </>
+      <div id="radius-display">...</div>
+    </div>
   );
 };
 
