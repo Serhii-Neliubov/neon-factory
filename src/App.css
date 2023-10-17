@@ -33,14 +33,14 @@
 .circleMenuTool {
   background: #0c2536;
   position: absolute;
-  top: 78%;
+  top: 81.8%;
   opacity: 0;
-  left: 32.5%;
+  left: 36%;
   padding: 10px;
   gap: 5px;
   z-index: 10;
   display: flex;
-  border-radius: 3px;
+  border-radius: 8px;
   flex-direction: column-reverse;
 }
 .circleMenuTool button {
@@ -121,18 +121,18 @@ body {
 }
 
 .sidebar {
+  background: linear-gradient(91deg, #001524 4.18%, rgba(0, 21, 36, 0.91) 35%);
   height: 100%;
   color: white;
-  margin-right: 25px;
   font-size: 14px;
   font-family: "Open Sans", sans-serif;
   display: flex;
   flex-direction: column;
-  width: 400px;
-  transition: transform 0.3s ease; /* Анимация перехода */
+  transition: all 0.3s ease; /* Анимация перехода */
 }
 .sidebar-active {
-  transform: translate(-100%, 0);
+  transform: translate(-93%, 0);
+  width: 30% !important;
 }
 ::-webkit-scrollbar {
   width: 0.7em;
@@ -170,21 +170,24 @@ body {
   position: absolute;
   width: 20px;
   top: 20px;
-  left: 20px;
+  left: 30px;
   height: 30px;
   background: none;
   z-index: 100;
   border: none;
   background-image: url("arrow-left-close.png");
+
   background-size: cover;
   background-repeat: no-repeat;
-  transform: translate(1790%, 0) !important;
+  transform: translate(1780%, 0) !important;
 
-  transition: transform 0.3s ease; /* Анимация перехода */
+  transition: transform 0.3s ease;
 }
 .closeSidebar {
-  transform: rotate(180deg) translate(60%, 0) !important;
+  transform: rotate(180deg) translate(70%, 0) !important;
+  background-size: contain;
 }
+
 .loading__img {
   position: absolute;
   z-index: 2000;
@@ -468,6 +471,7 @@ body {
 }
 .content-buttons {
   overflow: scroll;
+  width: 92%;
   overflow-x: hidden;
   height: 100%;
   display: flex;
@@ -671,24 +675,46 @@ body {
   display: none !important;
 }
 .mapbox-gl-draw_line {
-  background-image: url("line-tool.png");
+  background-image: url("linetool.svg");
+  transform: scale(1.2);
   background-repeat: no-repeat;
   background-position: center;
 }
 .mapbox-gl-draw_polygon {
-  background-image: url("polygon.png");
+  background-image: url("polygon.svg");
   background-repeat: no-repeat;
   background-position: center;
 }
 .mapbox-gl-draw_point {
-  background-image: url("location.png");
+  background-image: url("location.svg");
+  transform: scale(1.1);
   background-repeat: no-repeat;
   background-position: center;
 }
 .mapbox-gl-draw_trash {
-  background-image: url("trash.png");
+  background-image: url("trash.svg");
   background-repeat: no-repeat;
   background-position: center;
+}
+.loading__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #001524;
+  display: flex;
+}
+.loading__img::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-image: url("logo-sidebar.png");
+  background-position: center;
+  transform: scale(1.5);
+  background-repeat: no-repeat;
 }
 .mapboxgl-ctrl-group:not(:first-child) {
   border-radius: none;
@@ -698,8 +724,8 @@ body {
   height: 47px;
   position: absolute;
   display: none;
-  top: 777px;
-  right: 797px;
+  top: 965px;
+  right: 1033px;
   animation: fadeIn 1s forwards;
 }
 .mapbox-gl-draw_polygon {
@@ -815,9 +841,9 @@ body {
   height: 47px;
   position: absolute;
   background: #0f293a;
-  top: 787px;
+  top: 94.2%;
   cursor: pointer;
-  right: 760px;
+  right: 43.07%;
   z-index: 100;
   border-radius: 0 3px 3px 0;
 }
@@ -842,6 +868,7 @@ body {
   border: none;
   color: white;
   font-size: 18px;
+  font-weight: 600;
   font-family: "Arial";
   border-radius: 8px;
   background: #0f293a;
@@ -855,12 +882,12 @@ body {
 .circleMenu {
   cursor: pointer;
   position: absolute;
-  top: 92.7%;
-  right: 61.92%;
+  top: 94.2%;
+  right: 59.29%;
   padding: 14.3px;
   z-index: 10;
   opacity: 0;
-  border-radius: 8px 0 0 8px;
+  border-radius: 3px 0 0 3px;
   background: #0f293a;
 }
 
@@ -1048,18 +1075,8 @@ p {
 }
 .sidebar {
   position: absolute;
-  width: 21.5%;
+  width: 19%;
   z-index: 15;
-}
-.sidebar::after {
-  position: absolute;
-  content: "";
-  z-index: -1;
-  top: 0;
-  left: 0;
-  background: linear-gradient(91deg, #001524 4.18%, rgba(0, 21, 36, 0.91) 35%);
-  width: 425px;
-  height: 100%;
 }
 .mapStyleButton {
   text-transform: uppercase;
