@@ -1,7 +1,7 @@
 import React from "react";
 
 const MyLoader = () => {
-  return <img className="loading__img" src="loader-img.jpg" alt="" />;
+  return <div className="loading__img" />;
 };
 
 export default MyLoader;
