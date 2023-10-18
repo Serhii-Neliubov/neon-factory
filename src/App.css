@@ -25,8 +25,8 @@
 }
 #radius-display {
   padding: 10px;
-  border: 1px solid #4cc0ad;
-  border-radius: 8px;
+  border: 1px solid #fff;
+  border-radius: 3px;
   color: white;
   margin-bottom: 5px;
 }
@@ -45,11 +45,9 @@
 }
 .circleMenuTool button {
   border: none;
-  text-transform: uppercase;
   background: none;
   color: #fff;
   font-size: 11px;
-  font-weight: 600;
   transition: color 0.3s ease;
 }
 .circleMenuTool button:hover {
@@ -132,7 +130,7 @@ body {
 }
 .sidebar-active {
   transform: translate(-93%, 0);
-  width: 30% !important;
+  width: 700px !important;
 }
 ::-webkit-scrollbar {
   width: 0.7em;
@@ -1075,7 +1073,7 @@ p {
 }
 .sidebar {
   position: absolute;
-  width: 19%;
+  width: 440px;
   z-index: 15;
 }
 .mapStyleButton {
