@@ -13,6 +13,9 @@ const RightTopMenuText = () => {
       <div className="rightTopMenu-button rightTopMenu-button-north">
         Reset North
       </div>
+      <div className="rightTopMenu-button rightTopMenu-button-circleMenu">
+        Radius
+      </div>
     </div>
   );
 };

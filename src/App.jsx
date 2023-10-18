@@ -626,7 +626,6 @@ function App() {
 
     function updateArea(e) {
       const selectedFeature = e.features[0];
-
       if (selectedFeature) {
         // eslint-disable-next-line no-undef
         const area = turf.area(selectedFeature.geometry);
@@ -800,7 +799,20 @@ function App() {
             document.querySelector(".rightTopMenu-button-north").style.display =
               "none";
           });
-
+        document
+          .querySelector(".circleMenu")
+          .addEventListener("mouseover", function () {
+            document.querySelector(
+              ".rightTopMenu-button-circleMenu"
+            ).style.display = "unset";
+          });
+        document
+          .querySelector(".circleMenu")
+          .addEventListener("mouseout", function () {
+            document.querySelector(
+              ".rightTopMenu-button-circleMenu"
+            ).style.display = "none";
+          });
         document
           .querySelector(".mapbox-gl-draw_line")
           .addEventListener("mouseover", function () {
