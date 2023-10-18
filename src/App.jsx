@@ -474,7 +474,6 @@ function App() {
           ? drawFeatureAtPoint[0]
           : "";
         if (drawFeatureAtPoint.length) {
-          // Если была найдена фигура, покажите её размер
           var clickedFeature = draw.get(drawFeatureAtPoint[0]);
           showPolygonArea(clickedFeature);
         } else {
@@ -489,7 +488,6 @@ function App() {
     map.on("click", "0", function (e) {
       const clickedPolygon = e.features[0]; // Получаем информацию о кликнутом полигоне
       // Вызываем функцию для отображения метров полигона
-
       showPolygonArea(clickedPolygon);
     });
 
@@ -497,6 +495,7 @@ function App() {
       // eslint-disable-next-line no-undef
       const area = turf.area(polygonFeature.geometry);
       const sqm = Math.round(area * 100) / 100;
+
       // Выводим метры полигона в какой-либо элемент (например, модальное окно)
       setSqml(sqm);
     }
@@ -741,12 +740,12 @@ function App() {
     if (showTool) {
       lastElement.style.display = "flex";
       palette.style.display = "block";
-      circleMenu.current.style.opacity = 1;
+      circleMenu.current.style.display = "block";
     } else {
       lastElement.style.display = "none";
       palette.style.display = "none";
-      circleMenu.current.style.opacity = 0;
-      circleMenuTool.style.opacity = 0;
+      circleMenu.current.style.display = "none";
+      circleMenuTool.style.display = "none";
       setShowCircleMenu(true);
     }
   }
@@ -774,9 +773,9 @@ function App() {
   function circleToggleMenu() {
     setShowCircleMenu(!showCircleMenu);
     if (showCircleMenu) {
-      circleMenuTool.style.opacity = 1;
+      circleMenuTool.style.display = "flex";
     } else {
-      circleMenuTool.style.opacity = 0;
+      circleMenuTool.style.display = "none";
     }
   }
 

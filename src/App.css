@@ -34,13 +34,12 @@
 .circleMenuTool {
   background: #0c2536;
   position: absolute;
-  top: 77%;
-  opacity: 0;
-  right: 50%;
+  bottom: 65px;
+  right: calc(50% + -225px);
   padding: 10px;
   gap: 5px;
   z-index: 10;
-  display: flex;
+  display: none;
   border-radius: 8px;
   flex-direction: column-reverse;
 }
@@ -686,6 +685,7 @@ body {
 .mapbox-gl-draw_point {
   background-image: url("location.svg");
   background-repeat: no-repeat;
+  margin-right: 90px;
   background-position: center;
 }
 .mapbox-gl-draw_trash {
@@ -720,7 +720,7 @@ body {
 }
 :root {
   --myRightValue: 50%;
-  --myOffset: -202px;
+  --myOffset: -290px;
 }
 .mapboxgl-ctrl-group:not(:first-child) {
   border-radius: none;
@@ -739,7 +739,6 @@ body {
   border: none !important;
   cursor: pointer;
 }
-
 .toggleButton input:hover {
   color: #4cc0ad;
 }
@@ -835,7 +834,10 @@ body {
   z-index: 1000;
   transform: translate(0, -40%);
 }
-
+:root {
+  --myRightValue3: 50%;
+  --myOffset3: -233px;
+}
 .palette {
   border: none;
   display: none;
@@ -844,11 +846,11 @@ body {
   position: absolute;
   background: #0f293a;
   bottom: 15px;
-  right: 34.639%;
+  right: calc(var(--myRightValue3) + var(--myOffset3));
   cursor: pointer;
   border-radius: 0px 8px 8px 0;
 
-  z-index: 10;
+  z-index: 15;
 }
 .palette::after {
   content: "";
@@ -880,7 +882,10 @@ body {
   right: 50%;
   z-index: 1;
 }
-
+:root {
+  --myRightValue2: 50%;
+  --myOffset2: -187px;
+}
 .circleMenu {
   border: none;
   width: 50px;
@@ -888,9 +893,9 @@ body {
   position: absolute;
   background: #0f293a;
   cursor: pointer;
+  display: none;
   bottom: 15px;
-  right: 37.1%;
-  opacity: 0;
+  right: calc(var(--myRightValue2) + var(--myOffset2));
   z-index: 10;
   background-image: url("circleMenu.svg");
   background-repeat: no-repeat;
@@ -968,8 +973,8 @@ input[type="color"]::-webkit-color-swatch {
   padding: 10px;
   min-width: 64px;
   position: absolute;
-  bottom: 30px;
-  right: 8px;
+  bottom: 65px;
+  right: calc(50% + -110px);
   color: #fff;
   z-index: 100;
   border-radius: 8px;
@@ -981,9 +986,7 @@ input[type="color"]::-webkit-color-swatch {
   text-align: center;
   align-items: center;
   justify-content: center;
-  display: flex;
   font-family: "Helvetica";
-  height: 45px;
   margin-top: 250px;
 }
 

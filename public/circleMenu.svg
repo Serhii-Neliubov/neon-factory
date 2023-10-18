@@ -1,16 +1,11 @@
-<svg width="24" height="18" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Group 64">
-<circle id="Ellipse 18" cx="7.75" cy="2.25" r="2.25" fill="white"/>
-<circle id="Ellipse 19" cx="7.7499" cy="2.25002" r="1.35" fill="#243B49"/>
-<path id="Line 23" d="M1 2.69995H5.5" stroke="white" stroke-linecap="round"/>
-<path id="Line 24" d="M11.8 2.69995H22.6" stroke="white" stroke-linecap="round"/>
-<circle id="Ellipse 18_2" cx="7.75" cy="15.75" r="2.25" fill="white"/>
-<circle id="Ellipse 19_2" cx="7.7499" cy="15.75" r="1.35" fill="#243B4A"/>
-<path id="Line 25" d="M1 15.3H5.5" stroke="white" stroke-linecap="round"/>
-<path id="Line 26" d="M11.8 15.3H22.6" stroke="white" stroke-linecap="round"/>
-<ellipse id="Ellipse 20" cx="15.8501" cy="9.44995" rx="2.25" ry="2.25" transform="rotate(-180 15.8501 9.44995)" fill="white"/>
-<ellipse id="Ellipse 21" cx="15.85" cy="9.45005" rx="1.35" ry="1.35" transform="rotate(-180 15.85 9.45005)" fill="#243B4A"/>
-<path id="Line 27" d="M22.6001 9L18.1001 9" stroke="white" stroke-linecap="round"/>
-<path id="Line 28" d="M10 9L1 9" stroke="white" stroke-linecap="round"/>
-</g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 28.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 25 25" style="enable-background:new 0 0 25 25;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#FFFFFF;stroke-width:1.5;stroke-miterlimit:10;}
+	.st1{fill:#FFFFFF;}
+</style>
+<circle class="st0" cx="12.5" cy="12.5" r="11.29"/>
+<circle class="st1" cx="12.5" cy="12.5" r="1.63"/>
 </svg>
