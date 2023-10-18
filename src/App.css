@@ -921,8 +921,8 @@ input[type="color"]::-webkit-color-swatch {
 
 .rightTopMenu {
   position: absolute;
-  top: 8px;
-  right: 50px;
+  bottom: 50px;
+  right: 50%;
   z-index: 100;
   flex-direction: column;
   gap: 2px;
@@ -945,25 +945,48 @@ input[type="color"]::-webkit-color-swatch {
 .rightTopMenu-button:hover {
   opacity: 0.5;
 }
-
 .rightTopMenu-button-line {
-  margin-top: 43px;
+  position: absolute;
+  bottom: -15px;
+  left: -10px;
+  margin-bottom: 30px !important;
 }
 
 .rightTopMenu-button-shape {
-  margin-top: 72px;
+  position: absolute;
+  bottom: -15px;
+  left: 35px;
+  margin-bottom: 30px !important;
 }
 
 .rightTopMenu-button-location {
-  margin-top: 100px;
+  position: absolute;
+  white-space: nowrap;
+  bottom: -15px;
+  left: 65px;
+  margin-bottom: 30px !important;
 }
 
 .rightTopMenu-button-erase {
-  margin-top: 128px;
+  position: absolute;
+  white-space: nowrap;
+  bottom: -15px;
+  left: 230px;
+  margin-bottom: 30px !important;
 }
-
+.rightTopMenu-button-circleMenu {
+  position: absolute;
+  white-space: nowrap;
+  bottom: -15px;
+  left: 135px;
+  margin-bottom: 30px !important;
+}
 .rightTopMenu-button-color {
-  margin-top: 157px;
+  position: absolute;
+  white-space: nowrap;
+  bottom: -15px;
+  left: 185px;
+  margin-bottom: 30px !important;
 }
 .logo {
   margin: 45px 0 50px 0;
@@ -973,8 +996,8 @@ input[type="color"]::-webkit-color-swatch {
   padding: 10px;
   min-width: 64px;
   position: absolute;
-  bottom: 65px;
-  right: calc(50% + -110px);
+  bottom: 30px;
+  right: 20px;
   color: #fff;
   z-index: 100;
   border-radius: 8px;
@@ -989,7 +1012,6 @@ input[type="color"]::-webkit-color-swatch {
   font-family: "Helvetica";
   margin-top: 250px;
 }
-
 p {
   white-space: normal;
   font-family: "Open Sans";
