@@ -85,12 +85,13 @@ const CircleMenu = ({ map }) => {
 
   return (
     <div className="circleMenuTool">
-      <button id="delete-circle-button" onClick={handleDeleteCircle}>
-        Delete Radius
-      </button>
       <button id="delete-circles-button" onClick={handleDeleteAllCircles}>
         Delete all Radius
       </button>
+      <button id="delete-circle-button" onClick={handleDeleteCircle}>
+        Delete Radius
+      </button>
+
       <button onClick={handleCreateCircle} id="createCircleButton">
         Draw Radius
       </button>
