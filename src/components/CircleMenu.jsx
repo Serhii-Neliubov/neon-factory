@@ -94,14 +94,6 @@ const CircleMenu = ({ map }) => {
       <button onClick={handleCreateCircle} id="createCircleButton">
         Draw Radius
       </button>
-      <div id="distance-marker" className="distance-marker">
-        <div className="distance-close" id="distance-close">
-          ×
-        </div>
-        <div id="distance-value" className="distance-value">
-          0 m
-        </div>
-      </div>
       <div id="radius-display">...</div>
     </div>
   );

@@ -599,7 +599,18 @@ function App() {
         );
 
         // Обновляем текст в меню и позиционируем его
-        document.getElementById("distance-value").textContent = `${distance} m`;
+        if (distance < 1000) {
+          // Если расстояние меньше 1000 метров, умножаем его на 1000 и отображаем как целое число
+          document.getElementById("distance-value").textContent = `${(
+            distance * 1000
+          ).toFixed(0)} m`;
+        } else {
+          // Иначе отображаем значение в метрах с двумя знаками после запятой
+          document.getElementById(
+            "distance-value"
+          ).textContent = `${distance} m`;
+        }
+
         marker.style.left = `${map.project(menuPosition).x}px`;
         marker.style.top = `${map.project(menuPosition).y}px`;
       } else if (updatedFeature.geometry.type === "Polygon") {
@@ -969,7 +980,12 @@ function App() {
     ""
   )} */}
           <CircleMenu map={map} />
-
+          <div id="distance-marker" className="distance-marker">
+            <div id="distance-value"></div>
+            <div className="distance-close" id="distance-close">
+              ×
+            </div>
+          </div>
           <RightTopMenuText />
           <div className="calculation-box">
             <div id="calculated-area">{Sqm}.SQM</div>
@@ -981,11 +997,10 @@ function App() {
             className="palette"
             onChange={changeColor}
           />
-          <img
+          <div
             ref={circleMenu}
             onClick={circleToggleMenu}
             className="circleMenu"
-            src="circleMenu.svg"
             alt="logo"
           />
           <img alt="Logo" className="logo-map" src="logo.png" />
