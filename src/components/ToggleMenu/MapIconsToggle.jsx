@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { servicesActionChanging } from "../../redux/slices/servicesActionSlice";
 
 const MapIconsToggle = ({ children, map }) => {
-  const [toggle, setToggle] = useState(false);
   const [toggleClass, setToggleClass] = useState("");
   const dispatch = useDispatch();
   const servicesAction = useSelector(
@@ -14,10 +13,8 @@ const MapIconsToggle = ({ children, map }) => {
     dispatch(servicesActionChanging());
     if (!servicesAction) {
       map.setLayoutProperty("poi-label", "visibility", "visible");
-      setToggle(true);
     } else {
       map.setLayoutProperty("poi-label", "visibility", "none");
-      setToggle(false);
     }
   }
 
