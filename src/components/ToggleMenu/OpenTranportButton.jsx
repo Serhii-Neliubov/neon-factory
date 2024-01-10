@@ -1,14 +1,12 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { openTransportChanging } from "../../redux/slices/openTransportSlice";
-import { RootState } from "../../redux/store";
-import TransportButton from "./TransportButton";
+import TransportButton from "./TransportButton.jsx";
 import MapIconsToggle from "./MapIconsToggle";
 
 const OpenTranportButton = ({ map }) => {
   const dispatch = useDispatch();
   const openTransport = useSelector(
-    (state: RootState) => state.openTransport.value
+    (state) => state.openTransport.value
   );
   return (
     <>

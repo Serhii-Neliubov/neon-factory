@@ -10,8 +10,8 @@ const ToggleButton = ({
   center,
   zoom,
 }) => {
-  const [toggle, setToggle] = useState<boolean>(false);
-  const [toggleClass, setToggleClass] = useState<string>("");
+  const [toggle, setToggle] = useState(false);
+  const [toggleClass, setToggleClass] = useState("");
 
   const handleClick = () => {
     toggleButton(data, selectedDistricts, map);

@@ -11,11 +11,11 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 // Components
-import SubMenu from "./components/SubMenu/SubMenu";
-import ResetMap from "./components/ResetMap";
-import PrintScreen from "./components/PrintScreen";
-import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton";
-import MyLoader from "./components/MyLoader/MyLoader";
+import SubMenu from "./components/SubMenu/SubMenu.jsx";
+import ResetMap from "./components/ResetMap.jsx";
+import PrintScreen from "./components/PrintScreen.jsx";
+import AllDistrictsButton from "./components/ToggleMenu/AllDistrictsButton.jsx";
+import MyLoader from "./components/MyLoader/MyLoader.jsx";
 // Utils
 import defaultDrawStyles from "./utils/DefaultDrawStyles";
 //Map functions
@@ -25,8 +25,8 @@ import {
   toggleButton,
   createMarkerElement,
 } from "./utils/MapFunctions";
-import ToggleMenu from "./components/ToggleMenu/ToggleMenu";
-import RightTopMenuText from "./components/RightTopMenuText";
+import ToggleMenu from "./components/ToggleMenu/ToggleMenu.jsx";
+import RightTopMenuText from "./components/RightTopMenuText.jsx";
 // import MyModal from "./components/MyModal/MyModal";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -51,11 +51,11 @@ import {
   decentralisedToggleFalse,
   decentralisedToggleTrue,
 } from "./redux/slices/decentralisedToggleSlice";
-import Container from "./components/Container";
+import Container from "./components/Container.jsx";
 import CircleMenu from "./components/CircleMenu";
-import OpenTranportButton from "./components/ToggleMenu/OpenTranportButton";
-import OpenCadastreButton from "./components/ToggleMenu/OpenCadastreButton";
-import OpenMapStyleButton from "./components/ToggleMenu/OpenMapStyleButton";
+import OpenTranportButton from "./components/ToggleMenu/OpenTranportButton.jsx";
+import OpenCadastreButton from "./components/ToggleMenu/OpenCadastreButton.jsx";
+import OpenMapStyleButton from "./components/ToggleMenu/OpenMapStyleButton.jsx";
 
 function App() {
   const dispatch = useDispatch();

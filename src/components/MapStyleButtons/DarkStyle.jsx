@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { centralisedToggleFalse } from "../../redux/slices/centralisedToggleSlice";
 import { decentralisedToggleFalse } from "../../redux/slices/decentralisedToggleSlice";
 import { allDistrictsToggleFalse } from "../../redux/slices/allDistrictsToggleSlice";
-import { centralisedToggleFalse } from "../../redux/slices/centralisedToggleSlice";
-import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
 import { showTransportTrue } from "../../redux/slices/showTransportSlice";
 import { servicesActionFalse } from "../../redux/slices/servicesActionSlice";
+import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
+import { useDispatch } from "react-redux";
 
-const DefaultStyle = ({
+const DarkStyle = ({
   mapStyleSetter,
   map,
-  setMapStyleSetter,
   setSelectedDistricts,
+  setMapStyleSetter,
   setShowCadastre,
 }) => {
-  const [toggleClass, setToggleClass] = useState<string>("");
-  const [toggle, setToggle] = useState<boolean>(true);
+  const [toggleClass, setToggleClass] = useState("");
+  const [toggle, setToggle] = useState(true);
   const dispatch = useDispatch();
 
-  function defaultStyleHandler() {
-    map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+  function darkStyleHandler() {
+    map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
     dispatch(showCadastreFalse());
-    setMapStyleSetter(1);
-    dispatch(showTransportTrue());
-    setShowCadastre(false);
-    dispatch(servicesActionFalse());
+    setMapStyleSetter(4);
 
     if (map) {
       map.loadImage("pin.png", function (error, image) {
@@ -37,17 +33,20 @@ const DefaultStyle = ({
     }
     setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
-
-    // setIsModalActive(false);
     dispatch(decentralisedToggleFalse());
-
+    setShowCadastre(false);
     dispatch(allDistrictsToggleFalse());
+    // setIsModalActive(true);
+    dispatch(showTransportTrue());
+
+    dispatch(servicesActionFalse());
   }
+
   const handleClick = () => {
     setToggle(true);
   };
   useEffect(() => {
-    if (mapStyleSetter == 1) {
+    if (mapStyleSetter == 4) {
       setToggleClass("switch-btn switch-on");
     } else {
       setToggleClass("switch-btn");
@@ -56,15 +55,15 @@ const DefaultStyle = ({
   return (
     <div
       onClick={() => {
+        darkStyleHandler();
         handleClick();
-        defaultStyleHandler();
       }}
       className="toggleButton"
     >
-      <div onClick={handleClick}>Default</div>
+      <div>Dark</div>
       <div className={toggleClass}></div>
     </div>
   );
 };
 
-export default DefaultStyle;
+export default DarkStyle;

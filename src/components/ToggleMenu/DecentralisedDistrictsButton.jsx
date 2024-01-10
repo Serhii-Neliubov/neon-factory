@@ -1,14 +1,12 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { decentralisedToggleChanging } from "../../redux/slices/decentralisedToggleSlice";
-import { RootState } from "../../redux/store";
 const DecentralisedDistrictsButton = ({
   children,
   decentralisedDistrictsButtonHandler,
 }) => {
   const dispatch = useDispatch();
   const decentralisedToggle = useSelector(
-    (state: RootState) => state.decentralisedToggle.value
+    (state) => state.decentralisedToggle.value
   );
 
   const handleClick = () => {

@@ -1,6 +1,4 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 import { mapStyleButtonChanging } from "../../redux/slices/mapStyleButtonSlice";
 import DefaultStyle from "../MapStyleButtons/DefaultStyle";
 import DarkStyle from "../MapStyleButtons/DarkStyle";
@@ -16,7 +14,7 @@ const OpenMapStyleButton = ({
 }) => {
   const dispatch = useDispatch();
   const mapStyleButtonOpen = useSelector(
-    (state: RootState) => state.mapStyleButton.value
+    (state) => state.mapStyleButton.value
   );
   return (
     <>

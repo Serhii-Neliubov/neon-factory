@@ -1,13 +1,11 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 import { openCadastreChanging } from "../../redux/slices/openCadastreSlice";
 import CadastreButton from "./CadastreButton";
 
 const OpenCadastreButton = ({ map, setShowCadastre, showCadastre }) => {
   const dispatch = useDispatch();
   const openCadastre = useSelector(
-    (state: RootState) => state.openCadastre.value
+    (state) => state.openCadastre.value
   );
   return (
     <>

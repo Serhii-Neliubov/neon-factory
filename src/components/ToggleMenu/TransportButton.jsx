@@ -1,14 +1,12 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 import { showTransportChanging } from "../../redux/slices/showTransportSlice";
 
 const TransportButton = ({ children, map }) => {
   const dispatch = useDispatch();
-  const [toggleClass, setToggleClass] = useState<string>("");
+  const [toggleClass, setToggleClass] = useState("");
   const showTransport = useSelector(
-    (state: RootState) => state.showTransport.value
+    (state) => state.showTransport.value
   );
   function toggleTransportLayerVisibility() {
     dispatch(showTransportChanging());

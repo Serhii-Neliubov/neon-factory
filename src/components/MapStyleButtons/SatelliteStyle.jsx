@@ -1,52 +1,52 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
+import { useDispatch } from "react-redux";
+import { showTransportTrue } from "../../redux/slices/showTransportSlice";
+import { servicesActionFalse } from "../../redux/slices/servicesActionSlice";
 import { centralisedToggleFalse } from "../../redux/slices/centralisedToggleSlice";
 import { decentralisedToggleFalse } from "../../redux/slices/decentralisedToggleSlice";
 import { allDistrictsToggleFalse } from "../../redux/slices/allDistrictsToggleSlice";
-import { showTransportTrue } from "../../redux/slices/showTransportSlice";
-import { servicesActionFalse } from "../../redux/slices/servicesActionSlice";
-import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
-import { useDispatch } from "react-redux";
 
-const DarkStyle = ({
+const SatelliteStyle = ({
   mapStyleSetter,
   map,
-  setSelectedDistricts,
   setMapStyleSetter,
+  setSelectedDistricts,
   setShowCadastre,
 }) => {
-  const [toggleClass, setToggleClass] = useState<string>("");
-  const [toggle, setToggle] = useState<boolean>(true);
   const dispatch = useDispatch();
 
-  function darkStyleHandler() {
-    map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
-    dispatch(showCadastreFalse());
-    setMapStyleSetter(4);
+  const [toggleClass, setToggleClass] = useState("");
+  const [toggle, setToggle] = useState(false);
+
+  function satelitteStyleHandler() {
+    map.setStyle("mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90");
+    setMapStyleSetter(2);
 
     if (map) {
       map.loadImage("pin.png", function (error, image) {
         if (error) throw error;
         map.addImage("custom-pin", image);
       });
-
-      // Остальной код обработки карты также может быть здесь
     }
+
+    dispatch(showCadastreFalse());
+    dispatch(showTransportTrue());
     setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
     dispatch(decentralisedToggleFalse());
     setShowCadastre(false);
+    dispatch(servicesActionFalse());
     dispatch(allDistrictsToggleFalse());
     // setIsModalActive(true);
-    dispatch(showTransportTrue());
-
-    dispatch(servicesActionFalse());
   }
 
   const handleClick = () => {
     setToggle(true);
   };
+
   useEffect(() => {
-    if (mapStyleSetter == 4) {
+    if (mapStyleSetter == "2") {
       setToggleClass("switch-btn switch-on");
     } else {
       setToggleClass("switch-btn");
@@ -55,15 +55,15 @@ const DarkStyle = ({
   return (
     <div
       onClick={() => {
-        darkStyleHandler();
         handleClick();
+        satelitteStyleHandler();
       }}
       className="toggleButton"
     >
-      <div>Dark</div>
+      <div onClick={handleClick}>Satellite</div>
       <div className={toggleClass}></div>
     </div>
   );
 };
 
-export default DarkStyle;
+export default SatelliteStyle;

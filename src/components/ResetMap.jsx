@@ -1,9 +1,7 @@
-import React from "react";
 import { useDispatch } from "react-redux";
 import { controlActiveFalse } from "../redux/slices/ControlActiveSlice";
 import { openBrusselsFalse } from "../redux/slices/openBrusselsSlice";
 import { openTransportFalse } from "../redux/slices/openTransportSlice";
-import { showCadastreFalse } from "../redux/slices/showCadastreSlice";
 import { openCadastreFalse } from "../redux/slices/openCadastreSlice";
 import { mapStyleButtonFalse } from "../redux/slices/mapStyleButtonSlice";
 import { changeSqmValue } from "../redux/slices/sqmSlice";
@@ -66,14 +64,6 @@ const ResetMap = ({
       map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
     } else {
       map.setStyle("mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy");
-    }
-
-    if (map) {
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-      });
-      // Остальной код обработки карты также может быть здесь
     }
     // Сбрасываем видимость надписей в боковой панели
     var sidebarLabels = document.querySelectorAll(".sidebar-label");

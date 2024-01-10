@@ -1,27 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
-import { centralisedToggleFalse } from "../../redux/slices/centralisedToggleSlice";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { decentralisedToggleFalse } from "../../redux/slices/decentralisedToggleSlice";
 import { allDistrictsToggleFalse } from "../../redux/slices/allDistrictsToggleSlice";
+import { centralisedToggleFalse } from "../../redux/slices/centralisedToggleSlice";
+import { showCadastreFalse } from "../../redux/slices/showCadastreSlice";
 import { showTransportTrue } from "../../redux/slices/showTransportSlice";
 import { servicesActionFalse } from "../../redux/slices/servicesActionSlice";
-import { useDispatch } from "react-redux";
 
-const MonochromeStyle = ({
+const DefaultStyle = ({
   mapStyleSetter,
   map,
-  setSelectedDistricts,
   setMapStyleSetter,
+  setSelectedDistricts,
   setShowCadastre,
 }) => {
-  const [toggleClass, setToggleClass] = useState<string>("");
-  const [toggle, setToggle] = useState<boolean>(true);
+  const [toggleClass, setToggleClass] = useState("");
+  const [toggle, setToggle] = useState(true);
   const dispatch = useDispatch();
-  function monochromeStyleHandler() {
-    map.setStyle("mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97");
-    dispatch(showCadastreFalse());
 
-    setMapStyleSetter(3);
+  function defaultStyleHandler() {
+    map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
+    dispatch(showCadastreFalse());
+    setMapStyleSetter(1);
+    dispatch(showTransportTrue());
+    setShowCadastre(false);
+    dispatch(servicesActionFalse());
 
     if (map) {
       map.loadImage("pin.png", function (error, image) {
@@ -33,19 +36,17 @@ const MonochromeStyle = ({
     }
     setSelectedDistricts([]);
     dispatch(centralisedToggleFalse());
-    dispatch(decentralisedToggleFalse());
-    setShowCadastre(false);
-    dispatch(allDistrictsToggleFalse());
-    dispatch(showTransportTrue());
-    // setIsModalActive(true);
-    dispatch(servicesActionFalse());
-  }
 
+    // setIsModalActive(false);
+    dispatch(decentralisedToggleFalse());
+
+    dispatch(allDistrictsToggleFalse());
+  }
   const handleClick = () => {
     setToggle(true);
   };
   useEffect(() => {
-    if (mapStyleSetter == 3) {
+    if (mapStyleSetter == 1) {
       setToggleClass("switch-btn switch-on");
     } else {
       setToggleClass("switch-btn");
@@ -54,15 +55,15 @@ const MonochromeStyle = ({
   return (
     <div
       onClick={() => {
-        monochromeStyleHandler();
         handleClick();
+        defaultStyleHandler();
       }}
       className="toggleButton"
     >
-      <div onClick={handleClick}>Monochrome</div>
+      <div onClick={handleClick}>Default</div>
       <div className={toggleClass}></div>
     </div>
   );
 };
 
-export default MonochromeStyle;
+export default DefaultStyle;

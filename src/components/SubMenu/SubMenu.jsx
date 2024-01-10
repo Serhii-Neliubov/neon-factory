@@ -1,17 +1,15 @@
-import React from "react";
-import { ZoomInButton } from "./ZoomInButton";
-import ZoomOutButton from "./ZoomOutButton";
+import { ZoomInButton } from "./ZoomInButton.jsx";
+import ZoomOutButton from "./ZoomOutButton.jsx";
 import RotateLeftButton from "./RotateLeftButton";
 import RotateRightButton from "./RotateRightButton";
 import IncreasePitchButton from "./IncreasePitchButton";
 import DecreasePitchButton from "./DecreasePitchButton";
 import { ActionControls } from "./ActionControls";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 
 const SubMenu = ({ map, submenuTag }) => {
   const isControlsActive = useSelector(
-    (state: RootState) => state.activeControl.value
+    (state) => state.activeControl.value
   );
   return (
     <>
