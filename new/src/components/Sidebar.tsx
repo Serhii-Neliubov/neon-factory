@@ -1,5 +1,6 @@
 import './Sidebar.css';
 import { Map as MapTypes } from "mapbox-gl";
+import { useState } from "react";
 
 const MAP_STYLE_MODES = {
   DEFAULT: 'default',
@@ -15,10 +16,84 @@ const MAP_STYLES = {
   [MAP_STYLE_MODES.SATELLITE]: 'mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90',
 }
 
+const BRUSSELS_BUTTONS = [
+  {
+    data: "CD",
+    id: "CBDButton",
+    name: "Centre",
+    center: [4.351356, 50.845288],
+    zoom: 13,
+  },
+  {
+    data: "EU",
+    id: "EUButton",
+    name: "European",
+    center: [4.385024, 50.844421],
+    zoom: 13,
+  },
+  {
+    data: "Louise",
+    id: "LouiseButton",
+    name: "Louise",
+    center: [4.371282, 50.831629],
+    zoom: 13,
+  },
+  {
+    data: "North",
+    id: "NorthButton",
+    name: "North",
+    center: [4.348951, 50.86046],
+    zoom: 13,
+  },
+  {
+    data: "South",
+    id: "South",
+    name: "Midi",
+    center: [4.331086, 50.839218],
+    zoom: 13,
+  },
+  {
+    data: "NE",
+    id: "NEButton",
+    name: "North-East",
+    center: [4.404263, 50.865011],
+    zoom: 12,
+  },
+  {
+    data: "NW",
+    id: "NWButton",
+    name: "North-West",
+    center: [4.317688, 50.870644],
+    zoom: 12,
+  },
+  {
+    data: "SE",
+    id: "SEButton",
+    name: "South-East",
+    center: [4.416287, 50.81435],
+    zoom: 12,
+  },
+  {
+    data: "SW",
+    id: "SWButton",
+    name: "South-West",
+    center: [4.319291, 50.803937],
+    zoom: 12,
+  },
+  {
+    data: "Airport",
+    id: "Airport",
+    name: "Airport",
+    center: [4.480888, 50.899911],
+    zoom: 11.5,
+  },
+];
+
 export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
   const currentPitch = map?.getPitch();
   const currentRotation = map?.getBearing();
-
+  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
+  const [currentStyle, setCurrentStyle] = useState(MAP_STYLE_MODES.DEFAULT);
   function increasePitchHandler() {
     map?.setPitch(currentPitch as number + 5);
   }
@@ -44,6 +119,8 @@ export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
   }
 
   function setStyleHandler(modeStyle: string) {
+    setCurrentStyle(modeStyle);
+
     if(MAP_STYLES[modeStyle]){
       map?.setStyle(MAP_STYLES[modeStyle]);
     } else {
@@ -51,15 +128,30 @@ export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
     }
   }
 
-  function setActiveDistrictHandler(district: string | undefined) {
-    console.log(district);
+  function setActiveDistrictsHandler(district: string) {
+    const districtIndex = selectedDistricts.indexOf(district);
+
+    if (districtIndex !== -1) {
+      selectedDistricts.splice(districtIndex, 1);
+    } else {
+      selectedDistricts.push(district);
+    }
+
+    const newFilter = ["any", ...selectedDistricts.map(d => ["==", ["get", "sidebar_label"], d])];
+
+    map?.setFilter("districts-brussels-0-2", newFilter);
+    map?.triggerRepaint();
   }
+
 
   function resetMapHandler() {
     map?.setPitch(0);
     map?.setBearing(0);
     map?.setZoom(11);
     map?.setCenter([4.3517, 50.8503]);
+    map?.setStyle(currentStyle);
+
+    setSelectedDistricts([]);
   }
 
   function downloadMapHandler() {}
@@ -82,25 +174,19 @@ export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
           <div className='sidebar-styles_button' onClick={() => setStyleHandler('satellite')}>Satellite</div>
         </div>
         <div className='sidebar-brussels'>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('Center')}>Center</div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('European')}>European</div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('Louise')}>Louise</div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('North')}>North</div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('Midi')}>Midi</div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('North-East')}>North-East
-          </div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('North-West')}>North-West
-          </div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('South-East')}>South-East
-          </div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('South-West')}>South-West
-          </div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('Airport')}>Airport</div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('Cbd')}>Cbd</div>
+          {BRUSSELS_BUTTONS.map((button) => {
+            return (
+              <div key={button.id} className='sidebar-brussels_button'
+                   onClick={() => setActiveDistrictsHandler(button.data)}>
+                {button.name}
+              </div>
+            );
+          })}
+          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictsHandler('Cbd')}>Cbd</div>
           <div className='sidebar-brussels_button'
-               onClick={() => setActiveDistrictHandler('Decentralised')}>Decentralised
+               onClick={() => setActiveDistrictsHandler('Decentralised')}>Decentralised
           </div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictHandler('All Districts')}>All
+          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictsHandler('All Districts')}>All
             Districts
           </div>
         </div>

@@ -901,7 +901,7 @@ function App() {
           Tools
         </button>
         <div ref={sidebar} className="sidebar">
-          <img className="logo" src="logo-sidebar.png" />
+          <img className="logo" src="/logo-sidebar.png" />
           <div className="content-buttons">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
