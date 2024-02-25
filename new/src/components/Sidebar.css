@@ -11,3 +11,10 @@
     background-color: #f5f5f5;
     padding-top: 20px;
 }
+
+.sidebar-close {
+    position: absolute;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 99;
+}

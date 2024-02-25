@@ -2,6 +2,10 @@ import './Sidebar.css';
 import { Map as MapTypes } from "mapbox-gl";
 import { useState } from "react";
 
+type SidebarProps = {
+  map: MapTypes | undefined;
+}
+
 const MAP_STYLE_MODES = {
   DEFAULT: 'default',
   DARK: 'dark',
@@ -89,12 +93,13 @@ const BRUSSELS_BUTTONS = [
   },
 ];
 
-export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
+export const Sidebar = ({map}: SidebarProps) => {
   const currentPitch = map?.getPitch();
   const currentRotation = map?.getBearing();
 
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [currentStyle, setCurrentStyle] = useState(MAP_STYLES[MAP_STYLE_MODES.DEFAULT]);
+  const [sidebarVisibleStatus, setSidebarVisibleStatus] = useState('Open');
 
   function increasePitchHandler() {
     map?.setPitch(currentPitch as number + 5);
@@ -142,55 +147,86 @@ export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
 
     map?.flyTo({
       center: centerCoordinates as [number, number],
+      duration: 800,
+      zoom: 12,
       essential: true
     });
   }
 
   function resetMapHandler() {
-    map?.setPitch(0);
-    map?.setBearing(0);
-    map?.setZoom(11);
-    map?.setCenter([4.3517, 50.8503]);
     map?.setStyle(currentStyle);
 
+    map?.flyTo({
+      zoom: 12,
+      pitch: 0,
+      bearing: 0,
+      center: [4.3517, 50.8503],
+      duration: 800,
+      essential: true
+    });
+
     setSelectedDistricts([]);
+  }
+  
+  function setActiveIconsHandler(iconsType: string) {
+    console.log(iconsType);
+  }
+
+  function sidebarVisibleHandler() {
+    if(sidebarVisibleStatus === 'Open') {
+      setSidebarVisibleStatus('Close');
+    } else {
+      setSidebarVisibleStatus('Open');
+    }
   }
 
   function downloadMapHandler() {}
 
   return (
     <div className='body'>
-      <div className='sidebar'>
-        <div className='sidebar-controls'>
-          <button className='sidebar-controls_button' onClick={zoomInHandler}>Zoom In</button>
-          <button className='sidebar-controls_button' onClick={zoomOutHandler}>Zoom Out</button>
-          <button className='sidebar-controls_button' onClick={rotateLeftHandler}>Rotate Left</button>
-          <button className='sidebar-controls_button' onClick={rotateRightHandler}>Rotate Right</button>
-          <button className='sidebar-controls_button' onClick={increasePitchHandler}>Increase Pitch</button>
-          <button className='sidebar-controls_button' onClick={decreasePitchHandler}>Decrease Pitch</button>
-        </div>
-        <div className='sidebar-styles'>
-          <div className='sidebar-styles_button' onClick={() => setStyleHandler('default')}>Default</div>
-          <div className='sidebar-styles_button' onClick={() => setStyleHandler('dark')}>Dark</div>
-          <div className='sidebar-styles_button' onClick={() => setStyleHandler('monochrome')}>Monochrome</div>
-          <div className='sidebar-styles_button' onClick={() => setStyleHandler('satellite')}>Satellite</div>
-        </div>
-        <div className='sidebar-brussels'>
-          {BRUSSELS_BUTTONS.map((button) => {
-            return (
-              <div key={button.id} className='sidebar-brussels_button'
-                   onClick={() => setActiveDistrictsHandler(button.data, button.center)}>
-                {button.name}
-              </div>
-            );
-          })}
-          <div className='sidebar-brussels_button'>Cbd</div>
-          <div className='sidebar-brussels_button'>Decentralised</div>
-          <div className='sidebar-brussels_button'>All Districts</div>
-        </div>
-        <button onClick={downloadMapHandler}>Download Map</button>
-        <button onClick={resetMapHandler}>Reset Map</button>
-      </div>
+      {sidebarVisibleStatus === 'Close' && <div className='sidebar'>
+          <div className='sidebar-controls'>
+              <button className='sidebar-controls_button' onClick={zoomInHandler}>Zoom In</button>
+              <button className='sidebar-controls_button' onClick={zoomOutHandler}>Zoom Out</button>
+              <button className='sidebar-controls_button' onClick={rotateLeftHandler}>Rotate Left</button>
+              <button className='sidebar-controls_button' onClick={rotateRightHandler}>Rotate Right</button>
+              <button className='sidebar-controls_button' onClick={increasePitchHandler}>Increase Pitch</button>
+              <button className='sidebar-controls_button' onClick={decreasePitchHandler}>Decrease Pitch</button>
+          </div>
+          <div className='sidebar-styles'>
+              <div className='sidebar-styles_button' onClick={() => setStyleHandler('default')}>Default</div>
+              <div className='sidebar-styles_button' onClick={() => setStyleHandler('dark')}>Dark</div>
+              <div className='sidebar-styles_button' onClick={() => setStyleHandler('monochrome')}>Monochrome</div>
+              <div className='sidebar-styles_button' onClick={() => setStyleHandler('satellite')}>Satellite</div>
+          </div>
+          <div className='sidebar-brussels'>
+            {BRUSSELS_BUTTONS.map((button) => {
+              return (
+                <div key={button.id} className='sidebar-brussels_button'
+                     onClick={() => setActiveDistrictsHandler(button.data, button.center)}>
+                  {button.name}
+                </div>
+              );
+            })}
+              <div className='sidebar-brussels_button'>Cbd</div>
+              <div className='sidebar-brussels_button'>Decentralised</div>
+              <div className='sidebar-brussels_button'>All Districts</div>
+          </div>
+          <div className='sidebar-transport-amnities'>
+              <button className='sidebar-transport-amnities_button'
+                      onClick={() => setActiveIconsHandler('Transport')}>Transport
+              </button>
+              <button className='sidebar-transport-amnities_button'
+                      onClick={() => setActiveIconsHandler('ShopsAndRestaurants')}>Shops, Restaurants & Services
+              </button>
+          </div>
+          <div className='sidebar-cadastre'>
+              <button className='sidebar-cadastre_button'>Cadastre</button>
+          </div>
+          <button onClick={downloadMapHandler}>Download Map</button>
+          <button onClick={resetMapHandler}>Reset Map</button>
+      </div>}
+      <button className='sidebar-close' onClick={sidebarVisibleHandler}>{sidebarVisibleStatus}</button>
     </div>
   )
 }
