@@ -12,12 +12,18 @@ const MAP_STYLE_MODES = {
   MONOCHROME: 'monochrome',
   SATELLITE: 'satellite',
 }
-
 const MAP_STYLES = {
   [MAP_STYLE_MODES.DEFAULT]: 'mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b',
   [MAP_STYLE_MODES.DARK]: 'mapbox://styles/neon-factory/cllwooepi00i101pjf7im44oy',
   [MAP_STYLE_MODES.MONOCHROME]: 'mapbox://styles/neon-factory/cllwomphb00i401qyfp8m9u97',
   [MAP_STYLE_MODES.SATELLITE]: 'mapbox://styles/neon-factory/cllwohnul00im01pfe5adhc90',
+}
+
+const TRANSPORT_LAYOUTS: {[value: string]: string} = {
+  TRANSIT_LABEL: 'transit-label',
+  STIB_2023: 'stib-2023',
+  PARKINGS: 'parkings',
+  GARES_BRUXELLES: 'gares-bruxelles',
 }
 
 const BRUSSELS_BUTTONS = [
@@ -99,7 +105,9 @@ export const Sidebar = ({map}: SidebarProps) => {
 
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [currentStyle, setCurrentStyle] = useState(MAP_STYLES[MAP_STYLE_MODES.DEFAULT]);
-  const [sidebarVisibleStatus, setSidebarVisibleStatus] = useState('Open');
+  const [sidebarVisibleStatus, setSidebarVisibleStatus] = useState('Close');
+  const [isTransportActive, setIsTransportActive] = useState(true);
+  const [isRestaurantsActive, setIsRestaurantsActive] = useState(false);
 
   function increasePitchHandler() {
     map?.setPitch(currentPitch as number + 5);
@@ -167,16 +175,36 @@ export const Sidebar = ({map}: SidebarProps) => {
 
     setSelectedDistricts([]);
   }
-  
-  function setActiveIconsHandler(iconsType: string) {
-    console.log(iconsType);
-  }
 
   function sidebarVisibleHandler() {
     if(sidebarVisibleStatus === 'Open') {
       setSidebarVisibleStatus('Close');
     } else {
       setSidebarVisibleStatus('Open');
+    }
+  }
+
+  function setTransportIconsHandler() {
+    setIsTransportActive(!isTransportActive);
+
+    if(isTransportActive) {
+      Object.keys(TRANSPORT_LAYOUTS).forEach((key) => {
+        map?.setLayoutProperty(TRANSPORT_LAYOUTS[key], 'visibility', 'none');
+      });
+    } else {
+      Object.keys(TRANSPORT_LAYOUTS).forEach((key) => {
+        map?.setLayoutProperty(TRANSPORT_LAYOUTS[key], 'visibility', 'visible');
+      });
+    }
+  }
+
+  function setRestaurantsIconsHandler() {
+    setIsRestaurantsActive(!isRestaurantsActive);
+
+    if(!isRestaurantsActive) {
+      map?.setLayoutProperty("poi-label", "visibility", "visible");
+    } else {
+      map?.setLayoutProperty("poi-label", "visibility", "none");
     }
   }
 
@@ -214,10 +242,10 @@ export const Sidebar = ({map}: SidebarProps) => {
           </div>
           <div className='sidebar-transport-amnities'>
               <button className='sidebar-transport-amnities_button'
-                      onClick={() => setActiveIconsHandler('Transport')}>Transport
+                      onClick={() => setTransportIconsHandler()}>Transport
               </button>
               <button className='sidebar-transport-amnities_button'
-                      onClick={() => setActiveIconsHandler('ShopsAndRestaurants')}>Shops, Restaurants & Services
+                      onClick={() => setRestaurantsIconsHandler()}>Shops, Restaurants & Services
               </button>
           </div>
           <div className='sidebar-cadastre'>
