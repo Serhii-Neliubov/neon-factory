@@ -108,6 +108,7 @@ export const Sidebar = ({map}: SidebarProps) => {
   const [sidebarVisibleStatus, setSidebarVisibleStatus] = useState('Close');
   const [isTransportActive, setIsTransportActive] = useState(true);
   const [isRestaurantsActive, setIsRestaurantsActive] = useState(false);
+  const [isCadastreActive, setIsCadastreActive] = useState(false);
 
   function increasePitchHandler() {
     map?.setPitch(currentPitch as number + 5);
@@ -208,6 +209,18 @@ export const Sidebar = ({map}: SidebarProps) => {
     }
   }
 
+  function cadastreHandler() {
+    setIsCadastreActive(!isCadastreActive);
+
+    if(!isCadastreActive) {
+      map?.setLayoutProperty("bruxelles-cadastre-complet-7xijuk", "visibility", "visible");
+      map?.setLayoutProperty("building", "visibility", "none");
+    } else {
+      map?.setLayoutProperty("bruxelles-cadastre-complet-7xijuk", "visibility", "none");
+      map?.setLayoutProperty("building", "visibility", "visible");
+    }
+  }
+
   function downloadMapHandler() {}
 
   return (
@@ -249,7 +262,7 @@ export const Sidebar = ({map}: SidebarProps) => {
               </button>
           </div>
           <div className='sidebar-cadastre'>
-              <button className='sidebar-cadastre_button'>Cadastre</button>
+              <button className='sidebar-cadastre_button' onClick={cadastreHandler}>Cadastre</button>
           </div>
           <button onClick={downloadMapHandler}>Download Map</button>
           <button onClick={resetMapHandler}>Reset Map</button>
