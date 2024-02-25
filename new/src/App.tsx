@@ -25,7 +25,7 @@ function App() {
   return (
     <React.Fragment>
       <Sidebar map={map}/>
-      <Map map={map}/>
+      <Map />
     </React.Fragment>
   )
 }

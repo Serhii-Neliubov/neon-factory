@@ -92,8 +92,10 @@ const BRUSSELS_BUTTONS = [
 export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
   const currentPitch = map?.getPitch();
   const currentRotation = map?.getBearing();
+
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
-  const [currentStyle, setCurrentStyle] = useState(MAP_STYLE_MODES.DEFAULT);
+  const [currentStyle, setCurrentStyle] = useState(MAP_STYLES[MAP_STYLE_MODES.DEFAULT]);
+
   function increasePitchHandler() {
     map?.setPitch(currentPitch as number + 5);
   }
@@ -119,16 +121,12 @@ export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
   }
 
   function setStyleHandler(modeStyle: string) {
-    setCurrentStyle(modeStyle);
+    setCurrentStyle(MAP_STYLES[modeStyle]);
 
-    if(MAP_STYLES[modeStyle]){
-      map?.setStyle(MAP_STYLES[modeStyle]);
-    } else {
-      map?.setStyle(MAP_STYLES[MAP_STYLE_MODES.DEFAULT]);
-    }
+    map?.setStyle(MAP_STYLES[modeStyle]);
   }
 
-  function setActiveDistrictsHandler(district: string) {
+  function setActiveDistrictsHandler(district: string, centerCoordinates: number[]) {
     const districtIndex = selectedDistricts.indexOf(district);
 
     if (districtIndex !== -1) {
@@ -141,8 +139,12 @@ export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
 
     map?.setFilter("districts-brussels-0-2", newFilter);
     map?.triggerRepaint();
-  }
 
+    map?.flyTo({
+      center: centerCoordinates as [number, number],
+      essential: true
+    });
+  }
 
   function resetMapHandler() {
     map?.setPitch(0);
@@ -177,18 +179,14 @@ export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
           {BRUSSELS_BUTTONS.map((button) => {
             return (
               <div key={button.id} className='sidebar-brussels_button'
-                   onClick={() => setActiveDistrictsHandler(button.data)}>
+                   onClick={() => setActiveDistrictsHandler(button.data, button.center)}>
                 {button.name}
               </div>
             );
           })}
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictsHandler('Cbd')}>Cbd</div>
-          <div className='sidebar-brussels_button'
-               onClick={() => setActiveDistrictsHandler('Decentralised')}>Decentralised
-          </div>
-          <div className='sidebar-brussels_button' onClick={() => setActiveDistrictsHandler('All Districts')}>All
-            Districts
-          </div>
+          <div className='sidebar-brussels_button'>Cbd</div>
+          <div className='sidebar-brussels_button'>Decentralised</div>
+          <div className='sidebar-brussels_button'>All Districts</div>
         </div>
         <button onClick={downloadMapHandler}>Download Map</button>
         <button onClick={resetMapHandler}>Reset Map</button>
