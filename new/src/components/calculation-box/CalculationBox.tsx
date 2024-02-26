@@ -1,7 +1,8 @@
-import {Map as MapTypes} from "mapbox-gl";
+import { Map as MapTypes } from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { area as turfArea } from '@turf/turf';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+
 import './CalculationBox.css';
 
 type CalculationBoxProps = {
@@ -14,23 +15,34 @@ export const CalculationBox = ({map, draw}: CalculationBoxProps) => {
 
   useEffect(() => {
     const updateArea = () => {
-      const data = draw?.getAll();
-
-      if (data && data.features.length > 0) {
-        const calcArea = turfArea(data);
+      const selectedFeatures = draw?.getSelected();
+      if (selectedFeatures && selectedFeatures.features.length > 0) {
+        const calcArea = turfArea(selectedFeatures.features[0]);
         const rounded_area = String(Math.round(calcArea * 100) / 100);
         setArea(rounded_area);
+      } else {
+        setArea('0');
       }
     };
 
-    map?.on('draw.create', updateArea);
-    map?.on('draw.delete', updateArea);
-    map?.on('draw.update', updateArea);
+    const handleDrawEvent = () => {
+      updateArea();
+    };
+
+    const handleClick = () => {
+      updateArea();
+    };
+
+    map?.on('draw.create', handleDrawEvent);
+    map?.on('draw.delete', handleDrawEvent);
+    map?.on('draw.update', handleDrawEvent);
+    map?.on('click', handleClick);
 
     return () => {
-      map?.off('draw.create', updateArea);
-      map?.off('draw.delete', updateArea);
-      map?.off('draw.update', updateArea);
+      map?.off('draw.create', handleDrawEvent);
+      map?.off('draw.delete', handleDrawEvent);
+      map?.off('draw.update', handleDrawEvent);
+      map?.off('click', handleClick);
     };
   }, [map, draw]);
 
