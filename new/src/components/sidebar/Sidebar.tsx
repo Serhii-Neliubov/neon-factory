@@ -1,10 +1,6 @@
 import './Sidebar.css';
-import { Map as MapTypes } from "mapbox-gl";
-import { useState } from "react";
-
-type SidebarProps = {
-  map: MapTypes | undefined;
-}
+import { Map as MapTypes } from 'mapbox-gl';
+import { useState } from 'react';
 
 const MAP_STYLE_MODES = {
   DEFAULT: 'default',
@@ -99,7 +95,7 @@ const BRUSSELS_BUTTONS = [
   },
 ];
 
-export const Sidebar = ({map}: SidebarProps) => {
+export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [currentStyle, setCurrentStyle] = useState(MAP_STYLES[MAP_STYLE_MODES.DEFAULT]);
   const [sidebarVisibleStatus, setSidebarVisibleStatus] = useState('Close');

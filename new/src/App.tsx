@@ -1,10 +1,11 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
-import { Sidebar } from "./components/sidebar/Sidebar.tsx";
-import { Map } from "./components/Map.tsx";
-import mapboxgl, { Map as MapTypes } from "mapbox-gl";
-const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
-import "mapbox-gl/dist/mapbox-gl.css";
+import { Sidebar } from './components/sidebar/Sidebar.tsx';
+import { Map } from './components/Map.tsx';
+import mapboxgl, { Map as MapTypes } from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
 
 function App() {
   const [map, setMap] = useState<MapTypes | undefined>();
@@ -18,7 +19,9 @@ function App() {
       center: [4.387564, 50.845193],
       zoom: 10.8,
     });
+
     setMap(map);
+
     return () => map.remove();
   }, []);
 
