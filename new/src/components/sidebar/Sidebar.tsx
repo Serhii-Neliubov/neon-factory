@@ -100,9 +100,6 @@ const BRUSSELS_BUTTONS = [
 ];
 
 export const Sidebar = ({map}: SidebarProps) => {
-  const currentPitch = map?.getPitch();
-  const currentRotation = map?.getBearing();
-
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [currentStyle, setCurrentStyle] = useState(MAP_STYLES[MAP_STYLE_MODES.DEFAULT]);
   const [sidebarVisibleStatus, setSidebarVisibleStatus] = useState('Close');
@@ -111,18 +108,22 @@ export const Sidebar = ({map}: SidebarProps) => {
   const [isCadastreActive, setIsCadastreActive] = useState(false);
 
   function increasePitchHandler() {
+    const currentPitch = map?.getPitch();
     map?.setPitch(currentPitch as number + 5);
   }
 
   function decreasePitchHandler() {
+    const currentPitch = map?.getPitch();
     map?.setPitch(currentPitch as number - 5);
   }
 
   function rotateLeftHandler() {
+    const currentRotation = map?.getBearing();
     map?.setBearing(currentRotation as number - 5);
   }
 
   function rotateRightHandler() {
+    const currentRotation = map?.getBearing();
     map?.setBearing(currentRotation as number + 5);
   }
 
