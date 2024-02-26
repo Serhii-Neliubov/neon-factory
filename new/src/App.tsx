@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Sidebar } from './components/sidebar/Sidebar.tsx';
 import { Map } from './components/Map.tsx';
@@ -26,9 +26,10 @@ function App() {
   }, []);
 
   return (
-    <Map>
+    <React.Fragment>
       <Sidebar map={map} />
-    </Map>
+      <Map />
+    </React.Fragment>
   )
 }
 

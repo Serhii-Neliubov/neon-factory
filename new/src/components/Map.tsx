@@ -1,10 +1,7 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { ReactNode } from 'react';
 
-export const Map = ({children}: {children: ReactNode}) => {
+export const Map = () => {
   return (
-    <div id='map' style={{ width: '100%', height: '100vh' }}>
-      {children}
-    </div>
+    <div id='map' style={{ width: '100%', height: '100vh' }} />
   )
 }
