@@ -16,9 +16,11 @@ export const CalculationBox = ({map, draw}: CalculationBoxProps) => {
   useEffect(() => {
     const updateArea = () => {
       const selectedFeatures = draw?.getSelected();
+
       if (selectedFeatures && selectedFeatures.features.length > 0) {
         const calcArea = turfArea(selectedFeatures.features[0]);
         const rounded_area = String(Math.round(calcArea * 100) / 100);
+
         setArea(rounded_area);
       } else {
         setArea('0');
