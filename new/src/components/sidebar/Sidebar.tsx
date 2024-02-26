@@ -1,6 +1,7 @@
 import './Sidebar.css';
 import { Map as MapTypes } from 'mapbox-gl';
 import { useState } from 'react';
+import html2canvas from "html2canvas";
 
 const MAP_STYLE_MODES = {
   DEFAULT: 'default',
@@ -218,7 +219,24 @@ export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
     }
   }
 
-  function downloadMapHandler() {}
+  function downloadMapHandler() {
+    const mapElement = document.getElementById('map');
+
+    if (mapElement) {
+      html2canvas(mapElement, {
+        useCORS: true,
+        allowTaint: true
+      }).then(canvas => {
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.download = "test.png";
+        a.href = canvas.toDataURL();
+        a.click();
+      });
+    } else {
+      console.error('Map element not found.');
+    }
+  }
 
   return (
     <div className='body'>

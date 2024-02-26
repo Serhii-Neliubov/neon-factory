@@ -18,6 +18,7 @@ function App() {
       style: "mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b",
       center: [4.387564, 50.845193],
       zoom: 10.8,
+      preserveDrawingBuffer: true,
     });
 
     setMap(map);
