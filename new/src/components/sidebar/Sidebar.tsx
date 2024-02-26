@@ -96,7 +96,11 @@ const BRUSSELS_BUTTONS = [
   },
 ];
 
-export const Sidebar = ({map}: {map: MapTypes | undefined}) => {
+type SidebarProps = {
+  map: MapTypes | undefined
+}
+
+export const Sidebar = ({map}: SidebarProps) => {
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
   const [currentStyle, setCurrentStyle] = useState(MAP_STYLES[MAP_STYLE_MODES.DEFAULT]);
   const [sidebarVisibleStatus, setSidebarVisibleStatus] = useState('Close');
