@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-draw": "^1.4.3",
     "@mapbox/mapbox-gl-geocoder": "^5.0.2",
     "@types/mapbox-gl": "^3.1.0",
+    "@types/mapbox__mapbox-gl-draw": "^1.4.6",
     "@types/mapbox__mapbox-gl-geocoder": "^5.0.0",
     "html2canvas": "^1.4.1",
     "mapbox-gl": "^3.1.2",

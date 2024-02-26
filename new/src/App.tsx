@@ -5,6 +5,8 @@ import { Map } from './components/Map.tsx';
 import mapboxgl, { Map as MapTypes } from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
 
@@ -21,18 +23,22 @@ function App() {
       zoom: 10.8,
       preserveDrawingBuffer: true,
     });
+    const MapDrawTools = new MapboxDraw();
 
     map.addControl(
       new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl
-      })
+      }),
     );
+    map.addControl(MapDrawTools, 'top-right');
 
     setMap(map);
 
     return () => map.remove();
   }, []);
+
+
 
   return (
     <React.Fragment>
