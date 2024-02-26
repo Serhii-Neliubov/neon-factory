@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import './App.css';
-import { Sidebar } from "./components/Sidebar.tsx";
+import { Sidebar } from "./components/sidebar/Sidebar.tsx";
 import { Map } from "./components/Map.tsx";
 import mapboxgl, { Map as MapTypes } from "mapbox-gl";
 const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A"
@@ -23,10 +23,9 @@ function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <Map>
       <Sidebar map={map} />
-      <Map />
-    </React.Fragment>
+    </Map>
   )
 }
 
