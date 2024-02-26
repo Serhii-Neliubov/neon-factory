@@ -23,14 +23,24 @@ function App() {
       zoom: 10.8,
       preserveDrawingBuffer: true,
     });
-    const MapDrawTools = new MapboxDraw();
+    const MapDrawTools = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+        polygon: true,
+        trash: true,
+        line_string: true,
+        point: true,
+        combine_features: false,
+        uncombine_features: false,
+      },
+      defaultMode: 'draw_polygon',
+    });
+    const MapGeocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl
+    })
 
-    map.addControl(
-      new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl
-      }),
-    );
+    map.addControl(MapGeocoder);
     map.addControl(MapDrawTools, 'top-right');
 
     setMap(map);
