@@ -163,7 +163,7 @@ export const MAPBOX_DRAW_STYLES = [
         ['!=', 'meta', 'midpoint']
       ],
       'paint': {
-        'circle-radius': 7,
+        'circle-radius': 0,
         'circle-color': '#fff'
       }
     },
@@ -175,7 +175,7 @@ export const MAPBOX_DRAW_STYLES = [
         ['==', 'active', 'true']
       ],
       'paint': {
-        'circle-radius': 5,
+        'circle-radius': 0,
         'circle-color': '#fbb03b'
       }
     },

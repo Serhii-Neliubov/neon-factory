@@ -9,6 +9,7 @@ import { CalculationBox } from "./components/calculation-box/CalculationBox.tsx"
 import './App.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
+import {MAPBOX_DRAW_STYLES} from "./assets/data/mapbox-draw-styles.ts";
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
 
@@ -34,11 +35,67 @@ function App() {
         line_string: true,
         point: true,
       },
+      styles: MAPBOX_DRAW_STYLES,
     });
+
     const MapGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
     })
+
+    // Обработчик для создания нового div при создании маркера
+    map.on('draw.create', (event) => {
+      const feature = event.features[0];
+      if (feature && feature.geometry.type === 'Point') {
+        const coordinates = feature.geometry.coordinates;
+        const markerElement = document.createElement('div');
+        markerElement.className = 'custom-marker'; // стилизуйте этот класс по вашему усмотрению
+
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = '❌';
+        deleteButton.className = 'marker-delete-button';
+        deleteButton.style.display = 'none'; // скрыть кнопку по умолчанию
+        markerElement.appendChild(deleteButton);
+
+        const marker = new mapboxgl.Marker(markerElement)
+          .setLngLat(coordinates)
+          .addTo(map);
+
+        // Показать кнопку удаления при наведении на маркер
+        markerElement.addEventListener('mouseenter', () => {
+          deleteButton.style.display = 'block';
+        });
+
+        // Скрыть кнопку удаления при уходе с маркера
+        markerElement.addEventListener('mouseleave', () => {
+          deleteButton.style.display = 'none';
+        });
+
+        // Обработчик для удаления маркера при нажатии на кнопку
+        deleteButton.addEventListener('click', () => {
+          marker.remove();
+        });
+
+        // Обработчик для перемещения маркера
+        markerElement.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const onMouseMove = (event: mapboxgl.MapMouseEvent) => {
+            const lngLat = map.unproject(event.point);
+            marker.setLngLat(lngLat);
+          };
+
+          const onMouseUp = () => {
+            map.off('mousemove', onMouseMove);
+            map.off('mouseup', onMouseUp);
+          };
+
+          map.on('mousemove', onMouseMove);
+          map.once('mouseup', onMouseUp);
+        });
+      }
+    });
 
     map.addControl(MapGeocoder);
     map.addControl(MapDrawTools, 'top-right');
