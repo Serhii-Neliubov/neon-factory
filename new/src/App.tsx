@@ -9,7 +9,7 @@ import { CalculationBox } from "./components/calculation-box/CalculationBox.tsx"
 import './App.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-import {MAPBOX_DRAW_STYLES} from "./assets/data/mapbox-draw-styles.ts";
+import { MAPBOX_DRAW_STYLES } from "./assets/data/mapbox-draw-styles.ts";
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
 
@@ -27,6 +27,7 @@ function App() {
       zoom: 10.8,
       preserveDrawingBuffer: true,
     });
+
     const MapDrawTools = new MapboxDraw({
       displayControlsDefault: false,
       controls: {
@@ -37,13 +38,21 @@ function App() {
       },
       styles: MAPBOX_DRAW_STYLES,
     });
-
     const MapGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
     })
+    const MapResetNorth = new mapboxgl.NavigationControl({
+      showCompass: true,
+      showZoom: false,
+      visualizePitch: false,
+    })
 
-    // Обработчик для создания нового div при создании маркера
+    map.addControl(MapGeocoder);
+    map.addControl(MapDrawTools, 'top-right');
+    map.addControl(MapResetNorth);
+
+    // Marker functionality
     map.on('draw.create', (event) => {
       const feature = event.features[0];
       if (feature && feature.geometry.type === 'Point') {
@@ -61,22 +70,18 @@ function App() {
           .setLngLat(coordinates)
           .addTo(map);
 
-        // Показать кнопку удаления при наведении на маркер
         markerElement.addEventListener('mouseenter', () => {
           deleteButton.style.display = 'block';
         });
 
-        // Скрыть кнопку удаления при уходе с маркера
         markerElement.addEventListener('mouseleave', () => {
           deleteButton.style.display = 'none';
         });
 
-        // Обработчик для удаления маркера при нажатии на кнопку
         deleteButton.addEventListener('click', () => {
           marker.remove();
         });
 
-        // Обработчик для перемещения маркера
         markerElement.addEventListener('mousedown', (e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -96,9 +101,6 @@ function App() {
         });
       }
     });
-
-    map.addControl(MapGeocoder);
-    map.addControl(MapDrawTools, 'top-right');
 
     setMap(map);
     setDraw(MapDrawTools);

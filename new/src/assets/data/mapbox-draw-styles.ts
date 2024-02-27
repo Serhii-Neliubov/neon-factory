@@ -139,7 +139,7 @@ export const MAPBOX_DRAW_STYLES = [
       'paint': {
         'circle-radius': 5,
         'circle-opacity': 1,
-        'circle-color': '#fff'
+        'circle-color': 'transparent'
       }
     },
     {
@@ -152,7 +152,7 @@ export const MAPBOX_DRAW_STYLES = [
       ],
       'paint': {
         'circle-radius': 3,
-        'circle-color': '#3bb2d0'
+        'circle-color': 'transparent'
       }
     },
     {
@@ -232,52 +232,4 @@ export const MAPBOX_DRAW_STYLES = [
         'circle-color': '#404040'
       }
     },
-
-    // end default themes provided by MB Draw
-    // end default themes provided by MB Draw
-    // end default themes provided by MB Draw
-    // end default themes provided by MB Draw
-
-
-
-
-    // new styles for toggling colors
-    // new styles for toggling colors
-    // new styles for toggling colors
-    // new styles for toggling colors
-
-    {
-      'id': 'gl-draw-polygon-color-picker',
-      'type': 'fill',
-      'filter': ['all', ['==', '$type', 'Polygon'],
-        ['has', 'user_portColor']
-      ],
-      'paint': {
-        'fill-color': ['get', 'user_portColor'],
-        'fill-outline-color': ['get', 'user_portColor'],
-        'fill-opacity': 0.5
-      }
-    },
-    {
-      'id': 'gl-draw-line-color-picker',
-      'type': 'line',
-      'filter': ['all', ['==', '$type', 'LineString'],
-        ['has', 'user_portColor']
-      ],
-      'paint': {
-        'line-color': ['get', 'user_portColor'],
-        'line-width': 2
-      }
-    },
-    {
-      'id': 'gl-draw-point-color-picker',
-      'type': 'circle',
-      'filter': ['all', ['==', '$type', 'Point'],
-        ['has', 'user_portColor']
-      ],
-      'paint': {
-        'circle-radius': 3,
-        'circle-color': ['get', 'user_portColor']
-      }
-    }
-    ];
+];
