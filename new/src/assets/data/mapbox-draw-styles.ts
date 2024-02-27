@@ -12,8 +12,8 @@ export const MAPBOX_DRAW_STYLES = [
         ['!=', 'mode', 'static']
       ],
       'paint': {
-        'fill-color': '#3bb2d0',
-        'fill-outline-color': '#3bb2d0',
+        'fill-color': '#0bbdbd',
+        'fill-outline-color': '#0bbdbd',
         'fill-opacity': 0.1
       }
     },
@@ -24,8 +24,8 @@ export const MAPBOX_DRAW_STYLES = [
         ['==', '$type', 'Polygon']
       ],
       'paint': {
-        'fill-color': '#fbb03b',
-        'fill-outline-color': '#fbb03b',
+        'fill-color': '#0bbdbd',
+        'fill-outline-color': '#0bbdbd',
         'fill-opacity': 0.1
       }
     },
@@ -67,7 +67,7 @@ export const MAPBOX_DRAW_STYLES = [
         'line-join': 'round'
       },
       'paint': {
-        'line-color': '#fbb03b',
+        'line-color': '#0bbdbd',
         'line-dasharray': [0.2, 2],
         'line-width': 2
       }
@@ -84,7 +84,7 @@ export const MAPBOX_DRAW_STYLES = [
         'line-join': 'round'
       },
       'paint': {
-        'line-color': '#3bb2d0',
+        'line-color': '#0bbdbd',
         'line-width': 2
       }
     },
@@ -99,7 +99,7 @@ export const MAPBOX_DRAW_STYLES = [
         'line-join': 'round'
       },
       'paint': {
-        'line-color': '#fbb03b',
+        'line-color': '#0bbdbd',
         'line-dasharray': [0.2, 2],
         'line-width': 2
       }
@@ -124,8 +124,8 @@ export const MAPBOX_DRAW_STYLES = [
         ['!=', 'mode', 'static']
       ],
       'paint': {
-        'circle-radius': 3,
-        'circle-color': '#fbb03b'
+        'circle-radius': 5,
+        'circle-color': '#0bbdbd'
       }
     },
     {
