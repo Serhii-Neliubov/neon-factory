@@ -111,6 +111,12 @@ export const Sidebar = ({map}: SidebarProps) => {
   const [isRestaurantsActive, setIsRestaurantsActive] = useState(false);
   const [isCadastreActive, setIsCadastreActive] = useState(false);
 
+  const [isControlsMenuVisible, setIsControlsMenuVisible] = useState(false);
+  const [isMapStylesMenuVisible, setIsMapStylesMenuVisible] = useState(false);
+  const [isBrusselsMenuVisible, setIsBrusselsMenuVisible] = useState(false);
+  const [isTransportAndShopsMenuVisible, setIsTransportAndShopsMenuVisible] = useState(false);
+  const [isCadastreMenuVisible, setIsCadastreMenuVisible] = useState(false);
+
   function increasePitchHandler() {
     const currentPitch = map?.getPitch();
     map?.setPitch(currentPitch as number + 5);
@@ -249,85 +255,94 @@ export const Sidebar = ({map}: SidebarProps) => {
     <div className='absolute h-[100%] z-10 w-[480px] pb-[100px] p-[60px]'>
         {sidebarVisibleStatus === 'Close' &&
             <div className='overflow-y-scroll max-w-[490px] flex flex-col gap-[10px] pr-[15px] h-[100%]'>
-                <div className='flex flex-col flex-auto gap-[20px]'>
-                    <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
-                        <button className={clsx(button)} onClick={zoomInHandler}>Zoom In</button>
-                        <button className={clsx(button)} onClick={zoomOutHandler}>Zoom Out</button>
-                        <button className={clsx(button)} onClick={rotateLeftHandler}>Rotate Left</button>
-                        <button className={clsx(button)} onClick={rotateRightHandler}>Rotate Right</button>
-                        <button className={clsx(button)} onClick={increasePitchHandler}>Increase Pitch</button>
-                        <button className={clsx(button)} onClick={decreasePitchHandler}>Decrease Pitch</button>
-                    </div>
-                    {/* MAP STYLES MENU */}
-                    <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
-                      {Object.keys(MAP_STYLES).map((key) => {
-                        return (
-                          <div className={`flex gap-[10px] items-center`}
-                               onClick={() => setStyleHandler(key)}>
-                            <Switch checked={currentStyle === MAP_STYLES[key]}/>
-                            <button className={`${clsx(button)}`}>{key.toUpperCase()}</button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                    {/* MAP BRUSSELS MENU */}
-                    <div className='rounded-md w-full border'>
-                        <div className='flex flex-col gap-[15px] p-[20px] max-w-[96%] max-h-[200px] overflow-auto'>
-                          {BRUSSELS_BUTTONS.map((button) => {
-                            return (
-                              <div onClick={() => setActiveDistrictsHandler(button.data, button.center)}
-                                   className='flex gap-[10px] items-center'>
-                                <Switch/>
-                                <button key={button.id}
-                                        className='text-white font-semibold uppercase cursor-pointer hover:text-[#4CC0AD] transition-all '>
-                                  {button.name}
-                                </button>
-                              </div>
+                <div className='flex flex-col flex-auto gap-[10px]'>
+                  {/* MAP CONTROLS */}
+                    <button onClick={() => setIsControlsMenuVisible(prev => !prev)} className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-[8px] text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'>
+                      {isControlsMenuVisible ? 'Close Controls' : 'Open Controls'}
+                    </button>
+                  {isControlsMenuVisible && <div className='flex flex-col gap-[15px] p-[20px] border rounded-[8px]'>
+                      <button className={clsx(button)} onClick={zoomInHandler}>Zoom In</button>
+                      <button className={clsx(button)} onClick={zoomOutHandler}>Zoom Out</button>
+                      <button className={clsx(button)} onClick={rotateLeftHandler}>Rotate Left</button>
+                      <button className={clsx(button)} onClick={rotateRightHandler}>Rotate Right</button>
+                      <button className={clsx(button)} onClick={increasePitchHandler}>Increase Pitch</button>
+                      <button className={clsx(button)} onClick={decreasePitchHandler}>Decrease Pitch</button>
+                  </div>}
+                  {/* MAP STYLES MENU */}
+                    <button onClick={() => setIsMapStylesMenuVisible(prev => !prev)} className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-[8px] text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'>Map Style</button>
+                  {isMapStylesMenuVisible && <div className='flex flex-col gap-[15px] p-[20px] border rounded-[8px]'>
+                    {Object.keys(MAP_STYLES).map((key) => {
+                      return (
+                        <div className={`flex gap-[10px] items-center`}
+                             onClick={() => setStyleHandler(key)}>
+                          <Switch checked={currentStyle === MAP_STYLES[key]}/>
+                          <button className={`${clsx(button)}`}>{key.toUpperCase()}</button>
+                        </div>
+                      );
+                    })}
+                  </div>}
+                  {/* MAP BRUSSELS MENU */}
+                    <button onClick={() => setIsBrusselsMenuVisible(prev => !prev)} className='bg-gradient-to-b bg-[#4CC0AD99] py-[17px] rounded-[8px] text-white font-semibold transition-all uppercase'>Brussels</button>
+                  {isBrusselsMenuVisible && <div className='rounded-[8px] w-full border'>
+                      <div className='flex flex-col gap-[15px] p-[20px] max-w-[96%] max-h-[200px] overflow-auto'>
+                        {BRUSSELS_BUTTONS.map((button) => {
+                          return (
+                            <div onClick={() => setActiveDistrictsHandler(button.data, button.center)}
+                                 className='flex gap-[10px] items-center'>
+                              <Switch/>
+                              <button key={button.id}
+                                      className='text-white font-semibold uppercase cursor-pointer hover:text-[#4CC0AD] transition-all '>
+                                {button.name}
+                              </button>
+                            </div>
 
-                            );
-                          })}
-                            <div className='flex items-center gap-[10px]'>
-                                <Switch/>
-                                <button className={clsx(button)}>CBD</button>
-                            </div>
-                            <div className='flex items-center gap-[10px]'>
-                                <Switch/>
-                                <button className={clsx(button)}>DECENTRALISED</button>
-                            </div>
-                            <div className='flex items-center gap-[10px]'>
-                                <Switch/>
-                                <button className={clsx(button)}>ALL DISTRICTS</button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* MAP TRANSPORT AND SHOPS MENU */}
-                    <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
-                        <div className='flex items-center gap-[10px]' onClick={() => setTransportIconsHandler()}>
-                            <Switch/>
-                            <button className={clsx(button)}>Transport</button>
-                        </div>
-                        <div className='flex items-center gap-[10px]' onClick={() => setRestaurantsIconsHandler()}>
-                            <Switch/>
-                            <button className={clsx(button)}>Shops, Restaurants & Services</button>
-                        </div>
-                    </div>
-                    {/* MAP CADASTRE AND SHOPS MENU */}
-                    <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
-                        <div className='flex items-center gap-[10px]' onClick={cadastreHandler}>
-                            <Switch/>
-                            <button className={clsx(button)}>Cadastre</button>
-                        </div>
-                    </div>
+                          );
+                        })}
+                          <div className='flex items-center gap-[10px]'>
+                              <Switch/>
+                              <button className={clsx(button)}>CBD</button>
+                          </div>
+                          <div className='flex items-center gap-[10px]'>
+                              <Switch/>
+                              <button className={clsx(button)}>DECENTRALISED</button>
+                          </div>
+                          <div className='flex items-center gap-[10px]'>
+                              <Switch/>
+                              <button className={clsx(button)}>ALL DISTRICTS</button>
+                          </div>
+                      </div>
+                  </div>}
+                  {/* MAP TRANSPORT AND SHOPS MENU */}
+                    <button onClick={() => setIsTransportAndShopsMenuVisible(prev => !prev)} className='bg-gradient-to-b bg-[#4CC0AD99] py-[17px] rounded-[8px] text-white font-semibold transition-all uppercase'>transport & amenieties</button>
+                  {isTransportAndShopsMenuVisible && <div className='flex flex-col gap-[15px] p-[20px] border rounded-[8px]'>
+                      <div className='flex items-center gap-[10px]' onClick={() => setTransportIconsHandler()}>
+                          <Switch/>
+                          <button className={clsx(button)}>Transport</button>
+                      </div>
+                      <div className='flex items-center gap-[10px]' onClick={() => setRestaurantsIconsHandler()}>
+                          <Switch/>
+                          <button className={clsx(button)}>Shops, Restaurants & Services</button>
+                      </div>
+                  </div>}
+                  {/* MAP CADASTRE AND SHOPS MENU */}
+                    <button onClick={() => setIsCadastreMenuVisible(prev => !prev)} className='bg-gradient-to-b bg-[#4CC0AD99] py-[17px] rounded-[8px] text-white font-semibold transition-all uppercase'>cadastre</button>
+                    {isCadastreMenuVisible && <div className='flex flex-col gap-[15px] p-[20px] border rounded-[8px]'>
+                      <div className='flex items-center gap-[10px]' onClick={cadastreHandler}>
+                          <Switch/>
+                          <button className={clsx(button)}>Cadastre</button>
+                      </div>
+                  </div>}
                 </div>
                 <button
-                    className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-md text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'
+                    className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-[8px] text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'
                     onClick={downloadMapHandler}>Download Map
                 </button>
                 <button
-                    className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-md text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'
+                    className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-[8px] text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'
                     onClick={resetMapHandler}>Reset Map
                 </button>
-            </div>}
+            </div>
+        }
       <button className='sidebar-close' onClick={sidebarVisibleHandler}>{sidebarVisibleStatus}</button>
     </div>
   )
