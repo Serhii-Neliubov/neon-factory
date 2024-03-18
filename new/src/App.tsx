@@ -9,10 +9,9 @@ import { CalculationBox } from "./components/calculation-box/CalculationBox.tsx"
 import './App.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-import { MAPBOX_DRAW_STYLES } from "./assets/data/map-draw-styles.ts";
+import {MAPBOX_DRAW_STYLES} from "@/assets/data/mapbox-draw-styles.ts";
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
-
 function App() {
   const [map, setMap] = useState<MapTypes | undefined>();
   const [draw, setDraw] = useState<MapboxDraw | undefined>();
@@ -42,6 +41,8 @@ function App() {
     const MapGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
+      placeholder: 'YOUR ADDRESS HERE',
+      marker: false,
     })
     const MapResetNorth = new mapboxgl.NavigationControl({
       showCompass: true,
@@ -53,54 +54,41 @@ function App() {
     map.addControl(MapDrawTools, 'top-right');
     map.addControl(MapResetNorth);
 
-    // Marker functionality
-    map.on('draw.create', (event) => {
-      const feature = event.features[0];
-      if (feature && feature.geometry.type === 'Point') {
-        const coordinates = feature.geometry.coordinates;
-        const markerElement = document.createElement('div');
-        markerElement.className = 'custom-marker'; // стилизуйте этот класс по вашему усмотрению
+    {/* Custom marker for geocoder generating */}
+    map.on('load', () => {
+      map.addSource('single-point', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: []
+        }
+      });
 
-        const deleteButton = document.createElement('button');
-        deleteButton.innerHTML = '❌';
-        deleteButton.className = 'marker-delete-button';
-        deleteButton.style.display = 'none'; // скрыть кнопку по умолчанию
-        markerElement.appendChild(deleteButton);
+      map.loadImage(
+        'src/assets/images/pin.png',
+        (error, image) => {
+          if (error) throw error;
+          if (!image) return; // handle undefined case
+          map.addImage('custom-marker', image);
+          map.addLayer({
+            id: 'point',
+            source: 'single-point',
+            type: 'symbol',
+            layout: {
+              'icon-image': 'custom-marker',
+              'icon-size': 0.5,
+              'icon-allow-overlap': true
+            },
+          });
+        }
+      );
 
-        const marker = new mapboxgl.Marker(markerElement)
-          .setLngLat(coordinates)
-          .addTo(map);
-
-        markerElement.addEventListener('mouseenter', () => {
-          deleteButton.style.display = 'block';
-        });
-
-        markerElement.addEventListener('mouseleave', () => {
-          deleteButton.style.display = 'none';
-        });
-
-        deleteButton.addEventListener('click', () => {
-          marker.remove();
-        });
-
-        markerElement.addEventListener('mousedown', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-
-          const onMouseMove = (event: mapboxgl.MapMouseEvent) => {
-            const lngLat = map.unproject(event.point);
-            marker.setLngLat(lngLat);
-          };
-
-          const onMouseUp = () => {
-            map.off('mousemove', onMouseMove);
-            map.off('mouseup', onMouseUp);
-          };
-
-          map.on('mousemove', onMouseMove);
-          map.once('mouseup', onMouseUp);
-        });
-      }
+      MapGeocoder.on('result', (event) => {
+        const source = map.getSource('single-point') as mapboxgl.GeoJSONSource;
+        if (source) {
+          source.setData(event.result.geometry);
+        }
+      });
     });
 
     setMap(map);
@@ -115,7 +103,6 @@ function App() {
       <div className='bg-gradient-to-r from-[#001524] opacity-80 to-[#001524] absolute w-[450px] h-full z-10'/>
       <div className='bg-gradient-to-r from-[#001524] via-[#001524] via-10% absolute w-[450px] h-full z-10'/>
       {/* ========== */}
-
       <Sidebar map={map}/>
       <CalculationBox map={map} draw={draw}/>
 

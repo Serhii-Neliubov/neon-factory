@@ -95,8 +95,53 @@
   font-size: 12px;
 }
 
-.mapboxgl-ctrl-geocoder--input{
-  position: absolute;
-  top: 0;
-  right: 0;
+.mapboxgl-ctrl-geocoder--input {
+  padding: 16px;
+  width: 335px;
+  border: 2px solid white;
+  border-radius: 8px;
+  outline: none;
+}
+.mapboxgl-ctrl-top-right{
+  width: 100%;
+}
+.mapboxgl-ctrl-geocoder{
+}
+
+.mapboxgl-ctrl-geocoder--input::placeholder{
+  color: rgb(255, 255, 255);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 15px;
+}
+
+.mapboxgl-ctrl-geocoder--icon-search{
+  display: none;
+}
+
+.mapboxgl-ctrl-geocoder--icon {
+  display: none;
+}
+
+.suggestions {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 70px;
+  width: 335px;
+}
+
+.suggestions > li:hover{
+  background-color: #F3F3F3;
+  cursor: pointer;
+}
+
+.custom-marker {
+  width: 20px;
+  height: 20px;
+  background-image: url('src/assets/images/pin.png');
+  border-radius: 50%;
+  border: 2px solid #fff;
+  cursor: pointer;
 }
