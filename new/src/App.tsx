@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Sidebar } from './components/sidebar/Sidebar.tsx';
 import { Map } from './components/Map.tsx';
 import mapboxgl, { Map as MapTypes } from 'mapbox-gl';
@@ -9,13 +9,14 @@ import { CalculationBox } from "./components/calculation-box/CalculationBox.tsx"
 import './App.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-import { MAPBOX_DRAW_STYLES } from "./assets/data/mapbox-draw-styles.ts";
+import { MAPBOX_DRAW_STYLES } from "./assets/data/map-draw-styles.ts";
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
 
 function App() {
   const [map, setMap] = useState<MapTypes | undefined>();
   const [draw, setDraw] = useState<MapboxDraw | undefined>();
+  const [color, setColor] = useState<string>('#ff0000');
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -109,11 +110,17 @@ function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <div className='w-screen bg-[#001524] h-screen overflow-hidden p-[50px]'>
       <Sidebar map={map} />
       <CalculationBox map={map} draw={draw}/>
+      <input
+        className='absolute'
+        type="color"
+        value={color}
+        onChange={(e) => setColor(e.target.value)}
+      />
       <Map />
-    </React.Fragment>
+    </div>
   )
 }
 

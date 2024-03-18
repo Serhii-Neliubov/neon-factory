@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import {useEffect, useState, useRef, useCallback, Fragment} from "react";
 
 // MapBox
 import mapboxgl from "mapbox-gl";
@@ -673,6 +673,7 @@ function App() {
 
       setSelectedDistricts(allDistricts);
       toggleDistrictsVisibility(selectedDistricts, map);
+
       if (mapStyleSetter == 1) {
         map.setStyle("mapbox://styles/neon-factory/clle3pwwc010r01pm1k5f605b");
         setShowCadastre(false);
@@ -885,7 +886,7 @@ function App() {
   }, [draw, map]);
 
   return (
-    <>
+    <Fragment>
       {showLoader && <MyLoader />}
       <Container>
         <button
@@ -900,8 +901,9 @@ function App() {
         >
           Tools
         </button>
+
         <div ref={sidebar} className="sidebar">
-          <img className="logo" src="/logo-sidebar.png" />
+          <img className="logo" src="/logo-sidebar.png" alt='Image' />
           <div className="content-buttons">
             <div className="mainToggleButtons">
               <div ref={geocoderContainer}></div>
@@ -941,9 +943,6 @@ function App() {
                   </AllDistrictsButton>
                 </div>
               ) : null}
-              <button className="AreasButton">antwerp (soon)</button>
-              <button className="AreasButton">Gent (soon)</button>
-              <button className="AreasButton">luxembourg (soon)</button>
               <OpenTranportButton map={map} />
               <OpenCadastreButton
                 showCadastre={showCadastre}
@@ -972,7 +971,7 @@ function App() {
                 menuStyle={menuStyle}
                 colorPicker={colorPicker}
                 rightTopMenu={rightTopMenu}
-              ></PrintScreen>
+              />
             </div>
           </div>
         </div>
@@ -1014,10 +1013,10 @@ function App() {
             className="circleMenu"
             alt="logo"
           />
-          <img alt="Logo" className="logo-map" src="logo.png" />
+          <img alt="Logo" className="logo-map" src="/logo.png" />
         </div>
       </Container>
-    </>
+    </Fragment>
   );
 }
 

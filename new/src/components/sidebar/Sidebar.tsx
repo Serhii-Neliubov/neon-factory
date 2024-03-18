@@ -1,4 +1,3 @@
-import './Sidebar.css';
 import { Map as MapTypes } from 'mapbox-gl';
 import { useState } from 'react';
 import html2canvas from "html2canvas";
@@ -243,7 +242,7 @@ export const Sidebar = ({map}: SidebarProps) => {
   }
 
   return (
-    <div className='body'>
+    <div className='absolute z-10'>
       {sidebarVisibleStatus === 'Close' && <div className='sidebar'>
           <div className='sidebar-controls'>
               <button className='sidebar-controls_button' onClick={zoomInHandler}>Zoom In</button>

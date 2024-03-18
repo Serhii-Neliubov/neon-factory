@@ -3,8 +3,6 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { area as turfArea } from '@turf/turf';
 import { useEffect, useState } from "react";
 
-import './CalculationBox.css';
-
 type CalculationBoxProps = {
   map: MapTypes | undefined,
   draw: MapboxDraw | undefined
@@ -49,7 +47,7 @@ export const CalculationBox = ({map, draw}: CalculationBoxProps) => {
   }, [map, draw]);
 
   return (
-    <div className='calculationBox'>
+    <div className='absolute'>
       <div className='calculatedArea'>{area} m²</div>
     </div>
   )

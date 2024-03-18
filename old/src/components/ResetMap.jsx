@@ -23,6 +23,7 @@ const ResetMap = ({
   setSelectedFeatures,
   setSelectedDistricts,
   setShowCadastre,
+
 }) => {
   const dispatch = useDispatch();
 
