@@ -6,12 +6,15 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { CalculationBox } from "./components/calculation-box/CalculationBox.tsx";
 
+import pin from '@/assets/images/pin.png';
+
 import './App.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 import {MAPBOX_DRAW_STYLES} from "@/assets/data/mapbox-draw-styles.ts";
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJvNWUyb3F0Z2UzaWZ5emQifQ.T-AqPH9OSIcwSLxebbyh8A'
+
 function App() {
   const [map, setMap] = useState<MapTypes | undefined>();
   const [draw, setDraw] = useState<MapboxDraw | undefined>();
@@ -54,7 +57,7 @@ function App() {
     map.addControl(MapDrawTools, 'top-right');
     map.addControl(MapResetNorth);
 
-    {/* Custom marker for geocoder generating */}
+    {/* Custom marker for geocoder */}
     map.on('load', () => {
       map.addSource('single-point', {
         type: 'geojson',
@@ -65,7 +68,7 @@ function App() {
       });
 
       map.loadImage(
-        'src/assets/images/pin.png',
+        pin as string,
         (error, image) => {
           if (error) throw error;
           if (!image) return; // handle undefined case
