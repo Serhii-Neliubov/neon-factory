@@ -1,6 +1,8 @@
 import { Map as MapTypes } from 'mapbox-gl';
-import { useState } from 'react';
+import {useState} from 'react';
 import html2canvas from "html2canvas";
+import {Switch} from "@/components/ui/switch.tsx";
+import {clsx} from "clsx";
 
 const MAP_STYLE_MODES = {
   DEFAULT: 'default',
@@ -98,6 +100,8 @@ const BRUSSELS_BUTTONS = [
 type SidebarProps = {
   map: MapTypes | undefined
 }
+
+const button = 'text-left cursor-pointer font-semibold text-white uppercase hover:text-[#4CC0AD] transition-all';
 
 export const Sidebar = ({map}: SidebarProps) => {
   const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
@@ -242,50 +246,85 @@ export const Sidebar = ({map}: SidebarProps) => {
   }
 
   return (
-    <div className='bg-transparent absolute z-10'>
-      {sidebarVisibleStatus === 'Close' && <div className='sidebar'>
-          <div className='sidebar-controls'>
-              <button className='sidebar-controls_button' onClick={zoomInHandler}>Zoom In</button>
-              <button className='sidebar-controls_button' onClick={zoomOutHandler}>Zoom Out</button>
-              <button className='sidebar-controls_button' onClick={rotateLeftHandler}>Rotate Left</button>
-              <button className='sidebar-controls_button' onClick={rotateRightHandler}>Rotate Right</button>
-              <button className='sidebar-controls_button' onClick={increasePitchHandler}>Increase Pitch</button>
-              <button className='sidebar-controls_button' onClick={decreasePitchHandler}>Decrease Pitch</button>
-          </div>
-          <div className='sidebar-styles'>
-              <div className='sidebar-styles_button' onClick={() => setStyleHandler('default')}>Default</div>
-              <div className='sidebar-styles_button' onClick={() => setStyleHandler('dark')}>Dark</div>
-              <div className='sidebar-styles_button' onClick={() => setStyleHandler('monochrome')}>Monochrome</div>
-              <div className='sidebar-styles_button' onClick={() => setStyleHandler('satellite')}>Satellite</div>
-          </div>
-          <div className='sidebar-brussels'>
-            {BRUSSELS_BUTTONS.map((button) => {
-              return (
-                <div key={button.id} className='sidebar-brussels_button'
-                     onClick={() => setActiveDistrictsHandler(button.data, button.center)}>
-                  {button.name}
+    <div className='absolute h-[100%] z-10 w-[500px] pb-[100px]'>
+        {sidebarVisibleStatus === 'Close' && <div className='overflow-auto max-w-[490px] flex flex-col gap-[20px] pr-[30px] h-[100%]'>
+            <div className='flex flex-col flex-auto gap-[20px]'>
+                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
+                    <button className={clsx(button)} onClick={zoomInHandler}>Zoom In</button>
+                    <button className={clsx(button)} onClick={zoomOutHandler}>Zoom Out</button>
+                    <button className={clsx(button)} onClick={rotateLeftHandler}>Rotate Left</button>
+                    <button className={clsx(button)} onClick={rotateRightHandler}>Rotate Right</button>
+                    <button className={clsx(button)} onClick={increasePitchHandler}>Increase Pitch</button>
+                    <button className={clsx(button)} onClick={decreasePitchHandler}>Decrease Pitch</button>
                 </div>
-              );
-            })}
-              <div className='sidebar-brussels_button'>Cbd</div>
-              <div className='sidebar-brussels_button'>Decentralised</div>
-              <div className='sidebar-brussels_button'>All Districts</div>
-          </div>
-          <div className='sidebar-transport-amnities'>
-              <button className='sidebar-transport-amnities_button'
-                      onClick={() => setTransportIconsHandler()}>Transport
-              </button>
-              <button className='sidebar-transport-amnities_button'
-                      onClick={() => setRestaurantsIconsHandler()}>Shops, Restaurants & Services
-              </button>
-          </div>
-          <div className='sidebar-cadastre'>
-              <button className='sidebar-cadastre_button' onClick={cadastreHandler}>Cadastre</button>
-          </div>
-          <button onClick={downloadMapHandler}>Download Map</button>
-          <button onClick={resetMapHandler}>Reset Map</button>
-      </div>}
-      <button className='sidebar-close' onClick={sidebarVisibleHandler}>{sidebarVisibleStatus}</button>
+                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
+                    <div className={`${clsx(button)} flex gap-[10px] items-center`}
+                         onClick={() => setStyleHandler('default')}>
+                        <Switch/>
+                        <button>DEFAULT</button>
+                    </div>
+                    <div className={`${clsx(button)} flex gap-[10px] items-center`}
+                         onClick={() => setStyleHandler('dark')}>
+                        <Switch/>
+                        <button>DARK</button>
+                    </div>
+                    <div className={`${clsx(button)} flex gap-[10px] items-center`}
+                         onClick={() => setStyleHandler('monochrome')}>
+                        <Switch/>
+                        <button>MONOCHROME</button>
+                    </div>
+                    <div className={`${clsx(button)} flex gap-[10px] items-center`}
+                         onClick={() => setStyleHandler('satellite')}>
+                        <Switch/>
+                        <button>SATELLITE</button>
+                    </div>
+                </div>
+                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md max-h-[200px] overflow-auto'>
+                  {BRUSSELS_BUTTONS.map((button) => {
+                    return (
+                      <div onClick={() => setActiveDistrictsHandler(button.data, button.center)} className='flex gap-[10px] items-center'>
+                        <Switch />
+                        <button key={button.id} className='text-white font-semibold uppercase cursor-pointer hover:text-[#4CC0AD] transition-all '>
+                          {button.name}
+                        </button>
+                      </div>
+
+                    );
+                  })}
+                    <div className='flex items-center gap-[10px]'>
+                        <Switch/>
+                        <button className={clsx(button)}>CBD</button>
+                    </div>
+                    <div className='flex items-center gap-[10px]'>
+                        <Switch/>
+                        <button className={clsx(button)}>DECENTRALISED</button>
+                    </div>
+                    <div className='flex items-center gap-[10px]'>
+                        <Switch/>
+                        <button className={clsx(button)}>ALL DISTRICTS</button>
+                    </div>
+                </div>
+                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
+                    <div className='flex items-center gap-[10px]' onClick={() => setTransportIconsHandler()}>
+                        <Switch/>
+                        <button className={clsx(button)}>Transport</button>
+                    </div>
+                    <div className='flex items-center gap-[10px]' onClick={() => setRestaurantsIconsHandler()}>
+                        <Switch/>
+                        <button className={clsx(button)}>Shops, Restaurants & Services</button>
+                    </div>
+                </div>
+                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
+                    <div className='flex items-center gap-[10px]' onClick={cadastreHandler}>
+                        <Switch/>
+                        <button className={clsx(button)}>Cadastre</button>
+                    </div>
+                </div>
+            </div>
+            <button className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-md text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase' onClick={downloadMapHandler}>Download Map</button>
+            <button className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-md text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase' onClick={resetMapHandler}>Reset Map</button>
+        </div>}
+        <button className='sidebar-close' onClick={sidebarVisibleHandler}>{sidebarVisibleStatus}</button>
     </div>
   )
 }

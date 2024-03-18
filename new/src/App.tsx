@@ -110,7 +110,8 @@ function App() {
   }, []);
 
   return (
-    <div className='w-screen bg-[#001524] h-screen overflow-hidden p-[50px]'>
+    <div className='w-screen relative bg-[#001524] overflow-hidden h-screen p-[50px]'>
+      <div className='bg-gradient-to-r from-[#001524] to-[#001524] absolute w-[600px] h-full z-10 opacity-95' />
       <Sidebar map={map} />
       <CalculationBox map={map} draw={draw}/>
       <input
