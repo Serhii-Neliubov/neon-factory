@@ -242,7 +242,7 @@ export const Sidebar = ({map}: SidebarProps) => {
   }
 
   return (
-    <div className='absolute z-10'>
+    <div className='bg-transparent absolute z-10'>
       {sidebarVisibleStatus === 'Close' && <div className='sidebar'>
           <div className='sidebar-controls'>
               <button className='sidebar-controls_button' onClick={zoomInHandler}>Zoom In</button>

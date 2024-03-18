@@ -114,7 +114,7 @@ function App() {
       <Sidebar map={map} />
       <CalculationBox map={map} draw={draw}/>
       <input
-        className='absolute'
+        className='absolute bg-transparent'
         type="color"
         value={color}
         onChange={(e) => setColor(e.target.value)}
