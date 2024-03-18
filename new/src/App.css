@@ -63,6 +63,7 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
   }
 }
  
@@ -73,4 +74,29 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar{
+  width: 10px;
+}
+::-webkit-scrollbar-track{
+  background: linear-gradient(rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0));
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+::-webkit-scrollbar-thumb{
+  background: #4CC0ADE6;
+  border-radius: 8px;
+}
+
+* {
+  font-size: 12px;
+}
+
+.mapboxgl-ctrl-geocoder--input{
+  position: absolute;
+  top: 0;
+  right: 0;
 }

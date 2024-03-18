@@ -246,85 +246,89 @@ export const Sidebar = ({map}: SidebarProps) => {
   }
 
   return (
-    <div className='absolute h-[100%] z-10 w-[500px] pb-[100px]'>
-        {sidebarVisibleStatus === 'Close' && <div className='overflow-auto max-w-[490px] flex flex-col gap-[20px] pr-[30px] h-[100%]'>
-            <div className='flex flex-col flex-auto gap-[20px]'>
-                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
-                    <button className={clsx(button)} onClick={zoomInHandler}>Zoom In</button>
-                    <button className={clsx(button)} onClick={zoomOutHandler}>Zoom Out</button>
-                    <button className={clsx(button)} onClick={rotateLeftHandler}>Rotate Left</button>
-                    <button className={clsx(button)} onClick={rotateRightHandler}>Rotate Right</button>
-                    <button className={clsx(button)} onClick={increasePitchHandler}>Increase Pitch</button>
-                    <button className={clsx(button)} onClick={decreasePitchHandler}>Decrease Pitch</button>
-                </div>
-                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
-                    <div className={`${clsx(button)} flex gap-[10px] items-center`}
-                         onClick={() => setStyleHandler('default')}>
-                        <Switch/>
-                        <button>DEFAULT</button>
+    <div className='absolute h-[100%] z-10 w-[480px] pb-[100px] p-[60px]'>
+        {sidebarVisibleStatus === 'Close' &&
+            <div className='overflow-y-scroll max-w-[490px] flex flex-col gap-[10px] pr-[15px] h-[100%]'>
+                <div className='flex flex-col flex-auto gap-[20px]'>
+                    <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
+                        <button className={clsx(button)} onClick={zoomInHandler}>Zoom In</button>
+                        <button className={clsx(button)} onClick={zoomOutHandler}>Zoom Out</button>
+                        <button className={clsx(button)} onClick={rotateLeftHandler}>Rotate Left</button>
+                        <button className={clsx(button)} onClick={rotateRightHandler}>Rotate Right</button>
+                        <button className={clsx(button)} onClick={increasePitchHandler}>Increase Pitch</button>
+                        <button className={clsx(button)} onClick={decreasePitchHandler}>Decrease Pitch</button>
                     </div>
-                    <div className={`${clsx(button)} flex gap-[10px] items-center`}
-                         onClick={() => setStyleHandler('dark')}>
-                        <Switch/>
-                        <button>DARK</button>
+                    {/* MAP STYLES MENU */}
+                    <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
+                      {Object.keys(MAP_STYLES).map((key) => {
+                        return (
+                          <div className={`flex gap-[10px] items-center`}
+                               onClick={() => setStyleHandler(key)}>
+                            <Switch checked={currentStyle === MAP_STYLES[key]}/>
+                            <button className={`${clsx(button)}`}>{key.toUpperCase()}</button>
+                          </div>
+                        );
+                      })}
                     </div>
-                    <div className={`${clsx(button)} flex gap-[10px] items-center`}
-                         onClick={() => setStyleHandler('monochrome')}>
-                        <Switch/>
-                        <button>MONOCHROME</button>
-                    </div>
-                    <div className={`${clsx(button)} flex gap-[10px] items-center`}
-                         onClick={() => setStyleHandler('satellite')}>
-                        <Switch/>
-                        <button>SATELLITE</button>
-                    </div>
-                </div>
-                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md max-h-[200px] overflow-auto'>
-                  {BRUSSELS_BUTTONS.map((button) => {
-                    return (
-                      <div onClick={() => setActiveDistrictsHandler(button.data, button.center)} className='flex gap-[10px] items-center'>
-                        <Switch />
-                        <button key={button.id} className='text-white font-semibold uppercase cursor-pointer hover:text-[#4CC0AD] transition-all '>
-                          {button.name}
-                        </button>
-                      </div>
+                    {/* MAP BRUSSELS MENU */}
+                    <div className='rounded-md w-full border'>
+                        <div className='flex flex-col gap-[15px] p-[20px] max-w-[96%] max-h-[200px] overflow-auto'>
+                          {BRUSSELS_BUTTONS.map((button) => {
+                            return (
+                              <div onClick={() => setActiveDistrictsHandler(button.data, button.center)}
+                                   className='flex gap-[10px] items-center'>
+                                <Switch/>
+                                <button key={button.id}
+                                        className='text-white font-semibold uppercase cursor-pointer hover:text-[#4CC0AD] transition-all '>
+                                  {button.name}
+                                </button>
+                              </div>
 
-                    );
-                  })}
-                    <div className='flex items-center gap-[10px]'>
-                        <Switch/>
-                        <button className={clsx(button)}>CBD</button>
+                            );
+                          })}
+                            <div className='flex items-center gap-[10px]'>
+                                <Switch/>
+                                <button className={clsx(button)}>CBD</button>
+                            </div>
+                            <div className='flex items-center gap-[10px]'>
+                                <Switch/>
+                                <button className={clsx(button)}>DECENTRALISED</button>
+                            </div>
+                            <div className='flex items-center gap-[10px]'>
+                                <Switch/>
+                                <button className={clsx(button)}>ALL DISTRICTS</button>
+                            </div>
+                        </div>
                     </div>
-                    <div className='flex items-center gap-[10px]'>
-                        <Switch/>
-                        <button className={clsx(button)}>DECENTRALISED</button>
+                    {/* MAP TRANSPORT AND SHOPS MENU */}
+                    <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
+                        <div className='flex items-center gap-[10px]' onClick={() => setTransportIconsHandler()}>
+                            <Switch/>
+                            <button className={clsx(button)}>Transport</button>
+                        </div>
+                        <div className='flex items-center gap-[10px]' onClick={() => setRestaurantsIconsHandler()}>
+                            <Switch/>
+                            <button className={clsx(button)}>Shops, Restaurants & Services</button>
+                        </div>
                     </div>
-                    <div className='flex items-center gap-[10px]'>
-                        <Switch/>
-                        <button className={clsx(button)}>ALL DISTRICTS</button>
+                    {/* MAP CADASTRE AND SHOPS MENU */}
+                    <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
+                        <div className='flex items-center gap-[10px]' onClick={cadastreHandler}>
+                            <Switch/>
+                            <button className={clsx(button)}>Cadastre</button>
+                        </div>
                     </div>
                 </div>
-                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
-                    <div className='flex items-center gap-[10px]' onClick={() => setTransportIconsHandler()}>
-                        <Switch/>
-                        <button className={clsx(button)}>Transport</button>
-                    </div>
-                    <div className='flex items-center gap-[10px]' onClick={() => setRestaurantsIconsHandler()}>
-                        <Switch/>
-                        <button className={clsx(button)}>Shops, Restaurants & Services</button>
-                    </div>
-                </div>
-                <div className='flex flex-col gap-[15px] p-[20px] border rounded-md'>
-                    <div className='flex items-center gap-[10px]' onClick={cadastreHandler}>
-                        <Switch/>
-                        <button className={clsx(button)}>Cadastre</button>
-                    </div>
-                </div>
-            </div>
-            <button className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-md text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase' onClick={downloadMapHandler}>Download Map</button>
-            <button className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-md text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase' onClick={resetMapHandler}>Reset Map</button>
-        </div>}
-        <button className='sidebar-close' onClick={sidebarVisibleHandler}>{sidebarVisibleStatus}</button>
+                <button
+                    className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-md text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'
+                    onClick={downloadMapHandler}>Download Map
+                </button>
+                <button
+                    className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-md text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'
+                    onClick={resetMapHandler}>Reset Map
+                </button>
+            </div>}
+      <button className='sidebar-close' onClick={sidebarVisibleHandler}>{sidebarVisibleStatus}</button>
     </div>
   )
 }

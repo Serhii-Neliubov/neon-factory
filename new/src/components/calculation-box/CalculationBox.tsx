@@ -47,8 +47,8 @@ export const CalculationBox = ({map, draw}: CalculationBoxProps) => {
   }, [map, draw]);
 
   return (
-    <div className='absolute'>
-      <div className='calculatedArea'>{area} m²</div>
+    <div className='absolute bottom-[80px] right-[60px] z-20 bg-[#0F293A] py-[20px] px-[40px] rounded-md'>
+      <div className='text-white'>{area}.SQM</div>
     </div>
   )
 }

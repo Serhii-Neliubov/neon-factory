@@ -41,7 +41,7 @@ function App() {
     });
     const MapGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl
+      mapboxgl: mapboxgl,
     })
     const MapResetNorth = new mapboxgl.NavigationControl({
       showCompass: true,
@@ -110,17 +110,23 @@ function App() {
   }, []);
 
   return (
-    <div className='w-screen relative bg-[#001524] overflow-hidden h-screen p-[50px]'>
-      <div className='bg-gradient-to-r from-[#001524] to-[#001524] absolute w-[600px] h-full z-10 opacity-95' />
-      <Sidebar map={map} />
+    <div className='w-screen relative bg-[#001524] overflow-hidden h-screen pt-[50px] pr-[50px] pb-[50px]'>
+      {/* Background */}
+      <div className='bg-gradient-to-r from-[#001524] opacity-80 to-[#001524] absolute w-[450px] h-full z-10'/>
+      <div className='bg-gradient-to-r from-[#001524] via-[#001524] via-10% absolute w-[450px] h-full z-10'/>
+      {/* ========== */}
+
+      <Sidebar map={map}/>
       <CalculationBox map={map} draw={draw}/>
+
       <input
         className='absolute bg-transparent'
         type="color"
         value={color}
         onChange={(e) => setColor(e.target.value)}
       />
-      <Map />
+
+      <Map/>
     </div>
   )
 }
