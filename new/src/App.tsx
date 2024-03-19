@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import { Sidebar } from './components/sidebar/Sidebar.tsx';
 import { Map } from './components/Map.tsx';
 import mapboxgl, { Map as MapTypes } from 'mapbox-gl';
@@ -18,7 +18,7 @@ const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJv
 function App() {
   const [map, setMap] = useState<MapTypes | undefined>();
   const [draw, setDraw] = useState<MapboxDraw | undefined>();
-  const [color, setColor] = useState<string>('#ff0000');
+  const colorPicker = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -33,11 +33,15 @@ function App() {
 
     const MapDrawTools = new MapboxDraw({
       displayControlsDefault: false,
+      userProperties: true,
       controls: {
         polygon: true,
         trash: true,
         line_string: true,
         point: true,
+      },
+      modes: {
+        ...MapboxDraw.modes,
       },
       styles: MAPBOX_DRAW_STYLES,
     });
@@ -48,6 +52,7 @@ function App() {
       placeholder: 'YOUR ADDRESS HERE',
       marker: false,
     })
+
     const MapResetNorth = new mapboxgl.NavigationControl({
       showCompass: true,
       showZoom: false,
@@ -108,6 +113,22 @@ function App() {
     return () => map.remove();
   }, []);
 
+  function changeColor() {
+    const selectedColor = colorPicker.current.value;
+    if (draw) {
+      // Получаем активные фигуры на карте
+      const selectedFeatures = draw.getSelected();
+      console.log(draw.getSelected());
+
+      // Обновляем цвет каждой фигуры
+      selectedFeatures.features.forEach(feature => {
+        draw.setFeatureProperty(feature.id, ['portColor'], selectedColor);
+      });
+
+      draw.getSelected().features = selectedFeatures.features;
+    }
+  }
+
   return (
     <div className='w-screen relative bg-[#001524] overflow-hidden h-screen pt-[50px] pr-[50px] pb-[50px]'>
       {/* Background */}
@@ -118,10 +139,11 @@ function App() {
       <CalculationBox map={map} draw={draw}/>
 
       <input
-        className='absolute bg-transparent'
         type="color"
-        value={color}
-        onChange={(e) => setColor(e.target.value)}
+        ref={colorPicker}
+        id="colorPicker"
+        className="absolute z-[90]"
+        onChange={changeColor}
       />
 
       <Map/>

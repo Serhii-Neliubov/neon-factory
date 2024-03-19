@@ -41,20 +41,17 @@ export const MAPBOX_DRAW_STYLES = [
       }
     },
     {
-      'id': 'gl-draw-polygon-stroke-inactive',
-      'type': 'line',
-      'filter': ['all', ['==', 'active', 'false'],
-        ['==', '$type', 'Polygon'],
-        ['!=', 'mode', 'static']
-      ],
-      'layout': {
-        'line-cap': 'round',
-        'line-join': 'round'
+      id: "gl-draw-polygon-stroke-inactive",
+      type: "line",
+      filter: ["all", ["==", "$type", "LineString"], ["has", "user_portColor"]],
+      layout: {
+        "line-cap": "round",
+        "line-join": "round",
       },
-      'paint': {
-        'line-color': '#3bb2d0',
-        'line-width': 2
-      }
+      paint: {
+        "line-color": ["get", "user_portColor"],
+        "line-width": 2,
+      },
     },
     {
       'id': 'gl-draw-polygon-stroke-active',
@@ -73,20 +70,17 @@ export const MAPBOX_DRAW_STYLES = [
       }
     },
     {
-      'id': 'gl-draw-line-inactive',
-      'type': 'line',
-      'filter': ['all', ['==', 'active', 'false'],
-        ['==', '$type', 'LineString'],
-        ['!=', 'mode', 'static']
-      ],
-      'layout': {
-        'line-cap': 'round',
-        'line-join': 'round'
+      id: "gl-draw-line-inactive",
+      type: "line",
+      filter: ["all", ["==", "$type", "LineString"], ["has", "user_portColor"]],
+      layout: {
+        "line-cap": "round",
+        "line-join": "round",
       },
-      'paint': {
-        'line-color': '#0bbdbd',
-        'line-width': 2
-      }
+      paint: {
+        "line-color": ["get", "user_portColor"],
+        "line-width": 2,
+      },
     },
     {
       'id': 'gl-draw-line-active',
