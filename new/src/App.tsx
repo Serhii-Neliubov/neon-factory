@@ -53,6 +53,13 @@ function App() {
       visualizePitch: false,
     })
 
+    const customMarker = document.createElement('div');
+    customMarker.style.backgroundImage = `url(${pin})`;
+    customMarker.style.backgroundSize = 'cover';
+    customMarker.style.backgroundPosition = 'center';
+    customMarker.style.width = '27px';
+    customMarker.style.height = '41px';
+
     map.addControl(MapGeocoder);
     map.addControl(MapDrawTools, 'top-right');
     map.addControl(MapResetNorth);

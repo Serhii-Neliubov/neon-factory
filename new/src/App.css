@@ -101,6 +101,7 @@
   border: 2px solid white;
   border-radius: 8px;
   outline: none;
+  background-color: transparent;
 }
 .mapboxgl-ctrl-top-right{
   width: 100%;
