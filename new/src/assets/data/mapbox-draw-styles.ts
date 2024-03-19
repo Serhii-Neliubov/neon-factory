@@ -209,29 +209,38 @@ export const MAPBOX_DRAW_STYLES = [
         'line-width': 2
       }
     },
-    {
-      'id': 'gl-draw-point-static',
-      "type": "symbol",
-      'filter': ['all', ['==', '$type', 'Point'],
-        ['!=', 'meta', 'midpoint']
-      ],
-      "layout": {
-        "icon-image": "custom-marker",
-        "icon-allow-overlap": true,
-        "icon-size": 0.5
-      }
-    },
-    {
-      'id': 'gl-draw-point-active',
-      "type": "symbol",
-      'filter': ['all', ['==', '$type', 'Point'],
-        ['==', 'active', 'true'],
-        ['!=', 'meta', 'midpoint']
-      ],
-      "layout": {
-        "icon-image": "custom-marker",
-        "icon-allow-overlap": true,
-        "icon-size": 0.5
-      }
-    },
+  {
+    'id': 'gl-draw-point-static',
+    'type': 'symbol',
+    'filter': [
+      'all',
+      ['==', '$type', 'Point'],
+      ['!=', 'meta', 'midpoint'],
+      ['any', ['==', 'meta', 'feature'], ['==', 'meta', 'vertex']],
+      ['!=', 'mode', 'static'],
+      ['!=', 'active', 'false']
+    ],
+    'layout': {
+      'icon-image': 'custom-marker',
+      'icon-allow-overlap': true,
+      'icon-size': 0.5
+    }
+  },
+
+  {
+    'id': 'gl-draw-point-active',
+    'type': 'symbol',
+    'filter': [
+      'all',
+      ['==', '$type', 'Point'],
+      ['!=', 'meta', 'midpoint'],
+      ['==', 'active', 'true']
+    ],
+    'layout': {
+      'icon-image': 'custom-marker',
+      'icon-allow-overlap': true,
+      'icon-size': 0.5
+    }
+  },
+
 ];

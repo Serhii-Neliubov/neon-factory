@@ -3,6 +3,7 @@ import {useState} from 'react';
 import html2canvas from "html2canvas";
 import {Switch} from "@/components/ui/switch.tsx";
 import {clsx} from "clsx";
+import {CadastreButton} from "@/components/cadastre-button/CadastreButton.tsx";
 
 const MAP_STYLE_MODES = {
   DEFAULT: 'default',
@@ -109,13 +110,11 @@ export const Sidebar = ({map}: SidebarProps) => {
   const [sidebarVisibleStatus, setSidebarVisibleStatus] = useState('Close');
   const [isTransportActive, setIsTransportActive] = useState(true);
   const [isRestaurantsActive, setIsRestaurantsActive] = useState(false);
-  const [isCadastreActive, setIsCadastreActive] = useState(false);
 
   const [isControlsMenuVisible, setIsControlsMenuVisible] = useState(false);
   const [isMapStylesMenuVisible, setIsMapStylesMenuVisible] = useState(false);
   const [isBrusselsMenuVisible, setIsBrusselsMenuVisible] = useState(false);
   const [isTransportAndShopsMenuVisible, setIsTransportAndShopsMenuVisible] = useState(false);
-  const [isCadastreMenuVisible, setIsCadastreMenuVisible] = useState(false);
 
   function increasePitchHandler() {
     const currentPitch = map?.getPitch();
@@ -220,18 +219,6 @@ export const Sidebar = ({map}: SidebarProps) => {
     }
   }
 
-  function cadastreHandler() {
-    setIsCadastreActive(!isCadastreActive);
-
-    if(!isCadastreActive) {
-      map?.setLayoutProperty("bruxelles-cadastre-complet-7xijuk", "visibility", "visible");
-      map?.setLayoutProperty("building", "visibility", "none");
-    } else {
-      map?.setLayoutProperty("bruxelles-cadastre-complet-7xijuk", "visibility", "none");
-      map?.setLayoutProperty("building", "visibility", "visible");
-    }
-  }
-
   function downloadMapHandler() {
     const mapElement = document.getElementById('map');
 
@@ -325,13 +312,7 @@ export const Sidebar = ({map}: SidebarProps) => {
                       </div>
                   </div>}
                   {/* MAP CADASTRE AND SHOPS MENU */}
-                    <button onClick={() => setIsCadastreMenuVisible(prev => !prev)} className='bg-gradient-to-b bg-[#4CC0AD99] py-[17px] rounded-[8px] text-white font-semibold transition-all uppercase'>cadastre</button>
-                    {isCadastreMenuVisible && <div className='flex flex-col gap-[15px] p-[20px] border rounded-[8px]'>
-                      <div className='flex items-center gap-[10px]' onClick={cadastreHandler}>
-                          <Switch/>
-                          <button className={clsx(button)}>Cadastre</button>
-                      </div>
-                  </div>}
+                    <CadastreButton map={map}/>
                 </div>
                 <button
                     className='bg-gradient-to-b from-[#ffffff0a] to-[#ffffff36] py-[17px] rounded-[8px] text-white font-semibold hover:text-[#4CC0AD] transition-all uppercase'

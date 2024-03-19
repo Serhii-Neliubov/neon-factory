@@ -41,6 +41,7 @@ function App() {
       },
       styles: MAPBOX_DRAW_STYLES,
     });
+
     const MapGeocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
