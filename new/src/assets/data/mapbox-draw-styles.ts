@@ -143,19 +143,6 @@ export const MAPBOX_DRAW_STYLES = [
       }
     },
     {
-      'id': 'gl-draw-point-inactive',
-      'type': 'circle',
-      'filter': ['all', ['==', 'active', 'false'],
-        ['==', '$type', 'Point'],
-        ['==', 'meta', 'feature'],
-        ['!=', 'mode', 'static']
-      ],
-      'paint': {
-        'circle-radius': 3,
-        'circle-color': 'transparent'
-      }
-    },
-    {
       'id': 'gl-draw-point-stroke-active',
       'type': 'circle',
       'filter': ['all', ['==', '$type', 'Point'],
@@ -165,19 +152,6 @@ export const MAPBOX_DRAW_STYLES = [
       'paint': {
         'circle-radius': 0,
         'circle-color': '#fff'
-      }
-    },
-    {
-      'id': 'gl-draw-point-active',
-      'type': 'circle',
-      'filter': ['all', ['==', '$type', 'Point'],
-        ['!=', 'meta', 'midpoint'],
-        ['==', 'active', 'true']
-      ],
-      "layout": {
-        "icon-image": "custom-marker",
-        "icon-allow-overlap": true,
-        "icon-size": 0.5
       }
     },
     {
