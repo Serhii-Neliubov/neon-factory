@@ -19,8 +19,8 @@ function App() {
   const [map, setMap] = useState<MapTypes | undefined>();
   const [draw, setDraw] = useState<MapboxDraw | undefined>();
   const colorPicker = useRef<HTMLInputElement>(null);
-  const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
-  
+  const [selectedColor, setSelectedColor] = useState<string>('#3bb2d0');
+
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -119,7 +119,6 @@ function App() {
       const selectedFeatures = draw.getSelected();
       console.log(draw.getSelected());
 
-      // Обновляем цвет каждой фигуры
       selectedFeatures.features.forEach(feature => {
         draw.setFeatureProperty(feature.id, ['portColor'], selectedColor || '#ff0000');
       });

@@ -83,8 +83,9 @@ export const MAPBOX_DRAW_STYLES = [
       'line-join': 'round'
     },
     paint: {
-      "line-color": ["get", "user_portColor"],
+      "line-color": ["coalesce", ["get", "user_portColor"], "#4cc0ad"],
       "line-width": 2,
+      "line-dasharray": [2, 2]
     }
   },
   {
@@ -98,8 +99,9 @@ export const MAPBOX_DRAW_STYLES = [
       'line-join': 'round'
     },
     paint: {
-      "line-color": ["get", "user_portColor"],
+      "line-color": ["coalesce", ["get", "user_portColor"], "#4cc0ad"],
       "line-width": 2,
+      "line-dasharray": [2, 2]
     }
   },
   {
@@ -123,7 +125,21 @@ export const MAPBOX_DRAW_STYLES = [
     ],
     'paint': {
       'circle-radius': 5,
-      'circle-color': '#0bbdbd'
+      'circle-color': '#0bbdbd',
+      'circle-pitch-scale': 'map' // Устанавливаем circle-pitch-scale в "map"
+    }
+  },
+  {
+    'id': 'gl-draw-polygon-and-line-vertex-active',
+    'type': 'circle',
+    'filter': ['all', ['==', 'meta', 'vertex'],
+      ['==', '$type', 'Point'],
+      ['==', 'active', 'true']
+    ],
+    'paint': {
+      'circle-radius': 5,
+      'circle-color': '#0bbdbd',
+      'circle-pitch-scale': 'map' // Устанавливаем circle-pitch-scale в "map"
     }
   },
   {
@@ -207,36 +223,49 @@ export const MAPBOX_DRAW_STYLES = [
   },
   {
     'id': 'gl-draw-point-static',
-    'type': 'symbol',
+    'type': 'circle',
     'filter': [
       'all',
       ['==', '$type', 'Point'],
       ['!=', 'meta', 'midpoint'],
       ['any', ['==', 'meta', 'feature'], ['==', 'meta', 'vertex']],
       ['!=', 'mode', 'static'],
-      ['!=', 'active', 'false']
+      ['==', 'active', 'true'] // Только при активном состоянии
     ],
-    'layout': {
-      'icon-image': 'custom-marker',
-      'icon-allow-overlap': true,
-      'icon-size': 0.5
+    'paint': {
+      'circle-radius': 5,
+      'circle-opacity': 1,
+      'circle-color': 'transparent'
     }
   },
-
   {
     'id': 'gl-draw-point-active',
-    'type': 'symbol',
-    'filter': [
-      'all',
+    'type': 'circle',
+    'filter': ['all',
       ['==', '$type', 'Point'],
       ['!=', 'meta', 'midpoint'],
-      ['==', 'active', 'true']
+      ['any', ['==', 'meta', 'feature'], ['==', 'meta', 'vertex']],
+      ['!=', 'mode', 'static'],
+      ['==', 'active', 'false'] // Только при инактивном состоянии
     ],
-    'layout': {
-      'icon-image': 'custom-marker',
-      'icon-allow-overlap': true,
-      'icon-size': 0.5
+    'paint': {
+      'circle-radius': 5,
+      'circle-color': '#0bbdbd'
     }
   },
-
+  {
+    'id': 'gl-draw-marker',
+    'type': 'symbol',
+    'filter': ['all',
+      ['==', '$type', 'Point'],
+      ['!=', 'meta', 'midpoint'],
+      ['==', 'meta', 'feature'],
+      ['!=', 'mode', 'static']
+    ],
+    'layout': {
+      'icon-image': 'custom-marker', // имя изображения маркера
+      'icon-size': 0.5,
+      'icon-allow-overlap': true
+    }
+  },
 ];
