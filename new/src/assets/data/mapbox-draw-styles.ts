@@ -263,7 +263,7 @@ export const MAPBOX_DRAW_STYLES = [
       ['!=', 'mode', 'static']
     ],
     'layout': {
-      'icon-image': 'custom-marker', // имя изображения маркера
+      'icon-image': 'custom-marker',
       'icon-size': 0.5,
       'icon-allow-overlap': true
     }
