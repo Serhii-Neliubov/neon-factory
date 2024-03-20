@@ -19,7 +19,8 @@ function App() {
   const [map, setMap] = useState<MapTypes | undefined>();
   const [draw, setDraw] = useState<MapboxDraw | undefined>();
   const colorPicker = useRef<HTMLInputElement>(null);
-
+  const [selectedColor, setSelectedColor] = useState<string>('#ff0000');
+  
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -114,20 +115,22 @@ function App() {
   }, []);
 
   function changeColor() {
-    const selectedColor = colorPicker.current.value;
     if (draw) {
-      // Получаем активные фигуры на карте
       const selectedFeatures = draw.getSelected();
       console.log(draw.getSelected());
 
       // Обновляем цвет каждой фигуры
       selectedFeatures.features.forEach(feature => {
-        draw.setFeatureProperty(feature.id, ['portColor'], selectedColor);
+        draw.setFeatureProperty(feature.id, ['portColor'], selectedColor || '#ff0000');
       });
 
       draw.getSelected().features = selectedFeatures.features;
     }
   }
+
+  useEffect(() => {
+    changeColor();
+  }, [selectedColor]);
 
   return (
     <div className='w-screen relative bg-[#001524] overflow-hidden h-screen pt-[50px] pr-[50px] pb-[50px]'>
@@ -143,7 +146,7 @@ function App() {
         ref={colorPicker}
         id="colorPicker"
         className="absolute z-[90]"
-        onChange={changeColor}
+        onChange={(event) => setSelectedColor(event.target.value)}
       />
 
       <Map/>
