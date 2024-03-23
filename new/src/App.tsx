@@ -20,6 +20,7 @@ const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmVvbi1mYWN0b3J5IiwiYSI6ImNrcWlpZzk1MzJv
 function App() {
   const [map, setMap] = useState<MapTypes | undefined>();
   const [draw, setDraw] = useState<MapboxDraw | undefined>();
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   useEffect(() => {
     mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -80,7 +81,24 @@ function App() {
           features: []
         }
       });
-
+      map.addLayer({
+        id: 'Bruxelles_Cadastre_complet-7xijuk',
+        type: 'line', // Изменение типа слоя на line
+        source: {
+          type: 'vector',
+          url: 'mapbox://neon-factory.12ssh55s'
+        },
+        'source-layer': 'Bruxelles_Cadastre_complet-7xijuk',
+        paint: {
+          'line-color': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            '#FF0000', // Красный цвет при клике
+            'rgba(0, 0, 0, 0)' // Прозрачный цвет по умолчанию
+          ],
+          'line-width': 2, // Ширина линии
+        }
+      });
       map.loadImage(
         pin as string,
         (error, image) => {
@@ -100,29 +118,6 @@ function App() {
         }
       );
 
-      map.addLayer({
-        id: 'Bruxelles_Cadastre_complet-7xijuk',
-        type: 'line', // Изменение типа слоя на line
-        source: {
-          type: 'vector',
-          url: 'mapbox://neon-factory.12ssh55s'
-        },
-        'source-layer': 'Bruxelles_Cadastre_complet-7xijuk',
-        paint: {
-          'line-color': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            '#000000', // Чёрный цвет при наведении
-            ['boolean', ['feature-state', 'selected'], false],
-            '#FF0000', // Красный цвет при клике
-            'rgba(0, 0, 0, 0)' // Прозрачный цвет по умолчанию
-          ],
-          'line-width': 2, // Ширина линии
-        }
-      });
-
-      map.setPaintProperty('Bruxelles_Cadastre_complet-7xijuk', 'fill-opacity', 0);
-
       MapGeocoder.on('result', (event) => {
         const source = map.getSource('single-point') as mapboxgl.GeoJSONSource;
         if (source) {
@@ -131,45 +126,93 @@ function App() {
       });
     });
 
-    map.on('load', () => {
-
-
-      // Устанавливаем fill-opacity в 0, чтобы сделать заливку прозрачной
-    });
-
-// Обработка события наведения мыши на слой
-    map.on('mousemove', 'Bruxelles_Cadastre_complet-7xijuk', () => {
-      map.getCanvas().style.cursor = 'pointer';
-    });
-
-// Обработка события клика на слой
-    // Обработка события клика на слой
-    map.on('click', 'Bruxelles_Cadastre_complet-7xijuk', (e) => {
-      const features = map.queryRenderedFeatures(e.point);
-      if (features.length > 0) {
-        const selectedFeatureId = features[0].id;
-        const selectedFeatureState = map.getFeatureState({ source: 'Bruxelles_Cadastre_complet-7xijuk', sourceLayer: 'Bruxelles_Cadastre_complet-7xijuk', id: selectedFeatureId });
-
-        // Устанавливаем состояние для всех частей дома
-        for (const feature of features) {
-          map.setFeatureState({ source: 'Bruxelles_Cadastre_complet-7xijuk', sourceLayer: 'Bruxelles_Cadastre_complet-7xijuk', id: feature.id }, { selected: !selectedFeatureState.selected });
-        }
-      }
-    });
-
-
-// Возвращение курсора в обычное состояние при выходе из области слоя
-    map.on('mouseleave', 'Bruxelles_Cadastre_complet-7xijuk', () => {
-      map.getCanvas().style.cursor = '';
-    });
-
-
-
     setMap(map);
     setDraw(MapDrawTools);
 
     return () => map.remove();
   }, []);
+
+  useEffect(() => {
+    if (map) {
+      const clickHandler = function (e) {
+        const features = map.queryRenderedFeatures(e.point);
+        if (features.length > 0) {
+          const feature = features[0];
+          const index = selectedFeatures.indexOf(feature.properties.CaPaKey);
+          const updatedSelectedFeatures = [...selectedFeatures];
+          if (index === -1) {
+            updatedSelectedFeatures.push(feature.properties.CaPaKey);
+            map.setFeatureState(
+              {
+                source: "Bruxelles_Cadastre_complet-7xijuk",
+                sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+                id: feature.id,
+              },
+              { selected: true }
+            );
+          } else {
+            updatedSelectedFeatures.splice(index, 1);
+            map.setFeatureState(
+              {
+                source: "Bruxelles_Cadastre_complet-7xijuk",
+                sourceLayer: "Bruxelles_Cadastre_complet-7xijuk",
+                id: feature.id,
+              },
+              { selected: false }
+            );
+          }
+          setSelectedFeatures(updatedSelectedFeatures);
+        } else {
+          map.setPaintProperty("Bruxelles_Cadastre_complet-7xijuk", "line-color", [
+            "match",
+            ["get", "CaPaKey"],
+            "specificValue1",
+            "rgb(255, 0, 0)",
+            "specificValue2",
+            "rgb(0, 255, 0)",
+            "rgba(255, 255, 255, 0)",
+          ]);
+        }
+      };
+
+      const idleHandler = function () {
+        const lineColorExpression = [
+          "match",
+          ["to-string", ["get", "CaPaKey"]],
+          ...selectedFeatures.flatMap((feature) => [
+            String(feature),
+            "rgb(255,0,0)",
+          ]),
+          "rgba(255,255,255,0)",
+        ];
+        map.setPaintProperty(
+          "Bruxelles_Cadastre_complet-7xijuk",
+          "line-color",
+          lineColorExpression,
+        );
+      };
+
+      const mouseenterHandler = function (e) {
+        map.setPaintProperty("Bruxelles_Cadastre_complet-7xijuk", "line-color", "black");
+      };
+
+      const mouseleaveHandler = function (e) {
+        idleHandler(); // Возвращаем обычное состояние цвета
+      };
+
+      map.on("click", "Bruxelles_Cadastre_complet-7xijuk", clickHandler);
+      map.on("idle", idleHandler);
+      map.on("mouseenter", "Bruxelles_Cadastre_complet-7xijuk", mouseenterHandler);
+      map.on("mouseleave", "Bruxelles_Cadastre_complet-7xijuk", mouseleaveHandler);
+
+      return () => {
+        map.off("click", "Bruxelles_Cadastre_complet-7xijuk", clickHandler);
+        map.off("idle", idleHandler);
+        map.off("mouseenter", "Bruxelles_Cadastre_complet-7xijuk", mouseenterHandler);
+        map.off("mouseleave", "Bruxelles_Cadastre_complet-7xijuk", mouseleaveHandler);
+      };
+    }
+  }, [map, selectedFeatures]);
 
   return (
     <div className='w-screen relative bg-[#001524] overflow-hidden h-screen pt-[50px] pr-[50px] pb-[50px]'>
@@ -183,3 +226,4 @@ function App() {
 }
 
 export default App
+
