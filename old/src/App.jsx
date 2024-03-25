@@ -652,12 +652,21 @@ function App() {
     if (map) {
       const customMarker = document.createElement('div');
       customMarker.style.backgroundImage = `url(${pin})`;
-      customMarker.style.backgroundSize = 'cover';
       customMarker.style.backgroundPosition = 'center';
-      customMarker.style.width = '27px';
-      customMarker.style.height = '41px';
 
-      map.addImage("custom-marker", pin);
+      map.loadImage(
+          pin,
+          (error, image) => {
+            if (error) throw error;
+            if (!image) return; // handle undefined case
+            map.addImage('custom-marker', image);
+            map.addLayer({
+              id: 'point',
+              source: 'single-point',
+              type: 'symbol',
+            });
+          }
+    );
     }
   }, [map]);
 

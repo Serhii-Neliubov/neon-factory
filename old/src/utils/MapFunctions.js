@@ -16,9 +16,11 @@ export function createMarkerElement() {
   let marker = document.createElement("div");
   marker.className = "custom-marker";
   marker.style.backgroundImage = "url(pin.png)";
-  marker.style.width = "32px"; // Установите желаемую ширину и высоту маркера
-  marker.style.height = "32px";
+  marker.style.width = "50px";
+  marker.style.height = "50px";
   marker.draggable = true;
+  marker.style.backgroundSize = 'cover';
+  marker.style.backgroundPosition = 'center';
 
   // Создайте кнопку удаления
   let deleteButton = document.createElement("button");

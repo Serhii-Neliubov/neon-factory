@@ -137,12 +137,3 @@
   background-color: #F3F3F3;
   cursor: pointer;
 }
-
-.custom-marker {
-  width: 20px;
-  height: 20px;
-  background-image: url('src/assets/images/pin.png');
-  border-radius: 50%;
-  border: 2px solid #fff;
-  cursor: pointer;
-}

@@ -264,7 +264,6 @@ export const MAPBOX_DRAW_STYLES = [
     ],
     'layout': {
       'icon-image': 'custom-marker',
-      'icon-size': 0.5,
       'icon-allow-overlap': true
     }
   },

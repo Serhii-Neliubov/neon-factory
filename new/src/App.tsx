@@ -168,13 +168,9 @@ function App() {
             ["get", "CaPaKey"],
             "specificValue1",
             "rgb(255, 0, 0)",
-            "specificValue2",
-            "rgb(0, 255, 0)",
-            "rgba(255, 255, 255, 0)",
           ]);
         }
       };
-
       const idleHandler = function () {
         const lineColorExpression = [
           "match",
@@ -192,24 +188,12 @@ function App() {
         );
       };
 
-      const mouseenterHandler = function (e) {
-        map.setPaintProperty("Bruxelles_Cadastre_complet-7xijuk", "line-color", "black");
-      };
-
-      const mouseleaveHandler = function (e) {
-        idleHandler(); // Возвращаем обычное состояние цвета
-      };
-
       map.on("click", "Bruxelles_Cadastre_complet-7xijuk", clickHandler);
       map.on("idle", idleHandler);
-      map.on("mouseenter", "Bruxelles_Cadastre_complet-7xijuk", mouseenterHandler);
-      map.on("mouseleave", "Bruxelles_Cadastre_complet-7xijuk", mouseleaveHandler);
 
       return () => {
         map.off("click", "Bruxelles_Cadastre_complet-7xijuk", clickHandler);
         map.off("idle", idleHandler);
-        map.off("mouseenter", "Bruxelles_Cadastre_complet-7xijuk", mouseenterHandler);
-        map.off("mouseleave", "Bruxelles_Cadastre_complet-7xijuk", mouseleaveHandler);
       };
     }
   }, [map, selectedFeatures]);
