@@ -1,59 +1,30 @@
 import html2canvas from "html2canvas";
-import React from "react";
 
-const PrintScreen = ({
-  mapTag,
-  drawMenu,
-  sreenLogo,
-  colorPicker,
-  menuStyle,
-  sqmBox,
-  rightTopMenu,
-}) => {
-  async function printScreenHandler() {
-    // Спрячьте drawMenu
-    drawMenu.style.display = "none";
-    sreenLogo.style.display = "block";
-    sqmBox.style.display = "none";
-    // menuStyle.style.display = "none";
-    rightTopMenu.style.display = "none";
-    colorPicker.current.style.display = "none";
-    // Сделайте снимок экрана с использованием html2canvas
-    const canvas = await html2canvas(mapTag);
+const PrintScreen = ({showTool, toggleToolbar}) => {
+  function downloadMapHandler() {
+    const mapElement = document.getElementById('map');
+    if(!showTool) toggleToolbar();
 
-    // Восстановите видимость drawMenu
-    drawMenu.style.display = "block";
+    if (mapElement) {
+      html2canvas(mapElement, {
+        useCORS: true,
+        allowTaint: true
+      }).then(canvas => {
 
-    // Создайте ссылку на изображение в формате data URL
-    const imgData = canvas
-      .toDataURL("image/png")
-      .replace(/^data:image\/[^;]/, "data:application/octet-stream");
-
-    // Создайте элемент "a" для загрузки изображения
-    const downloadLink = document.createElement("a");
-    downloadLink.href = imgData;
-    downloadLink.download = "screenshot.png"; // Имя файла для загрузки
-
-    // Добавьте текст или стили для ссылки (необязательно)
-    downloadLink.textContent = "Скачать снимок экрана";
-
-    // Добавьте ссылку на страницу
-    document.body.appendChild(downloadLink);
-
-    // Нажмите на ссылку автоматически (требуется браузерная поддержка)
-    downloadLink.click();
-
-    // Удалите ссылку с DOM (если она больше не нужна)
-    document.body.removeChild(downloadLink);
-    sreenLogo.style.display = "none";
-    colorPicker.current.style.display = "block";
-    menuStyle.style.display = "flex";
-    rightTopMenu.style.display = "block";
-    sqmBox.style.display = "block";
+        console.log(showTool);
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.download = "test.png";
+        a.href = canvas.toDataURL();
+        a.click();
+      });
+    } else {
+      console.error('Map element not found.');
+    }
   }
 
   return (
-    <button onClick={printScreenHandler} className="PrintScreen">
+    <button onClick={downloadMapHandler} className="PrintScreen">
       DOWNLOAD YOUR MAP
     </button>
   );

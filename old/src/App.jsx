@@ -9,7 +9,7 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "./App.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-
+import pin from "/pin.png";
 // Components
 import SubMenu from "./components/SubMenu/SubMenu.jsx";
 import ResetMap from "./components/ResetMap.jsx";
@@ -88,12 +88,7 @@ function App() {
   const geocoderContainer = useRef();
   const newDrawFeature = useRef(false);
   const sidebarButton = useRef();
-  const drawMenu = document.querySelector(".mapboxgl-ctrl-top-right");
-  const sreenLogo = document.querySelector(".logo-map");
   const palette = document.querySelector(".palette");
-  const menuStyle = document.querySelector(".menuMapStyle");
-  const rightTopMenu = document.querySelector(".mapboxgl-ctrl-top-right");
-  const sqmBox = document.querySelector(".calculation-box");
   const circleMenuTool = document.querySelector(".circleMenuTool");
   const sidebar = useRef();
   const toolbarButton = useRef();
@@ -427,9 +422,7 @@ function App() {
         combine_features: false,
         uncombine_features: false,
       },
-      modes: {
-        ...MapboxDraw.modes,
-      },
+      marker: false,
       styles: defaultDrawStyles,
     });
 
@@ -657,10 +650,14 @@ function App() {
 
   useEffect(() => {
     if (map) {
-      map.loadImage("pin.png", function (error, image) {
-        if (error) throw error;
-        map.addImage("custom-pin", image);
-      });
+      const customMarker = document.createElement('div');
+      customMarker.style.backgroundImage = `url(${pin})`;
+      customMarker.style.backgroundSize = 'cover';
+      customMarker.style.backgroundPosition = 'center';
+      customMarker.style.width = '27px';
+      customMarker.style.height = '41px';
+
+      map.addImage("custom-marker", pin);
     }
   }, [map]);
 
@@ -704,10 +701,6 @@ function App() {
     }
   }
 
-  // function modalWindowHandler() {
-  //   setIsModalActive(!isModalActive);
-  //   defaultStyleHandler();
-  // }
   function centralisedDistrictsButtonHandler() {
     if (isCentralisedDistrictsVisible) {
       dispatch(decentralisedToggleFalse());
@@ -962,16 +955,7 @@ function App() {
                 setSelectedDistricts={setSelectedDistricts}
               ></ResetMap>
 
-              <PrintScreen
-                sqmBox={sqmBox}
-                palette={palette}
-                sreenLogo={sreenLogo}
-                drawMenu={drawMenu}
-                mapTag={mapTag.current}
-                menuStyle={menuStyle}
-                colorPicker={colorPicker}
-                rightTopMenu={rightTopMenu}
-              />
+              <PrintScreen showTool={showTool} toggleToolbar={toggleToolbar} />
             </div>
           </div>
         </div>
@@ -984,11 +968,6 @@ function App() {
             position: "relative",
           }}
         >
-          {/* {isModalActive ? (
-    <MyModal modalWindowHandler={modalWindowHandler}></MyModal>
-  ) : (
-    ""
-  )} */}
           <CircleMenu map={map} />
           <div id="distance-marker" className="distance-marker">
             <div id="distance-value"></div>
@@ -1013,7 +992,7 @@ function App() {
             className="circleMenu"
             alt="logo"
           />
-          <img alt="Logo" className="logo-map" src="/logo.png" />
+          <img alt="Logo" className="logo-map" src="/old/src/assets/images/logo.png" />
         </div>
       </Container>
     </Fragment>

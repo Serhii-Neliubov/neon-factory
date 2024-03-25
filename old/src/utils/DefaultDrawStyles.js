@@ -14,7 +14,6 @@ const defaultDrawStyles = [
       "fill-opacity": 0.1,
     },
   },
-
   {
     id: "gl-draw-polygon-fill-active",
     type: "fill",
@@ -62,17 +61,36 @@ const defaultDrawStyles = [
     },
   },
   {
-    id: "gl-draw-line-inactive",
-    type: "line",
-    filter: ["all", ["==", "$type", "LineString"], ["has", "user_portColor"]],
-    layout: {
-      "line-cap": "round",
-      "line-join": "round",
+    'id': 'gl-draw-line-inactive',
+    'type': 'line',
+    'filter': ['all', ['==', 'active', 'false'],
+      ['==', '$type', 'LineString'],
+      ['!=', 'mode', 'static']
+    ],
+    'layout': {
+      'line-cap': 'round',
+      'line-join': 'round'
     },
     paint: {
-      "line-color": ["get", "user_portColor"],
+      "line-color": ["coalesce", ["get", "user_portColor"], "#4cc0ad"],
       "line-width": 2,
-    },
+      "line-dasharray": [2, 2]
+    }
+  },
+  {
+    'id': 'gl-draw-marker',
+    'type': 'symbol',
+    'filter': ['all',
+      ['==', '$type', 'Point'],
+      ['!=', 'meta', 'midpoint'],
+      ['==', 'meta', 'feature'],
+      ['!=', 'mode', 'static']
+    ],
+    'layout': {
+      'icon-image': 'custom-marker',
+      'icon-size': 0.5,
+      'icon-allow-overlap': true
+    }
   },
   {
     id: "gl-draw-line-active",
@@ -219,38 +237,6 @@ const defaultDrawStyles = [
       "circle-radius": 5,
       "circle-color": "#404040",
     },
-  },
-  {
-    id: "highlight-active-points",
-    type: "symbol",
-    filter: [
-      "all",
-      ["==", "$type", "Point"],
-      ["==", "meta", "feature"],
-      ["==", "active", "true"],
-    ],
-    layout: {
-      "icon-image": "custom-pin",
-      "icon-size": 0.5,
-      "icon-anchor": "bottom",
-    },
-    paint: {},
-  },
-  {
-    id: "points-are-blue",
-    type: "symbol",
-    filter: [
-      "all",
-      ["==", "$type", "Point"],
-      ["==", "meta", "feature"],
-      ["==", "active", "false"],
-    ],
-    layout: {
-      "icon-image": "custom-pin", // Имя изображения без расширения файла
-      "icon-size": 0.5,
-      "icon-anchor": "bottom",
-    },
-    paint: {},
   },
   {
     id: "gl-draw-polygon-color-picker",

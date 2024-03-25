@@ -112,7 +112,7 @@
 }
 
 body {
-  padding: 48px 36px 0px 36px;
+  padding: 48px 36px 0 36px;
   background-color: #001524;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -166,23 +166,19 @@ body {
 }
 .activeSidebar {
   position: absolute;
-  width: 20px;
+  width: 25px;
   top: 40px;
-  left: 65px;
-  height: 30px;
-  background: none;
+  left: -10px;
+  height: 100%;
   z-index: 100;
   border: none;
-  background-image: url("arrow-left-close.png");
-
   background-size: cover;
-  background-repeat: no-repeat;
+  background: url("./assets/images/arrow-left-close.png") no-repeat;
   transform: translate(1500%, 0) !important;
-
   transition: transform 0.3s ease;
 }
 .closeSidebar {
-  transform: rotate(180deg) translate(250%, 0) !important;
+  transform: scaleX(-1) translate(-100%, 1%) !important;
   background-size: contain;
 }
 
@@ -263,8 +259,7 @@ body {
   justify-content: center;
 }
 .modal-window__close-button {
-  background: url(search-clear.png);
-  background-repeat: no-repeat;
+  background: url('./assets/images/search-clear.png') no-repeat;
   top: 12px;
   cursor: pointer;
   right: 5px;
@@ -302,7 +297,7 @@ body {
   border: none;
   overflow: hidden;
   width: 90%;
-  font-family: "Helvetica";
+  font-family: "Helvetica", sans-serif;
   font-weight: 700;
 
   background: transparent;
@@ -313,7 +308,7 @@ body {
 .modal-window__input input::placeholder {
   text-transform: uppercase;
   text-align: center;
-  font-family: "Helvetica";
+  font-family: "Helvetica", sans-serif;
   font-weight: 700;
 }
 .modal-window__toggles {
@@ -393,7 +388,7 @@ body {
   font-size: 14px;
   border-radius: 8px;
   background-color: #333333;
-  font-family: "Helvetica";
+  font-family: "Helvetica", sans-serif;
   color: #4cc0ad;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -504,7 +499,7 @@ body {
   width: 30px;
   height: 30px;
   color: #4cc0ad;
-  background-image: url("arrow.png");
+  background-image: url("./assets/images/arrow.png");
   background-size: cover;
   background-repeat: no-repeat;
   transform: rotate(-90deg);
@@ -587,7 +582,7 @@ body {
   content: "";
   width: 100%;
   height: 100%;
-  background-image: url(search-icon.svg);
+  background-image: url('./assets/images/search-icon.svg');
   background-repeat: no-repeat;
   position: absolute;
   top: 11px;
@@ -659,9 +654,7 @@ body {
 }
 .mapboxgl-ctrl-geocoder--button::before {
   content: "";
-  background: url(search-clear.png);
-  background-position: center;
-  background-repeat: no-repeat;
+  background: url('./assets/images/search-clear.png') no-repeat center;
   top: 13px;
   right: 2px;
   position: absolute;
@@ -673,45 +666,34 @@ body {
   display: none !important;
 }
 .mapbox-gl-draw_line {
-  background-image: url("linetool.svg");
+  background-image: url("./assets/images/linetool.svg");
   background-repeat: no-repeat;
   background-position: center;
 }
 .mapbox-gl-draw_polygon {
-  background-image: url("polygon.svg");
+  background-image: url("./assets/images/polygon.svg");
   background-repeat: no-repeat;
   background-position: center;
 }
 .mapbox-gl-draw_point {
-  background-image: url("location.svg");
+  background-image: url("./assets/images/location.svg");
   background-repeat: no-repeat;
   margin-right: 90px;
   background-position: center;
 }
 .mapbox-gl-draw_trash {
-  background-image: url("trash.svg");
+  background-image: url("./assets/images/trash.svg");
   background-repeat: no-repeat;
   background-position: center;
 }
 .loading__img {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   width: 100%;
   height: 100%;
+  transform: translate(-50%, -50%);
   background-color: #001524;
-  display: flex;
-}
-.loading__img::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
-  background-image: url("logo-sidebar.png");
-  background-position: center;
-  transform: scale(1.5);
-  background-repeat: no-repeat;
 }
 .mapboxgl-ctrl-top-right {
   width: 100%;
@@ -723,7 +705,6 @@ body {
   --myOffset: -290px;
 }
 .mapboxgl-ctrl-group:not(:first-child) {
-  border-radius: none;
   background: #0f293a;
   box-shadow: none !important;
   border: none;
@@ -816,7 +797,7 @@ body {
   top: 20px; /* Установите желаемый отступ сверху */
   left: 20px; /* Установите желаемый отступ справа */
   width: 130px; /* Установите желаемую ширину */
-  background-image: url("logo.png"); /* Путь к вашему логотипу */
+  background-image: url("./assets/images/logo.png"); /* Путь к вашему логотипу */
   background-size: cover;
   background-repeat: no-repeat;
   z-index: 1000;
@@ -861,7 +842,7 @@ body {
   border-radius: 100%;
   width: 100%;
   height: 100%;
-  background-image: url("iconPalette.png");
+  background-image: url("./assets/images/iconPalette.png");
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -891,15 +872,12 @@ body {
   width: 50px;
   height: 45px;
   position: absolute;
-  background: #0f293a;
   cursor: pointer;
   display: none;
   bottom: 15px;
   right: calc(var(--myRightValue2) + var(--myOffset2));
   z-index: 10;
-  background-image: url("circleMenu.svg");
-  background-repeat: no-repeat;
-  background-position: center;
+  background: #0f293a url("./assets/images/circleMenu.svg") no-repeat center;
   background-size: 50%;
 }
 
@@ -1052,7 +1030,7 @@ p {
   width: 30px;
   height: 30px;
   color: #4cc0ad;
-  background-image: url("arrow.png");
+  background-image: url("./assets/images/arrow.png");
   background-size: cover;
   background-repeat: no-repeat;
   transform: rotate(-90deg);
@@ -1141,7 +1119,7 @@ p {
   width: 30px;
   height: 30px;
   color: #4cc0ad;
-  background-image: url("arrow.png");
+  background-image: url("./assets/images/arrow.png");
   background-size: cover;
   background-repeat: no-repeat;
   transform: rotate(-90deg);
@@ -1190,7 +1168,7 @@ p {
   width: 30px;
   height: 30px;
   color: #4cc0ad;
-  background-image: url("arrow.png");
+  background-image: url("./assets/images/arrow.png");
   background-size: cover;
   background-repeat: no-repeat;
   transform: rotate(-90deg);
@@ -1211,7 +1189,7 @@ p {
   width: 30px;
   height: 30px;
   color: #4cc0ad;
-  background-image: url("arrow.png");
+  background-image: url("./assets/images/arrow.png");
   background-size: cover;
   background-repeat: no-repeat;
   /* Изначально поворачиваем стрелку на -90 градусов */
@@ -1258,6 +1236,9 @@ p {
   margin-top: 2px;
   font-family: "Helvetica";
   font-weight: 700;
+}
+.mapboxgl-canvas-container .mapboxgl-ctrl .mapboxgl-user .mapboxgl-interactive:hover {
+  fill: black;
 }
 
 input[type="radio"] {
